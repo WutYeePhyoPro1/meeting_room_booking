@@ -4,21 +4,42 @@
     <div class="mt-3 ps-3">
         <span class="text-2xl italic font-medium uppercase">Booking History</span>
 
-        <div class="p-5">
-            <div class="flex flex-col">
-                <label for="">Room :</label>
-                <select name="" id="" class="mt-2 border-1 border-slate-300 text-slate-700 rounded-t-lg focus:border-slate-400 focus:ring-0">
-                    <option value="">Choose Room</option>
-                    @foreach ($rooms as $item)
-                    <option value="{{ $item->id }}">{{ $item->room_name }}</option>
-                    @endforeach
-                </select>
+        <form action="{{ route('booking_history') }}" method="GET">
+            <div class="p-5 grid grid-cols-5 gap-8">
+                <div class="flex flex-col">
+                    <label for="room">Room :</label>
+                    <select name="room" id="room" class="mt-2 border-1 border-slate-400 text-slate-700 rounded-t-lg focus:border-slate-400 focus:ring-0">
+                        <option value="">Choose Room</option>
+                        @foreach ($rooms as $item)
+                        <option value="{{ $item->id }}">{{ $item->room_name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <label for="from_date">From Date :</label>
+                    <input type="date" id="from_date" name="from_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
+                </div>
+                <div class="flex flex-col">
+                    <label for="to_date">To Date :</label>
+                    <input type="date" id="to_date" name="to_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
+                </div>
+                <div class="flex flex-col">
+                    <label for="status">Status :</label>
+                    <select name="status" id="status" class="mt-2 border-1 border-slate-400 text-slate-700 rounded-t-lg focus:border-slate-400 focus:ring-0">
+                        <option value="">Choose Status</option>
+                        <option value="0">Pending</option>
+                        <option value="1">Started</option>
+                        <option value="2">Ended</option>
+                        <option value="3">Canceled</option>
+                        <option value="4">Missed</option>
+                        <option value="5">Finished</option>
+                    </select>
+                </div>
+                <div class="flex flex-col">
+                    <x-button class="bg-emerald-600 text-white w-1/2 mt-8 h-10 ms-5 ps-14 hover:bg-emerald-800">Search</x-button>
+                </div>
             </div>
-            <div class="flex flex-col">
-                <label for="from_date">From Date :</label>
-                <input type="date" id="from_date" name="from_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
-            </div>
-        </div>
+        </form>
 
         <table class="table-responsive mt-4" style="width: 99%">
             <thead class="h-12 bg-slate-300 z-0">
@@ -80,8 +101,14 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="flex justify-center text-xs mt-2 bg-white">
-            {{ $bookings->links() }}
+        @if (request('room') || request('status') || request('from_date') || request('to_date') )
+            <div class="mt-3">
+                <a href="{{ route('booking_history') }}"><x-button class="bg-sky-800 hover:bg-sky-900 text-white">Go To Default</x-button></a>
+            </div>
+        @endif
+        <div class="flex justify-center text-xs bg-white">
+            {{ $bookings->appends(request()->query())->links() }}
+
 
     </div>
 @endsection

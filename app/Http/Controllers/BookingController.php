@@ -155,12 +155,26 @@ class BookingController extends Controller
     //go to booking history page
     public function booking_history()
     {
+        // if(request('room')){
+        //     dd(request('room'));
+        // }
         $bookings = Booking::where('user_id',getAUth()->id)
+                        ->when(request('room'),function($q){
+                            $q->where('room_id',request('room'));
+                        })
+                        ->when(request('status'),function($q){
+                            $q->where('status',request('status'));
+                        })
+                        ->when(request('from_date'),function($q){
+                            $q->where('date','>=',request('from_date'));
+                        })
+                        ->when(request('to_date'),function($q){
+                            $q->where('date','<=',request('to_date'));
+                        })
                         ->orderBy('date','desc')
                         ->orderBy('start_time','desc')
-                        ->paginate(30);
-
-        $rooms    = MeetingRoom::get();
+                        ->paginate(15);
+        $rooms    = MeetingRoom::orderBy('id')->get();
         return view('user.booking_history',compact('bookings','rooms'));
     }
 

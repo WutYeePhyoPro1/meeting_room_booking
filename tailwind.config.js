@@ -27,6 +27,9 @@ export default {
                 cus1    : 'rgba(32, 43, 63, 0.9)',
                 cus2    : 'rgb(206, 206, 206)'
             },
+            padding:{
+                    
+            },
 
             // spacing: {
             //     '1': '8px',
