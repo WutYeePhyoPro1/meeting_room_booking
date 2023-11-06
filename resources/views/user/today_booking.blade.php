@@ -46,7 +46,7 @@
                                     <span >{{ $item->user->name }}</span>
                                 </div>
                                 <div class="flex justify-between mt-9 mb-2 px-4 my_booking_card">
-                                    @if (getAuth()->id != $item->user_id)
+                                    @if (auth()->id() != $item->user_id && $item->start_time < \Carbon\Carbon::now())
                                     <button class="bg-emerald-400 hover:bg-emerald-500 py-2 px-10 rounded-md req_btn" data-id="{{ $item->id }}">Request</button>
                                     @endif
                                 </div>
@@ -212,6 +212,8 @@
                                         case(0) : $status = 'Pending' ; $text_color = 'text-amber-500';break;
                                         case(1) : $status = 'Accept'; $text_color = 'text-emerald-500';break;
                                         case(2) : $status = 'Reject'; $text_color = 'text-rose-500';break;
+                                        case(3) : $status = 'Reject'; $text_color = 'text-rose-500';break;
+                                        case(4) : $status = 'Waiting your answer'; $text_color = 'text-rose-500';break;
                                         default :break;
                                     }
                                     $status_title = `

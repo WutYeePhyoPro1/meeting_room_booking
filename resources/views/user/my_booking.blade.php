@@ -8,28 +8,6 @@
                 }
         </style>
     @endpush
-    {{-- <form action="" method="get" class="grid grid-cols-6 gap-10">
-    <div class="col-start-2 flex flex-col">
-        <label for="from_date">From Date :</label>
-        <input type="date" name="from_date" id="from_date" class="border-slate-300 rounded-lg mt-2 focus:ring-0 focus:border-slate-500">
-    </div>
-    <div class="flex flex-col">
-        <label for="to_date">TO Date :</label>
-        <input type="date" name="to_date" id="to_date" class="border-slate-300 rounded-lg mt-2 focus:ring-0 focus:border-slate-500">
-    </div>
-    <div class="flex flex-col">
-        <label for="status">Status :</label>
-        <select name="status" id="status" class="border-slate-300 rounded-t-lg mt-2 focus:ring-0 focus:border-slate-500">
-            <option value="">Choose Status</option>
-            <option value=""></option>
-            <option value=""></option>
-            <option value=""></option>
-        </select>
-    </div>
-    <div class="flex flex-col">
-        <x-button class="bg-slate-600 w-24 ps-6 py-3 rounded-lg text-white mt-8 hover:bg-slate-500">Search</x-button>
-    </div>
-</form> --}}
         <div class="px-4 py-2 mt-3 text-center w-1/2 rounded-2xl mx-auto relative filter_div">
                 <span class="absolute w-20 rounded-2xl border-b-2 border-rose-500 ms-3 bottom-0 duration-500 filter_highlight" style="border-color: {{ getAuth()->bg_color }}"></span>
                 <span class="text-xl px-10 rounded-2xl py-2 cursor-pointer select-none  duration-500 filter_nav filter_select" data-no="0">All</span>
@@ -37,11 +15,13 @@
                 <span class="text-xl px-10 rounded-2xl py-2 cursor-pointer select-none  duration-500 filter_nav" data-no="2">Room2</span>
                 <span class="text-xl px-10 rounded-2xl py-2 cursor-pointer select-none  duration-500 filter_nav" data-no="3">Room3</span>
         </div>
-
-            <div id="table_layout">
-                @if (count($booking) > 0)
-                <div class="grid grid-cols-3 gap-6 px-6 pb-4 pt-2 mt-4 ">
-                    @foreach ($booking as $item)
+        <input type="hidden" id="success" value="{{ Session::has('success') ? Session::get('success') : '' }}">
+        <input type="hidden" id="error" value="{{ $errors->any() ? 1 : 0 }}">
+        <div id="table_layout">
+            @if (count($booking) > 0)
+            <div class="grid grid-cols-3 gap-6 px-6 pb-4 pt-2 mt-4 ">
+                @foreach ($booking as $item)
+                {{-- @dd(check_extendable($item->id)) --}}
                         <div class="max-w bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 bg_img1" style="background: linear-gradient(rgba(61, 57, 57, 0.7), rgba(59, 57, 57, 0.7)),url('{{ asset('storage/uploads/room_image/'.$item->room->image->file_name) }}');background-repeat:no-repeat;background-position:center;background-size:cover;color:white;">
                             <div class="text-center py-2 my_booking_card">
                                 {{ $item->title }}
@@ -68,19 +48,32 @@
                                     <span >Reason :</span>
                                     <span >{{ $item->reason->reason }}</span>
                                 </div>
-                                <div class="grid grid-cols-2 gap-2 my-9 px-4 my_booking_card">
+                                <div class="grid grid-cols-2 gap-2 my-9 px-4 my_booking_card remark">
                                     <span >Remark :</span>
                                     <span class="break-all">{{ $item->remark }}</span>
                                 </div>
-                                <div class="flex justify-between mt-9 mb-2 px-4 my_booking_card">
+                                <div class="grid grid-cols-2 gap-2 my-9 px-4 my_booking_card extend_div hidden">
+
+                                </div>
+                                <input type="hidden" class="started" value="{{ $item->status == 1 ? 1 : 0 }}">
+                                <div class="flex justify-between mt-9 mb-2 px-4 my_booking_card all_btn_gp">
+                                    <input type="hidden" id="extendable" value="{{ count(check_extendable($item->id)) > 0 ? 1 : 0 }}">
                                     <input type="hidden" class="room_status" value="{{ $item->room->status }}">
                                     <button class="bg-emerald-400 hover:bg-emerald-500 py-2 px-10 rounded-md hidden start_btn" data-id="{{ $item->id }}">Start</button>
                                     <button class="bg-rose-300 hover:bg-rose-400 py-2 rounded-md px-10 end_btn {{ $item->status == 1 ? '' : 'hidden' }}" data-id="{{ $item->id }}" >End</button>
-                                    <button class="bg-sky-500 hover:bg-sky-600 py-2 rounded-md px-10 extent_btn {{ $item->status == 1 ? '' : 'hidden' }}" >Extend</button>
+                                    <button class="bg-sky-500 hover:bg-sky-600 py-2 rounded-md px-10 extend_btn {{ ($item->status == 1 && count(check_extendable($item->id))>0 && !$item->extend_status) ? '' : 'hidden' }}" data-id="{{ $item->id }}">Extend</button>
                                     <button class="bg-red-500 hover:bg-red-600 py-2 rounded-md px-10 cancel_btn" hidden data-id="{{ $item->id }}">Cancel</button>
                                 </div>
+                                <div class="flex justify-between mt-9 mb-2 px-4 my_booking_card hidden extend_btn_gp">
+                                    <button class="bg-red-500 hover:bg-red-600 py-2 rounded-md px-10 back_btn" >Back</button>
+                                    <form action="{{ route('extend') }}" method="POST">
+                                        @csrf
+                                        <input type="hidden" name="id" value="{{ $item->id }}">
+                                        <input type="hidden" name="extend_time" class="extend_time">
+                                        <button type="submit" class="bg-emerald-400 hover:bg-emerald-500 py-2 px-10 rounded-md accept_btn">Accept</button>
+                                    </form>
+                                </div>
                                 <input type="hidden" class="booking_status" value="{{ $item->status }}">
-
                             </div>
                         </div>
                     @endforeach
@@ -96,6 +89,21 @@
         @push('js')
             <script>
                 $(document).ready(function(){
+                    $success = $('#success').val();
+                $error = $('#error').val();
+                if($error == 1)
+                {
+                    Swal.fire({
+                        'icon' : 'error',
+                        'text' : 'ကျေးဇူပြုပြီး အချက်အလက်အပြည့်အစုံဖြည့်ပါ'
+                    });
+                }
+                if($success != ''){
+                    Swal.fire({
+                        'icon' : 'success',
+                        'text' : $success
+                    });
+                }
                     // console.log($('.remaining_time').length);
                     var length = $('.remaining_time').length;
                     setInterval(() => {
@@ -126,7 +134,6 @@
                                $time = `${$days}d ${$hours.toString().padStart(2, "0")}:${$min.toString().padStart(2, "0")}:${$sec.toString().padStart(2, "0")}`;
                             }
                             $(e).eq($i).html($time);
-                            $(e).trigger('changeValue');
                         }
                     }
 
@@ -141,6 +148,7 @@
                             $end_date = $date+' '+$end_time;
                             $start = new Date($start_date);
                             $end = new Date($end_date);
+                            $started = $('.started').eq($i).val();
                             // console.log($start);
                             $now        = new Date();
                             $now        = $now.getTime();
@@ -167,8 +175,8 @@
                             //             console.log('its show time');
 
                             if($now > $start_time){
+
                                 $diff = $end_time - $now;
-                                // console.log($diff);
                                  if ($diff <= 0) {
                                     // clearInterval();
                                         $id = $('.start_btn').eq($i).data('id');
@@ -190,11 +198,11 @@
                                 }
                                 $(e).eq($i).html($time);
 
-                            }else{
+
+                            }else if($now < $start_time && $started != 1){
                                 // $(e).eq($i).parent().parent().parent().find('.cancel_btn').attr('hidden',false);
                                 $('.cancel_btn').eq($i).removeAttr('hidden');
                             }
-
                         }
                     }
 
@@ -225,9 +233,14 @@
                                         Swal.fire({
                                             icon: 'success',
                                             title: 'Success',
-                                            text : 'Booking Cancel Success'
-                                        });
-                                        location.reload();
+                                            text : 'Booking Cancel Success',
+                                            confirmButtonText : 'Ok',
+                                        }).then((result)=>{
+                                            if(result.isConfirmed){
+                                                location.reload();
+                                            }
+                                        })
+
                                     },
                                     complete:function(){
                                         $this.text('Cancel');
@@ -276,6 +289,7 @@
 
                     $(document).on('click','.start_btn',function(e){
                         $id = $(this).data('id');
+                        $extend = $(this).parent().find('#extendable').val();
                         $this = $(this);
                         $.ajax({
                             url : '/my_booking/ajax/start/'+$id,
@@ -283,7 +297,11 @@
                             success : function(res){
                                 $this.addClass('hidden');
                                 $this.parent().find('.end_btn').removeClass('hidden');
+                                $this.parent().find('.cancel_btn').addClass('hidden');
                                 $this.parent().parent().find('.booking_status').val(1);
+                                if($extend == 1){
+                                    $this.parent().find('.extend_btn').removeClass('hidden');
+                                }
                             }
                         })
                     })
@@ -302,6 +320,47 @@
                                 $this.parent().parent().parent().remove();
                             }
                         })
+                    })
+
+                    $(document).on('click','.extend_btn',function(e){
+                        $id = $(this).data('id');
+                        $this = $(this);
+                        $.ajax({
+                            url : 'my_booking/ajax/extend_time/'+$id,
+                            success: function(res){
+                                $list = `
+                                <span >Extend Time :</span>
+                                <Select name="extend_time" class="rounded-t-md h-8 text-black p-0 ps-2 me-10 extend_time_select">
+                                        <option value="">Choose Extend time</option>
+                                `;
+                                for($i = 0 ; $i < res.length ; $i++){
+                                    $list += `
+                                    <option value="${res[$i]}">${res[$i]}</option>
+                                    `;
+                                }
+                                $list +=`</Select>`;
+                                $this.parent().parent().find('.extend_div').append($list);
+                            },
+                            complete: function(){
+                                $this.parent().parent().find('.extend_div').removeClass('hidden');
+                                $this.parent().parent().find('.remark').addClass('hidden');
+                                $this.parent().addClass('hidden');
+                                $this.parent().parent().find('.extend_btn_gp').removeClass('hidden');
+                            }
+                        })
+                    })
+
+                    $(document).on('click','.back_btn',function(e){
+                        $(this).parent().addClass('hidden');
+                        $this.parent().parent().find('.all_btn_gp').removeClass('hidden');
+                        $this.parent().parent().find('.extend_div').addClass('hidden');
+                        $this.parent().parent().find('.remark').removeClass('hidden');
+                        $this.parent().parent().find('.extend_div').html('');
+                    })
+
+                    $(document).on('change','.extend_time_select',function(e){
+                        $val = $(this).val();
+                        $(this).parent().parent().find('.extend_time').val($val);
                     })
                 })
             </script>

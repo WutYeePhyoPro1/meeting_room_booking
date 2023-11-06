@@ -15,7 +15,9 @@ class MeetingRoom extends Model
     protected $fillable = [
         'room_name',
         'branch_id',
-        'status'
+        'seat',
+        'status',
+        'boss'
     ];
 
     public function branches()

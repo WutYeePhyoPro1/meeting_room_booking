@@ -16,8 +16,10 @@ return new class extends Migration
             $table->integer('booking_id');
             $table->string('request_reason');
             $table->integer('request_status')->nullable();
+            $table->integer('resend_status')->nullable();
             $table->integer('read')->nullable();
             $table->integer('request_user');
+            $table->integer('approve_user')->nullable();
             $table->string('from');
             $table->string('total_duration')->nullable();
             $table->timestamps();

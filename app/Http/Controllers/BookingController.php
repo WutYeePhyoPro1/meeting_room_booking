@@ -15,6 +15,34 @@ use App\Repositories\BookingRepository;
 use Illuminate\Support\Facades\Notification;
 use App\Interfaces\BookingRepositoryInterface;
 
+//store booking data
+// go to my booking page
+// go to today's booking
+//go to request Noti page
+//go to booking history page
+//search time
+//check resize time(booking တခုနဲ့တခုကြား 30 miခြားမခြားစစ် calander က resize လုပ်တဲ့အချိန် )
+//drop validation fullcalendar
+//edit to click
+//cancel booking
+//extend booking
+//my booking filter
+//today booking filter
+// check room status
+//booking start
+//request booking accept
+//change status
+//booking change status
+//request booking
+//end booking
+//check booking exist
+//read due booking
+//check booking
+//noti pass(10 min အလို alerm ပေးတာကို သိပြီကြောင်း)
+//read noti
+//resend_noti
+//get avaliable extend time
+
 class BookingController extends Controller
 {
     private BookingRepositoryInterface $repository;
@@ -86,7 +114,7 @@ class BookingController extends Controller
                                                     });
                                 })
                             ->where('user_id',getAuth()->id)
-                            ->whereNotIn('status',[2,3])
+                            ->whereIn('status',[0,1])
                             ->orderBy('date','asc')
                             ->orderBy('start_time','asc')
                             ->get();
@@ -101,32 +129,39 @@ class BookingController extends Controller
         $date = Carbon::now()->format('Y-m-d');
         $now = Carbon::now()->format('H:i:s');
 
-        $booking = Booking::where('date',$date)
-                            ->where('start_time','>',$now)
-                            ->where('status','!=',3)
-                            ->orderBy('start_time','asc')
-                            ->get();
+        $booking = Booking::where(function($q) use ($date, $now) {
+        $q->where('date', '>', $date)
+            ->orWhere(function ($q) use ($date, $now) {
+                $q->where('date', $date)
+                    ->where('start_time', '>', $now);
+            });
+    })
+    ->where('status', '!=', 3)
+    ->orderBy('date', 'asc')
+    ->orderBy('start_time', 'asc')
+    ->get();
+
 
         return view('user.today_booking',compact('booking'));
     }
 
     //go to request Noti page
-    public function request_page()
+    public function request_page($id)
     {
-        $notis = getAuth()->unreadNotifications->pluck('data');
-        $data = [];
-        foreach ($notis as $item) {
-            $bookingRequest = BookingRequest::where('id', $item['request_id'])->first();
-            if ($bookingRequest) {
-                $data[] = $bookingRequest;
-            }
-        }
-        // $id = [];
-        // foreach($notis as $item)
-        // {
-        //     $id[] = $item['booking_id'];
-        // }
+        $data = BookingRequest::where('id',$id)->first();
         return view('user.request_noti',compact('data'));
+    }
+
+    //go to booking history page
+    public function booking_history()
+    {
+        $bookings = Booking::where('user_id',getAUth()->id)
+                        ->orderBy('date','desc')
+                        ->orderBy('start_time','desc')
+                        ->paginate(30);
+
+        $rooms    = MeetingRoom::get();
+        return view('user.booking_history',compact('bookings','rooms'));
     }
 
     //search time
@@ -229,6 +264,7 @@ class BookingController extends Controller
         Booking::where('id',$id)->update([
             'status'    => 3
         ]);
+        Booking::where('id',$id)->delete();
         return response()->json(200);
     }
 
@@ -279,29 +315,27 @@ class BookingController extends Controller
         date_default_timezone_set('Asia/Yangon');
         $date = Carbon::now()->format('Y-m-d');
         $now = Carbon::now()->format('H:i:s');
+        $startDate = Carbon::now();
+        $endDate = Carbon::now()->addDays(7);
 
-        $booking = Booking::where('date',$date)
-                    ->where('status','!=',3)
-                    ->where('start_time','>',$now)
-                    ->orderBy('start_time','asc');
+        $booking = Booking::where(function($q) use ($date, $now) {
+            $q->where('date', '>', $date)
+                ->orWhere(function ($q) use ($date, $now) {
+                    $q->where('date', $date)
+                        ->where('start_time', '>', $now);
+                });
+        });
 
-
-        switch ($id) {
-            case 0:
-                break;
-            case 1:
-                $booking->where('room_id', 1);
-                break;
-            case 2:
-                $booking->where('room_id', 2);
-                break;
-            case 3:
-                $booking->where('room_id', 3);
-                break;
-            default:
-                break;
+        if ($id) {
+            $booking->where('room_id', $id);
         }
-        $booking = $booking->get();
+
+        $booking = $booking
+            ->where('status', '!=', 3)
+            ->orderBy('date', 'asc')
+            ->orderBy('start_time', 'asc')
+            ->get();
+
         if(count($booking) > 0){
             return view('user.today_booking_filter',compact('booking'))->render();
         }else{
@@ -314,7 +348,7 @@ class BookingController extends Controller
     {
         date_default_timezone_set('Asia/Yangon');
         $now_date = Carbon::now()->format('Y-m-d');
-        $now_time = Carbon::now()->format('H:i:s');
+        $now_time = Carbon::now()->addMinutes(5)->format('H:i:s');
 
         $booking = Booking::where('room_id', $id)
                 ->where(function ($q) use ($now_date, $now_time) {
@@ -333,39 +367,193 @@ class BookingController extends Controller
 
         $data = MeetingRoom::where('id',$id)->first();
         $status1 = $data->status;
-        if($booking){
-            $user = $booking->user->name;
-            if($booking->status == 0){
-                $status = 'Not Avaliable';
-            }else if($booking->status == 1){
-                $status = 'Occupied';
-                if($status1 == 0){
+        $boss = $data->boss;
+        if($boss == 1){
+            $status = 'Boss In';
+            return response()->json(['status'=>$status],200);
+        }else{
+            if($booking){
+                $user = $booking->user->name;
+                if($booking->status == 0){
+                    $status = 'Not Avaliable';
                     MeetingRoom::where('id',$id)->update([
-                        'status'    => 1
+                        'status'    => 0
+                    ]);
+                }else if($booking->status == 1){
+                    // dd('yes');
+                    $status = 'Occupied';
+                    if($status1 == 0){
+                        MeetingRoom::where('id',$id)->update([
+                            'status'    => 1
+                        ]);
+                    }
+                }
+                return response()->json([
+                    'status' =>$status,
+                    'user'  => $user
+                ],200);
+            }else{
+                $status = 'Avaliable';
+                if($status1 == 1){
+                    MeetingRoom::where('id',$id)->update([
+                        'status'    => 0
                     ]);
                 }
+                return response()->json(['status'=>$status],200);
             }
-            return response()->json([
-                'status' =>$status,
-                'user'  => $user
-            ],200);
-        }else{
-            $status = 'Avaliable';
-            if($status1 == 1){
-                MeetingRoom::where('id',$id)->update([
-                    'status'    => 0
-                ]);
-            }
-            return response()->json(['status'=>$status],200);
-        }
 
+        }
     }
 
     //booking start
     public function booking_start($id)
     {
+        $booking = Booking::where('id',$id)->first();
         Booking::where('id',$id)->update(['status'=>1]);
+        MeetingRoom::where('id',$booking->room_id)->update(['status' =>1]);
         return response()->json(200);
+    }
+
+    //request booking accept
+    public function req_accept(Request $request)
+    {
+        // dd($request->all());
+        $req_booking = BookingRequest::where('id',$request->req_id)->first();
+        $booking     = Booking::where('id',$req_booking->booking_id)->first();
+        $user_name  = $booking->user->name;
+        $user = User::where('id',$req_booking->request_user)->first();
+        if($req_booking->total_duration == $booking->duration){
+            // Booking::where('id',$req_booking->booking_id)->update([
+            //     'title'     => 'Accepted by '.$user_name,
+            //     'remark'    => $req_booking->reason,
+            //     'user_id'   => $req_booking->request_user
+            // ]);
+            $booking = Booking::find($req_booking->booking_id);
+            $booking->title = 'Accepted by '.$user_name;
+            $booking->remark = $req_booking->reason;
+            $booking->user_id= $req_booking->request_user;
+            $booking->save();
+        }else{
+            $req_duration = $req_booking->total_duration;
+            $duration     = $booking->duration;
+            list($hour,$min,$sec) = explode(':',$req_duration);
+            list($hour1,$min1,$sec1) = explode(':',$duration);
+            $total_sec = $hour*3600 + $min*60 + $sec;
+            $total_sec1 = $hour1*3600 + $min1*60 + $sec1;
+            $final_duration = $total_sec1-$total_sec;
+            $hours2 = floor($final_duration / 3600);
+            $min2 = floor(($final_duration % 3600) / 60);
+            $sec2 = $final_duration % 60;
+            $final_duration = sprintf("%02d:%02d:%02d", $hours2, $min2, $sec2);
+
+            if($req_booking->from == 'start'){
+                $start = strtotime($booking->start_time);
+                $end = floor($start+$total_sec);
+                $end_time = date('H:i:s',$end);
+                Booking::where('id',$req_booking->booking_id)->update([
+                    'start_time'    => $end_time,
+                    'duration'      =>$final_duration,
+                    'original_start'=>$booking->start_time,
+                    'original_end'=>$booking->end_time,
+                ]);
+                Booking::create([
+                    'room_id'   => $booking->room_id,
+                    'date'      => $booking->date,
+                    'start_time'=> $booking->start_time,
+                    'end_time'  => $end_time,
+                    'duration'  => $req_booking->total_duration,
+                    'title'     => 'Accepted by '.$user_name,
+                    'reason_id' => $booking->reason_id,
+                    'user_id'   => $req_booking->request_user,
+                    'remark'    => $req_booking->reason,
+                    'status'    => 0
+                ]);
+            }else{
+                $end = strtotime($booking->end_time);
+                $start = floor($end-$total_sec);
+                $start_time = date('H:i:s',$start);
+                Booking::where('id',$req_booking->booking_id)->update([
+                    'end_time' => $start_time,
+                    'duration'   => $final_duration,
+                    'original_start'=>$booking->start_time,
+                    'original_end'=>$booking->end_time,
+                ]);
+                Booking::create([
+                    'room_id'   => $booking->room_id,
+                    'date'      => $booking->date,
+                    'start_time'=> $start_time,
+                    'end_time'  => $booking->end_time,
+                    'duration'  => $req_booking->total_duration,
+                    'title'     => 'Accepted by '.$user_name,
+                    'reason_id' => $booking->reason_id,
+                    'user_id'   => $req_booking->request_user,
+                    'remark'    => $req_booking->reason,
+                    'status'    => 0
+                ]);
+            }
+        }
+        if($req_booking->resend_status){
+            $og_user = User::where('id',$req_booking->booking->user_id)->first();
+            sendNoti($og_user,$booking->id,$req_booking->id,getAuth()->id);
+        }
+        BookingRequest::where('id',$request->req_id)->update([
+            'request_status' => 1,
+            'approve_user'  => getAuth()->id
+        ]);
+        $noti = getAuth()->unreadNotifications;
+        foreach($noti as $item){
+            if($item->data['request_id'] == $req_booking->id && $item->data['req_user_id'] == $req_booking->request_user){
+                $item->markAsRead();
+            }
+        }
+        sendNoti($user,$booking->id,$req_booking->id,getAuth()->id);
+        return back()->with('success','Request Accept Success');
+    }
+
+    //extend booking
+    public function extend(Request $request)
+    {
+        $book = Booking::find($request->id);
+        list($hour,$min,$sec)       = explode(':',$request->extend_time);
+        list($hour1,$min1,$sec1)    = explode(':',$book->duration);
+        $new_total_sec              = $hour*3600 + $min * 60 + $sec;
+        $total_sec              = $hour1*3600 + $min1 * 60 + $sec1;
+        $final_sec              = $total_sec + $new_total_sec;
+        $hours2 = floor($final_sec / 3600);
+        $min2 = floor(($final_sec % 3600) / 60);
+        $sec2 = $final_sec % 60;
+        $final_duration = sprintf("%02d:%02d:%02d", $hours2, $min2, $sec2);
+        $end_time = $book->end_time;
+        $final_end_time = date('H:i:s',strtotime($end_time) + $new_total_sec);
+        $book->update([
+            'end_time'              => $final_end_time,
+            'duration'          => $final_duration,
+            'extend_status'     => 1,
+            'extended_duration' => $request->extend_time,
+            'extended_time'     => Carbon::now()
+        ]);
+        return back()->with('success','Extend Time Success');
+    }
+
+    //request booking reject
+    public function req_reject(Request $request)
+    {
+        $id = $request->req_id;
+        $user_id = $request->req_user_id;
+        $data = BookingRequest::where('id',$id)->first();
+        BookingRequest::where('id',$id)->update([
+            'request_status'    => 3,
+            'approve_user'      => getAuth()->id
+        ]);
+        $user = User::where('id',$user_id)->first();
+        sendNoti($user,$data->booking_id,$id,getAuth()->id);
+        $unread_noti = getAuth()->unreadNotifications;
+        foreach($unread_noti as $item){
+            if($item->data['request_id'] == $id && $item->data['req_user_id'] == $user_id){
+                $item->markAsRead();
+            }
+        }
+        return back()->with('success','Request Reject Success');
     }
 
     //change status
@@ -382,6 +570,9 @@ class BookingController extends Controller
                 'status' => 2
             ]);
         }
+        MeetingRoom::where('id',$booking->room_id)->update([
+            'status'    => 0
+        ]);
         return response()->json(200);
     }
 
@@ -440,9 +631,13 @@ class BookingController extends Controller
     {
         date_default_timezone_set('Asia/Yangon');
         $id = $request->data;
+        $booking = Booking::where('id',$id)->first();
         Booking::where('id',$id)->update([
             'status'  => 5,
             'finished_time' => Carbon::now()
+        ]);
+        MeetingRoom::where('id',$booking->room_id)->update([
+            'status'    => 0
         ]);
         return response(200);
     }
@@ -497,11 +692,24 @@ class BookingController extends Controller
 
                 $requestId = $data['request_id'];
                 $book = BookingRequest::find($requestId);
-
-                if ($book && $book->request_status === 0) {
-                    $book->update(['request_status' => 2]);
+                $user = User::where('id',$data['req_user_id'])->first();
+                if ($book) {
+                    if($book->request_status === 0){
+                        $book->update(['request_status' => 2]);
+                        sendNoti($user,$data['booking_id'],$data['request_id'],getAuth()->id);
+                    }elseif($book->request_status == 1 || $book->request_status == 3){
+                        $item->markAsRead();
+                    }
                 }
+
+                $user = User::where('id',$data['req_user_id'])->first();
             }
+            // 0    => pending
+            // 1    => accept
+            // 2    => system reject
+            // 3    => user reject
+            // 4    => user send
+            // 5    => resended request
         }
 
         $count = getAuth()->unreadNotifications->count();
@@ -544,6 +752,66 @@ class BookingController extends Controller
         Booking::where('id',$id)->update([
             'noti' => 1
         ]);
+        return response(200);
+    }
+
+    //read noti
+    public  function read_noti($id)
+    {
+        $data  = BookingRequest::where('id',$id)->first();
+        if(!$data->read){
+            BookingRequest::where('id',$id)->update([
+                'read' => 1
+            ]);
+        }
+        $noti = getAuth()->unreadNotifications;
+        if($data->request_status == 1 || $data->request_status == 3)
+        {
+            foreach($noti as $item)
+            {
+                // dd($data->request_user);
+                if($item->data['request_id'] == $id){
+                    $item->markAsRead();
+                }
+            }
+        }
+        return response(200);
+    }
+
+    //get avaliable extend time
+    public function extend_time($id)
+    {
+        $time = check_extendable($id);
+        return response()->json($time,200);
+    }
+
+    //resend notification
+    public function resend_noti(Request $request)
+    {
+        // dd($request->all());
+        $req_booking = BookingRequest::find($request->id);
+        BookingRequest::where('id',$request->id)->update([
+            'request_status'    => 4,
+            'resend_status'    => 1,
+            'approve_user'      => getAuth()->id
+        ]);
+        $new_req=BookingRequest::create([
+            'booking_id'    => $req_booking->booking_id,
+            'request_reason'=> $req_booking->request_reason,
+            'request_status'=> 5,
+            'resend_status'=> 1,
+            'request_user'  => $req_booking->request_user,
+            'from'          => $req_booking->from,
+            'total_duration'=> $request->duration
+        ]);
+        $user = User::find($req_booking->request_user);
+        $noti = getAuth()->unreadNotifications;
+        foreach($noti as $item){
+            if($item->data['request_id'] == $request->id && $item->data['req_user_id'] == $req_booking->request_user){
+                $item->markAsRead();
+            }
+        }
+        sendNoti($user,$req_booking->booking_id,$new_req->id,$user->id);
         return response(200);
     }
 

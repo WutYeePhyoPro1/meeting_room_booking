@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('meeting_rooms', function (Blueprint $table) {
             $table->id();
-            $table->string('room_name');
+        $table->string('room_name');
             $table->integer('branch_id');
+            $table->integer('seat');
             $table->integer('status')->default(0);
+            $table->integer('boss')->default(0);
             $table->timestamps();
         });
     }

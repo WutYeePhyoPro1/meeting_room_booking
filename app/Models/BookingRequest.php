@@ -16,8 +16,10 @@ class BookingRequest extends Model
         'booking_id',
         'request_reason',
         'request_status',
+        'resend_status',
         'read',
         'request_user',
+        'approve_user',
         'from',
         'total_duration'
     ];
@@ -30,5 +32,10 @@ class BookingRequest extends Model
     public function user() :BelongsTo
     {
         return $this->belongsTo(User::class,'request_user')->withDefault();
+    }
+
+    public function approve() :BelongsTo
+    {
+        return $this->belongsTo(User::class ,'approve_user')->withDefault();
     }
 }

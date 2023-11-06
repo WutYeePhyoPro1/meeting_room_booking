@@ -32,6 +32,13 @@
                         <small class="text-rose-500 ms-2">{{ $message }}</small>
                     @enderror
                 </div>
+                <div class="flex flex-col mb-5">
+                    <label for="seat">Avaliable Seat :</label>
+                    <input type="number" name="seat" id="seat" class="mt-2 border-1 text-slate-700 border-slate-300 rounded-lg focus:ring-0 focus:border-b-4 focus:border-slate-200 placeholder-slate-200" value="{{ old('seat', (isset($data) ? $data->seat : '')) }}" placeholder="Avaliable Seed...">
+                    @error('seat')
+                        <small class="text-rose-500 ms-2">{{ $message }}</small>
+                    @enderror
+                </div>
                 <div class="grid grid-cols-2 gap-2">
                     <div class="pt-4 flex flex-col">
                         <span class="text-lg underline cursor-pointer tracking-wider hover:text-cus" onclick="$('#room_img').click()">Click To Uploads Room Image (optional)</span>

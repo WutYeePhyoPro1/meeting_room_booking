@@ -1,18 +1,18 @@
 
 
-body::-webkit-scrollbar,.fc-scroller::-webkit-scrollbar{
+body::-webkit-scrollbar,.fc-scroller::-webkit-scrollbar,#noti_drop::-webkit-scrollbar{
     width: 5px;
 }
 
-body::-webkit-scrollbar-track,.fc-scroller::-webkit-scrollbar-track{
+body::-webkit-scrollbar-track,.fc-scroller::-webkit-scrollbar-track,#noti_drop::-webkit-scrollbar-track{
     background-color: rgb(133, 133, 133);
 }
 
-body::-webkit-scrollbar-thumb,.fc-scroller::-webkit-scrollbar-thumb{
+body::-webkit-scrollbar-thumb,.fc-scroller::-webkit-scrollbar-thumb,#noti_drop::-webkit-scrollbar-thumb{
     background-color: rgb(32, 32, 32,0.5);
 }
 
-body::-webkit-scrollbar-track-piece,.fc-scroller::-webkit-scrollbar-track-piece{
+body::-webkit-scrollbar-track-piece,.fc-scroller::-webkit-scrollbar-track-piece,#noti_drop::-webkit-scrollbar-track-piece{
     background-color: rgb(163, 163, 163);
 }
 

@@ -25,7 +25,7 @@ class Booking extends Model
         'user_id',
         'remark',
         'extend_status',
-        'extend_duration',
+        'extended_duration',
         'extended_time',
         'status',
         'finished_time',

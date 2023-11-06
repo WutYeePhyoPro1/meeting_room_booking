@@ -8,7 +8,7 @@
 
             @foreach ($room as $item)
                 <div class="max-w bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-hidden room_card">
-                    <div class="h-3/4 overflow-hidden">
+                    <div class="h-4/6 overflow-hidden">
                         <a href="javascript:{}" >
                             <img class="rounded-t-lg object-cover h-full w-full duration-500 hover:scale-125 booking_a" src="{{ asset('storage/uploads/room_image/'.$item->image->file_name) }}" alt="" />
                         </a>
@@ -17,6 +17,7 @@
                         <x-button class="px-3 text-sm font-medium justify-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 hover:ring-2 hover:ring-offset-2  dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 booking_btn" data-id="{{ $item->id }}">
                             {{ __('Book Now') }}
                         </x-button>
+                        <span class="w-full mt-2 text-xl text-center font-serif ">{{ $item->seat }} Seats Avaliable</span>
                         <span class="w-full mt-2 text-xl text-center">{{ $item->room_name }}( <b class="room_status"></b> )</span>
                     </div>
                 </div>
@@ -26,7 +27,7 @@
         </div><hr class="mt-2">
 
         <div class="mt-3 ps-3">
-            <span class="text-2xl italic font-medium uppercase underline">Meeting &nbsp; Plan</span>
+            <span class="text-2xl italic font-medium uppercase underline">Meeting &nbsp; Plan &nbsp; This &nbsp; Month</span>
 
             <table class="table-responsive mt-4" style="width: 99%">
                 <thead class="h-12 bg-slate-300 z-0">
@@ -79,7 +80,11 @@
                                 @endswitch
                             </td>
                             <td>{{ $item->reason->reason }}</td>
-                            <td></td>
+                            <td>
+                                @if ($item->extend_status)
+                                {{ $item->extended_duration }}
+                            @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -131,7 +136,10 @@
                                 $('.room_status').eq(i).removeClass('text-emerald-500 text-rose-500')
                             },
                             success : function(res){
-                                if(res.status == 'Avaliable'){
+                                if(res.status == 'Boss In'){
+                                    $('.room_status').eq(i).addClass('text-indigo-500');
+                                    $('.room_status').eq(i).text(res.status);
+                                }else if(res.status == 'Avaliable'){
                                     $('.room_status').eq(i).addClass('text-emerald-500');
                                     $('.room_status').eq(i).text(res.status);
                                 }else if(res.status == 'Occupied'){

@@ -17,7 +17,9 @@
                 <th class="text-left ps-3 rounded-tl-lg">No</th>
                 <th class="text-left">Name</th>
                 <th class="text-left">Branch</th>
-                <th class="text-left rounded-tr-lg">Action</th>
+                <th class="text-left">Avaliable Seat</th>
+                <th class="text-left ">Action</th>
+                <th class="text-left rounded-tr-lg">Boss</th>
             </tr>
         </thead>
         <tbody class="font-light admin_userbody">
@@ -26,9 +28,16 @@
                     <td class="ps-4">{{ $data->firstItem()+$loop->index }}</td>
                     <td>{{ $item->room_name }}</td>
                     <td>{{ $item->branches->branch_name }}</td>
+                    <td>{{ $item->seat }} seats</td>
                     <td>
                         <button class="bg-amber-300 hover:bg-amber-400 rounded-lg  px-3 py-1" id="edit" title="edit" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base">edit</i></button>
                         <button class="bg-rose-400 hover:bg-rose-500 rounded-lg  px-3 py-1" onclick="confirmmessage({{ $item->id }})" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base translate-y-0.5">delete</i></button>
+                    </td>
+                    <td>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="{{ $item->id }}" class="sr-only peer boss_in" {{ $item->boss == 1 ? 'checked' : '' }}>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                          </label>
                     </td>
                 </tr>
             @endforeach
@@ -51,6 +60,18 @@
                 $url = window.location.href;
                 localStorage.setItem($user_id+'_room',$url);
                 window.location.href = "room/edit/"+$id;
+            })
+
+            $(document).on('click','.boss_in',function(){
+                $val = $(this).val();
+
+                $.ajax({
+                    url : 'room/boss/'+$val,
+                    type: 'get',
+                    success: function(res){
+
+                    }
+                })
             })
         })
 

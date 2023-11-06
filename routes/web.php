@@ -12,7 +12,11 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
             route::get('mybooking','my_booking')->name('my_booking');
             route::get('todaybooking','today_booking')->name('today_booking');
             route::post('today_booking/request_booking','request_booking')->name('request_booking');
-            route::get('request_booking','request_page');
+            route::get('request_booking/{id}','request_page')->name('request_page');
+            route::post('request_booking/accept','req_accept')->name('request_accept');
+            route::post('request_booking/reject','req_reject')->name('request_reject');
+            route::post('my_booking/extend_time','extend')->name('extend');
+            route::get('all_booking/history','booking_history')->name('booking_history');
 
             // ajax
             //booking
@@ -25,6 +29,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
             route::get('my_booking/ajax/filter/{id}','my_booking_filter')->name('booking_filter');
             route::get('my_booking/ajax/start/{id}','booking_start')->name('booking_start');
             route::get('my_booking/ajax/status/{id}','change_status')->name('change_status');
+            route::get('my_booking/ajax/extend_time/{id}','extend_time');
             route::post('my_booking/ajax/end','end_booking')->name('end_booking');
             //today_booking
             route::get('today_booking/ajax/filter/{id}','today_booking_filter')->name('today_booking_filter');
@@ -37,6 +42,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
             route::get('booking/ajax/read_due','read_due');
             route::get('booking/ajax/check_booking','check_booking')->name('check_booking');
             route::get('booking/ajax/noti_pass/{id}','noti_pass');
+            route::get('booking/ajax/read_noti/{id}','read_noti');
+            route::post('booking/ajax/resend_noti','resend_noti')->name('resend_noti');
         });
 
         route::group(['controller' => userController::class],function(){

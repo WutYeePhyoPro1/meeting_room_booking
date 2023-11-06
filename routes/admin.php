@@ -41,5 +41,8 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         route::get('room/edit/{id}','room_edit')->name('edit_room');
         route::post('room/create','store_room')->name('store_room');
         route::get('room/delete/{id}','room_delete')->name('delete_room');
+
+        //ajax
+        route::get('room/boss/{id}','boss_in');
     });
 });

@@ -27,7 +27,7 @@ class adminController extends Controller
             $room = MeetingRoom::orderBy('created_at','asc')->get();
             $current_month = Carbon::now()->format('m');
             $current_year = Carbon::now()->format('Y');
-            $bookings = Booking::whereMonth('date',$current_month)->whereYear('date',$current_year)->orderBy('date','desc')->paginate(10);
+            $bookings = Booking::whereMonth('date',$current_month)->whereYear('date',$current_year)->orderBy('date','desc')->withTrashed()->paginate(10);
             return view('user.home',compact('room','bookings'));
         }
     }
@@ -140,6 +140,7 @@ class adminController extends Controller
                 $data = [];
                 $data['room_name'] = $request->name;
                 $data['branch_id'] = $request->branch_id;
+                $data['seat']      = $request->seat;
                 if($request->file('room_image')){
                     $item = RoomImage::where('room_id',$id)->first();
                     $dbImage = $item->file_name;
@@ -162,6 +163,7 @@ class adminController extends Controller
                 $room = new MeetingRoom();
                 $room->room_name = $request->name;
                 $room->branch_id = $request->branch_id;
+                $room->seat = $request->seat;
                 $room->save();
 
 
@@ -218,6 +220,21 @@ class adminController extends Controller
         return back()->with('success','Room Delete Success');
     }
 
+    //boss in
+    public function boss_in($id)
+    {
+        $data = MeetingRoom::where('id',$id)->first();
+        if($data->boss == 0){
+            MeetingRoom::where('id',$id)->update([
+                'boss' => 1
+            ]);
+        }else{
+            MeetingRoom::where('id',$id)->update([
+                'boss' => 0
+            ]);
+        }
+    }
+
     //validate
     public function cus_validate($data,$action)
     {
@@ -248,6 +265,7 @@ class adminController extends Controller
             $validate = $data->validate([
                 'name'      => ['required',new RoomNameDublicate($data->branch_id)],
                 'branch_id' => 'required',
+                'seat'      => 'required|min:1',
                 'room_image'=> 'mimetypes:image/*'
             ]);
         }else if($action == 'room_update')
@@ -256,6 +274,7 @@ class adminController extends Controller
             $validate = $data->validate([
                 'name'      => ['required',new RoomNameDublicate($data->branch_id,$id)],
                 'branch_id' => 'required',
+                'seat'      => 'required|min:1',
                 'room_image'=> 'mimetypes:image/*'
             ]);
         }
