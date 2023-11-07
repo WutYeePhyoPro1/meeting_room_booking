@@ -12,6 +12,7 @@
     {{-- <link rel="stylesheet" href="{{ asset('css/fullcalendar.min.css') }}"> --}}
     <script src="{{ asset('js/index.global.js') }}"></script>
     <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
     @stack('css')
