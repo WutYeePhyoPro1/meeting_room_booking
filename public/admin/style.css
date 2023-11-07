@@ -27,7 +27,8 @@ body.toggle .sidebar{
     width: 100%;
     box-shadow: 5px 2px 10px #ffffff;
     border-bottom: 1px solid #ffffff;
-
+    padding: 6px 10%;
+    overflow: hidden;
     /* background-color: #ffffff !important; */
 }
 
@@ -132,4 +133,14 @@ body.toggle .content{
 
 .admin_userbody tr:nth-child(even){
     background-color: rgb(0,0,0,0.1);
+}
+
+#logo_content{
+    /* background-color: red; */
+    height: 50px;
+}
+
+#logo{
+    width: 160px;
+    transform: translateX(18px);
 }

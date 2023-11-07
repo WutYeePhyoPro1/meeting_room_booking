@@ -6,7 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ config('app.name', 'Meeting Room Booking System') }}</title>
-    
+    <link rel="icon" href="{{ asset('images/logo/finallogo.png') }}">
     <link rel="stylesheet" href="{{ asset('admin/style.css') }}">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
@@ -17,7 +17,9 @@
 <body>
     <div class="sidebar">
         <div class="sidebar_header">
-
+            <div id="logo_content">
+                <img src="{{ asset('images/logo/finallogo.png') }}" id="logo">
+            </div>
         </div>
         <nav class="sidebar_body">
             <ul class="nav_link">
@@ -35,14 +37,20 @@
                 </li>
                 <li class="link_item {{ request()->is('admin/user*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
                     <a href="{{ route('admin#user') }}" class="">
-                        <i class="material-symbols-outlined text-white mt-3 text-md" style="transform:translateX(-13px)">person_add</i>
+                        <i class="material-symbols-outlined text-white mt-3 text-md" style="transform:translateX(-10px)">person_add</i>
                         <span class="-translate-x-7">User</span>
                     </a>
                 </li>
                 <li class="link_item {{ request()->is('admin/room*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
                     <a href="{{ route('admin#room') }}">
-                        <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-3">meeting_room</i>
+                        <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-2">meeting_room</i>
                         <span class="-translate-x-5">Room</span>
+                    </a>
+                </li>
+                <li class="link_item " onclick="this.childNodes[1].click()">
+                    <a href="javascript:{}">
+                        <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-1">book_online</i>
+                        <span class="-translate-x-2">Booking</span>
                     </a>
                 </li>
                 {{-- <li class="link_item">
