@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Rules\RoomNameDublicate;
 use App\Customize\Commonfunction;
+use App\Models\Reason;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\CssSelector\Node\FunctionNode;
@@ -55,7 +56,10 @@ class adminController extends Controller
     //to booking page
     public function booking()
     {
-        return view('admin.booking.index');
+        $data = Booking::orderBy('date','desc')
+                        ->orderBy('start_time','desc')
+                        ->paginate(15);
+        return view('admin.booking.index',compact('data'));
     }
 
     //store user
@@ -218,6 +222,14 @@ class adminController extends Controller
 
         MeetingRoom::where('id',$id)->delete();
         return back()->with('success','Room Delete Success');
+    }
+
+    // edit booking
+    public function edit_booking($id)
+    {
+        $data = Booking::where('id',$id)->first();
+        $reason = Reason::get();
+        return view('admin.booking.edit',compact('data','reason'));
     }
 
     //boss in

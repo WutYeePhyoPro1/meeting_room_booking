@@ -409,7 +409,7 @@
                         beforeSend:function(){
                             $('.time_interval').html('');
                         },
-                        success: function (res) {   
+                        success: function (res) {
                             $start = '<option value="">Choose StartTime</option>';
                             $end   = '<option value="">Choose EndTime</option>';
                             $gl_vl = res.time;
@@ -489,6 +489,7 @@
                                 $('#start_time').val('');
                                 $('#end_time').val('');
                                 $('#total_duration').text('00:00:00');
+                                $('#duration').val('00:00:00');
                     }
                 })
 

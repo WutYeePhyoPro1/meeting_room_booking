@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="__token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Meeting Room Booking System') }}</title>
     <link rel="icon" href="{{ asset('images/logo/finallogo.png') }}">
     <link rel="stylesheet" href="{{ asset('admin/style.css') }}">
@@ -31,7 +32,7 @@
                 </li>
                 <li class="link_item {{ request()->is('admin/booking*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
                     <a href="{{ route('admin#booking') }}" class="">
-                        <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-1">lists</i>
+                        <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-1">book_online</i>
                         <span class="-translate-x-3">Booking</span>
                     </a>
                 </li>
@@ -45,12 +46,6 @@
                     <a href="{{ route('admin#room') }}">
                         <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-2">meeting_room</i>
                         <span class="-translate-x-5">Room</span>
-                    </a>
-                </li>
-                <li class="link_item " onclick="this.childNodes[1].click()">
-                    <a href="javascript:{}">
-                        <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-1">book_online</i>
-                        <span class="-translate-x-2">Booking</span>
                     </a>
                 </li>
                 {{-- <li class="link_item">
@@ -104,6 +99,17 @@
 
 <script>
     $(document).ready(function(e){
+        $.ajaxSetup({
+                        headers : {'X-CSRF-TOKEN' : $('meta[name = __token]').attr('content')}
+                    })
+
+        $.ajax({
+            url : "{{ route('booking_status') }}",
+            type: "POST",
+            success:function(res){
+                console.log('change status success');
+            }
+        })
 
         $(document).on('click','#toggle_btn',function(e){
             e.preventDefault();

@@ -514,9 +514,20 @@ class BookingController extends Controller
             'request_status' => 1,
             'approve_user'  => getAuth()->id
         ]);
+        $all_req = BookingRequest::where('booking_id',$booking->id)
+                                ->where('request_status',0)
+                                ->get();
+        if($all_req){
+            foreach($all_req as $item){
+                BookingRequest::where('id',$item->id)->update([
+                    'request_status'    => 3,
+                    'approve_user'      => getAuth()->id
+                ]);
+            }
+        }
         $noti = getAuth()->unreadNotifications;
         foreach($noti as $item){
-            if($item->data['request_id'] == $req_booking->id && $item->data['req_user_id'] == $req_booking->request_user){
+            if($item->data['request_id'] == $req_booking->id){
                 $item->markAsRead();
             }
         }
