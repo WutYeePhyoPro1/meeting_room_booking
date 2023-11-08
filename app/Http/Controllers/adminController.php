@@ -237,7 +237,7 @@ class adminController extends Controller
     //detail booking
     public function detail_booking($id)
     {
-        $data = Booking::where("id",$id)->first();
+        $data = Booking::where("id",$id)->withTrashed()->first();
         $req_book = BookingRequest::where('booking_id',$id)->whereNot('request_status',0)->get();
         return view('admin.booking.detail',compact('data','req_book'));
     }

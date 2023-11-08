@@ -1,6 +1,13 @@
 @extends('new_layouts.admin.layout')
 @section('content')
-<div class="w-1/2 mx-auto px-6 pt-5 mt-4 ">
+<div class="w-1/2 mx-auto mt-5">
+    <x-button class="bg-transparent text-slate-900 hover:text-white px-5 hover:bg-slate-400 focus:ring-slate-800" id="back_btn">
+        <i class="material-symbols-outlined">
+            arrow_back
+            </i>
+    </x-button>
+</div>
+<div class="w-1/2 mx-auto px-6 pt-2">
     {{-- @dd(check_extendable($item->id)) --}}
             <div class="max-w bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 bg_img1" style="background: linear-gradient(rgba(61, 57, 57, 0.7), rgba(59, 57, 57, 0.7)),url('{{ asset('storage/uploads/room_image/'.$data->room->image->file_name) }}');background-repeat:no-repeat;background-position:center;background-size:cover;color:white;">
                 <div class="text-center py-2 my_booking_card">
@@ -106,4 +113,20 @@
 
     @endforeach
     </div>
+
+    @push('js')
+        <script>
+            $(document).ready(function(){
+                $(document).on('click','#back_btn',function(e){
+                    $url = localStorage.getItem('admin_detail');
+                    localStorage.removeItem('admin_detail');
+                    if($url){
+                        window.location.href = $url;
+                    }else{
+                        window.history.back();
+                    }
+                })
+            })
+        </script>
+    @endpush
 @endsection
