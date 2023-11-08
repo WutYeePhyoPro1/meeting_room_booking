@@ -11,28 +11,28 @@
                     <select name="room" id="room" class="mt-2 border-1 border-slate-400 text-slate-700 rounded-t-lg focus:border-slate-400 focus:ring-0">
                         <option value="">Choose Room</option>
                         @foreach ($rooms as $item)
-                        <option value="{{ $item->id }}">{{ $item->room_name }}</option>
+                        <option value="{{ $item->id }}" {{ $item->id == request('room') ? 'selected' : '' }} >{{ $item->room_name }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="flex flex-col">
                     <label for="from_date">From Date :</label>
-                    <input type="date" id="from_date" name="from_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
+                    <input type="date" id="from_date" value="{{ request('from_date') }}" name="from_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
                 </div>
                 <div class="flex flex-col">
                     <label for="to_date">To Date :</label>
-                    <input type="date" id="to_date" name="to_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
+                    <input type="date" id="to_date" value="{{ request('to_date') }}" name="to_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
                 </div>
                 <div class="flex flex-col">
                     <label for="status">Status :</label>
                     <select name="status" id="status" class="mt-2 border-1 border-slate-400 text-slate-700 rounded-t-lg focus:border-slate-400 focus:ring-0">
                         <option value="">Choose Status</option>
-                        <option value="0">Pending</option>
-                        <option value="1">Started</option>
-                        <option value="2">Ended</option>
-                        <option value="3">Canceled</option>
-                        <option value="4">Missed</option>
-                        <option value="5">Finished</option>
+                        <option value="6" {{ request('status') == 6 ? 'selected' : ''}} >Pending</option>
+                        <option value="1" {{ request('status') == 1 ? 'selected' : '' }} >Started</option>
+                        <option value="2" {{ request('status') == 2 ? 'selected' : '' }} >Ended</option>
+                        <option value="3" {{ request('status') == 3 ? 'selected' : '' }} >Canceled</option>
+                        <option value="4" {{ request('status') == 4 ? 'selected' : '' }} >Missed</option>
+                        <option value="5" {{ request('status') == 5 ? 'selected' : '' }} >Finished</option>
                     </select>
                 </div>
                 <div class="flex flex-col">

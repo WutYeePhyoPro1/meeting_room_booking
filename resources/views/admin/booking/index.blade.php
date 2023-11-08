@@ -2,8 +2,44 @@
 @section('content')
 
     <div class="my-4 mx-2 flex justify-between">
-    <span class="text-xl">All Booking</span>
+        <span class="text-xl">All Booking</span>
     </div>
+    <form action="{{ route('admin#booking') }}" method="GET">
+        <div class="p-5 grid grid-cols-5 gap-8">
+            <div class="flex flex-col">
+                <label for="room">Room :</label>
+                <select name="room" id="room" class="mt-2 border-1 border-slate-400 text-slate-700 rounded-t-lg focus:border-slate-400 focus:ring-0">
+                    <option value="">Choose Room</option>
+                    @foreach ($rooms as $item)
+                    <option value="{{ $item->id }}" {{ $item->id == request('room') ? 'selected' : '' }} >{{ $item->room_name }}</option>
+                    @endforeach
+                </select>
+            </div>
+            <div class="flex flex-col">
+                <label for="from_date">From Date :</label>
+                <input type="date" id="from_date" value="{{ request('from_date') }}" name="from_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
+            </div>
+            <div class="flex flex-col">
+                <label for="to_date">To Date :</label>
+                <input type="date" id="to_date" value="{{ request('to_date') }}" name="to_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
+            </div>
+            <div class="flex flex-col">
+                <label for="status">Status :</label>
+                <select name="status" id="status" class="mt-2 border-1 border-slate-400 text-slate-700 rounded-t-lg focus:border-slate-400 focus:ring-0">
+                    <option value="">Choose Status</option>
+                    <option value="6" {{ request('status') == 6 ? 'selected' : ''}} >Pending</option>
+                    <option value="1" {{ request('status') == 1 ? 'selected' : '' }} >Started</option>
+                    <option value="2" {{ request('status') == 2 ? 'selected' : '' }} >Ended</option>
+                    <option value="3" {{ request('status') == 3 ? 'selected' : '' }} >Canceled</option>
+                    <option value="4" {{ request('status') == 4 ? 'selected' : '' }} >Missed</option>
+                    <option value="5" {{ request('status') == 5 ? 'selected' : '' }} >Finished</option>
+                </select>
+            </div>
+            <div class="flex flex-col">
+                <x-button class="bg-emerald-600 text-white w-1/2 mt-8 h-10 ms-5 ps-14 hover:bg-emerald-800">Search</x-button>
+            </div>
+        </div>
+    </form>
     <div class="mt-3 ps-2">
         <input type="hidden" value="{{ getAuth()->id }}" id="user_id">
         <table class="table-fixed " style="width: 99%">
@@ -76,8 +112,13 @@
                 @endforeach
             </tbody>
         </table>
+        @if (request('room') || request('status') || request('from_date') || request('to_date') )
+            <div class="mt-3">
+                <a href="{{ route('admin#booking') }}"><x-button class="bg-sky-800 hover:bg-sky-900 text-white">Go To Default</x-button></a>
+            </div>
+        @endif
         <div class="flex justify-center mt-3">
-            {{ $data->links() }}
+            {{ $data->appends(request()->query())->links() }}
         </div>
     </div>
     @push('js')

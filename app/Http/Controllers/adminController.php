@@ -57,11 +57,29 @@ class adminController extends Controller
     //to booking page
     public function booking()
     {
-        $data = Booking::orderBy('date','desc')
+        $data = Booking::when(request('room'),function($q){
+                        $q->where('room_id',request('room'));
+        })
+                        ->when(request('status'),function($q){
+                            $q->when(request('status')==6,function($q){
+                                $q->where('status',0);
+                            })
+                            ->when(request('status') != 6, function($q){
+                                $q->where('status',request('status'));
+                            });
+            })
+                        ->when(request('from_date'),function($q){
+                            $q->where('date','>=',request('from_date'));
+            })
+                        ->when(request('to_date'),function($q){
+                            $q->where('date','<=',request('to_date'));
+            })
+                        ->orderBy('date','desc')
                         ->orderBy('start_time','desc')
                         ->withTrashed()
                         ->paginate(15);
-        return view('admin.booking.index',compact('data'));
+        $rooms = MeetingRoom::get();
+        return view('admin.booking.index',compact('data','rooms'));
     }
 
     //store user

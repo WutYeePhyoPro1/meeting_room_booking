@@ -163,7 +163,12 @@ class BookingController extends Controller
                             $q->where('room_id',request('room'));
                         })
                         ->when(request('status'),function($q){
-                            $q->where('status',request('status'));
+                            $q->when(request('status')==6,function($q){
+                                $q->where('status',0);
+                            })
+                            ->when(request('status') != 6, function($q){
+                                $q->where('status',request('status'));
+                            });
                         })
                         ->when(request('from_date'),function($q){
                             $q->where('date','>=',request('from_date'));
@@ -711,8 +716,7 @@ class BookingController extends Controller
             $bookingId = $data['booking_id'];
 
             $booking = Booking::where('id', $bookingId)->first();
-            $start = strtotime($booking->start_time);
-
+            $start = strtotime($booking->date.' '.$booking->start_time);
             if ($now > $start) {
                 DB::table('notifications')
                     ->where('id', $item->id)
