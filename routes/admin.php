@@ -32,6 +32,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
         //booking
         route::get('booking','booking')->name('admin#booking');
         route::get('booking/edit/{id}','edit_booking')->name('admin#editbooking');
+        route::get('booking/detail/{id}','detail_booking')->name('admin#detailbooking');
         //user
         route::get('user/create','create')->name('create_user');
         route::get('user/delete/{id}','delete')->name('delete_user');

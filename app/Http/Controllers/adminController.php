@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use App\Rules\RoomNameDublicate;
 use App\Customize\Commonfunction;
+use App\Models\BookingRequest;
 use App\Models\Reason;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -58,6 +59,7 @@ class adminController extends Controller
     {
         $data = Booking::orderBy('date','desc')
                         ->orderBy('start_time','desc')
+                        ->withTrashed()
                         ->paginate(15);
         return view('admin.booking.index',compact('data'));
     }
@@ -230,6 +232,14 @@ class adminController extends Controller
         $data = Booking::where('id',$id)->first();
         $reason = Reason::get();
         return view('admin.booking.edit',compact('data','reason'));
+    }
+
+    //detail booking
+    public function detail_booking($id)
+    {
+        $data = Booking::where("id",$id)->first();
+        $req_book = BookingRequest::where('booking_id',$id)->whereNot('request_status',0)->get();
+        return view('admin.booking.detail',compact('data','req_book'));
     }
 
     //boss in

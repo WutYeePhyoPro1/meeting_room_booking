@@ -63,7 +63,7 @@ class BookingController extends Controller
     //store booking data
     public  function store(Request $request)
     {
-
+        // dd($request->all());
         $user_id = getAuth()->id;
         $this->cus_validate($request,'store');
 
@@ -523,6 +523,9 @@ class BookingController extends Controller
                     'request_status'    => 3,
                     'approve_user'      => getAuth()->id
                 ]);
+                $rej_user = User::where('id',$item->request_user)->first();
+
+                sendNoti($rej_user,$item->booking_id,$item->id,getAuth()->id);
             }
         }
         $noti = getAuth()->unreadNotifications;

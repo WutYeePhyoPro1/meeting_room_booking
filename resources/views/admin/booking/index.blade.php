@@ -2,7 +2,7 @@
 @section('content')
 
     <div class="my-4 mx-2 flex justify-between">
-        <span class="text-xl">Booking History</span>
+    <span class="text-xl">All Booking</span>
     </div>
     <div class="mt-3 ps-2">
         <input type="hidden" value="{{ getAuth()->id }}" id="user_id">
@@ -66,9 +66,11 @@
                         <td class="text-right pr-1">
                             @if ($item->status == 1 || $item->status == 0)
                             <a href="{{ route('admin#editbooking',['id'=>$item->id]) }}"><button class="bg-amber-300 hover:bg-amber-400 rounded-lg  px-3 py-1" id="edit" title="edit" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base mt-1">edit</i></button></a>
-                            <a href="{{ route('admin#editbooking',['id'=>$item->id]) }}"><button class="bg-rose-300 hover:bg-rose-400 rounded-lg  px-3 py-1" id="cancel" title="cancel" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base mt-1">cancel</i></button></a>
+                            <a href="javascript:confirmmessage({{ $item->id }})"><button class="bg-rose-300 hover:bg-rose-400 rounded-lg  px-3 py-1" id="cancel" title="cancel" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base mt-1">cancel</i></button></a>
                             @endif
+                            <a href="{{ route('admin#detailbooking',['id'=>$item->id]) }}">
                                 <button class="bg-sky-300 hover:bg-sky-400 rounded-lg  px-3 py-1" id="detail" title="detail" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base mt-1">info</i></button>
+                            </a>
                         </td>
                     </tr>
                 @endforeach
@@ -105,7 +107,32 @@
                     showCancelButton:true,
                 }).then((result)=>{
                     if(result.isConfirmed){
-                        window.location.href = 'user/delete/'+$id;
+                        $.ajaxSetup({
+                                    headers : { 'X-CSRF_TOKEN' : $("meta[name='__token']").attr('content') }
+                                })
+
+                                $.ajax({
+                                    url  : "{{ route('booking_cancel') }}",
+                                    type : 'POST',
+                                    data : {'id' :$id} ,
+                                    success: function(res){
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Success',
+                                            text : 'Booking Cancel Success',
+                                            confirmButtonText : 'Ok',
+                                        }).then((result)=>{
+                                            if(result.isConfirmed){
+                                                location.reload();
+                                            }
+                                        })
+
+                                    },
+                                    complete:function(){
+                                        $this.text('Cancel');
+                                        $this.removeClass('pointer-events-none');
+                                    }
+                                })
                     }
                 })
             }

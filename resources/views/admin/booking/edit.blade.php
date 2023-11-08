@@ -1,6 +1,13 @@
 @extends('new_layouts.admin.layout')
 @section('content')
 <div class="px-8 py-5 mt-4">
+    <div class="w-1/2 mx-auto">
+        <x-button class="bg-transparent text-slate-900 hover:text-white px-5 hover:bg-slate-400 focus:ring-slate-800" id="back_btn">
+            <i class="material-symbols-outlined">
+                arrow_back
+                </i>
+        </x-button>
+    </div>
     <div class=" w-1/2 p-2 overflow-hidden rounded-lg mt-4 duration-500 whitespace-nowrap mx-auto shadow-lg " id="booking_div" style="background-color: rgb(255,250,223)">
         <input type="hidden" id="succ_msg" value="{{ Session::has('create') ? 1 : (Session::has('update') ? 2 : 0)}}">
         <input type="hidden" id="user_id" value="{{ getAuth()->id }}">
@@ -10,7 +17,7 @@
         <form action="{{ route('booking_store') }}" method="POST" class="mt-3" id="booking_form">
             @csrf
             <div class="flex flex-col">
-                <label for="title">Title <span class="text-red-600">*</span>:</label>
+                <label for="title">Title <span class="text-r\ed-600">*</span>:</label>
                 <input type="text" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="title" id="title" value="{{ old('title',$data->title) }}">
                 @error('title')
                     <small class="ml-2 text-red-600">{{ $message }}</small>
@@ -45,7 +52,6 @@
                     <label for="end_time">End Time <span class="text-red-600">*</span>:</label>
                     <select id="end_time" name="end_time" class="h-10 mt-2 border-slate-200 rounded-t-md focus:ring-0 focus:border-slate-400 time_interval">
                         <option value="">Choose EndTime</option>
-
                     </select>
                     <input type="hidden" id="original_end" value="{{ $data->end_time }}">
                     @error('end_time')
@@ -53,7 +59,7 @@
                     @enderror
                 </div>
             </div>
-            <input type="hidden" name="booking_id" id="booking_id">
+            {{-- <input type="hidden" name="booking_id" id="booking_id" value="{{ $data->id }}"> --}}
             <div class="text-center mt-3">
                 <span>duration ( <b id="total_duration">00:00:00</b> )</span>
                 <input type="hidden" name="duration" id="duration" value="{{ old('duration') }}">
@@ -81,7 +87,7 @@
             <div class="text-right mt-4" id="btn_div">
                 <x-button type="submit" class="bg-emerald-400 w-24 h-10 ps-6 focus:ring-yellow-600 hover:bg-emerald-600">Update</x-button>
             </div>
-            <input type="hidden" id="id" name="id" value="{{ $data->id }}">
+            <input type="hidden" id="id" name="booking_id" value="{{ $data->id }}">
         </form>
     </div>
 </div>
@@ -89,6 +95,23 @@
 @push('js')
     <script>
         $(document).ready(function(e){
+            $success = $('#succ_msg').val();
+                if($success == 1){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text : 'Booking Create Success'
+                    })
+                }else if($success == 2){
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Success',
+                        text : 'Booking Update Success'
+                    })
+                }
+
+
+
             var id = $('#id').val();
             $.ajax({
             type : "GET",
@@ -162,6 +185,12 @@
                         }
                     }
                 })
+
+
+        $(document).on('click','#back_btn',function(e){
+            window.location.href = "/admin/booking";
+
+        })
         })
     </script>
 @endpush
