@@ -39,11 +39,11 @@ class adminController extends Controller
                             ->orderBy('month')
                             ->get();
 
-            if(request('month')){
-                $year = date('Y',strtotime(request('month')));
-                $month = date('m',strtotime(request('month')));
 
-            }
+                $year = date('Y',strtotime(request('month')));
+                $month= date('m',strtotime(request('month')));
+
+
             $user_data = Booking::with('user')->select(DB::raw('count(user_id) as count'),'user_id')
                                     ->when(request('month'),function($q) use($year,$month){
                                         $q->whereMonth('date',$month)
@@ -328,7 +328,7 @@ class adminController extends Controller
     public function detail_booking($id)
     {
         $data = Booking::where("id",$id)->withTrashed()->first();
-        $req_book = BookingRequest::where('booking_id',$id)->whereNot('request_status',0)->get();
+        $req_book = BookingRequest::where('booking_id',$id)->orderBy('request_status')->get();
         return view('admin.booking.detail',compact('data','req_book'));
     }
 

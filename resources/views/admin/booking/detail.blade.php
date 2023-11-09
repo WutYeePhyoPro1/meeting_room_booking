@@ -78,18 +78,9 @@
                         <span>: {{ $item->booking->room->room_name }}</span>
                     </div>
                     @if ( $item->request_status == 0 || $item->request_status == 5)
-                        <form action="" method="POST">
-                            @csrf
-                            <input type="hidden" name="req_id" id="req_id" value="{{ $item->id }}">
-                            <input type="hidden" name="req_user_id" id="req_user_id" value="{{ $item->request_user }}">
-                            <div class="{{$item->request_status == 5 ? 'grid-cols-2' : 'grid-cols-3' }} grid  mt-10">
-                                <button type="submit" formaction="{{ route('request_reject') }}" name="action" value="reject" class="font-semibold text-slate-500 hover:bg-rose-500 duration-500 hover:text-white border py-4">Reject</button>
-                                @if ($item->request_status == 0)
-                                    <button type="button" class="font-semibold text-slate-500 hover:bg-sky-500 duration-500 hover:text-white border py-4 resent_btn">Resend</button>
-                                @endif
-                                <button type="submit" formaction="{{ route('request_accept') }}" name="action" value="accept" class="font-semibold text-slate-500 hover:bg-emerald-500 duration-500 hover:text-white border py-4">Accept</button>
-                            </div>
-                        </form>
+                        <div class="mt-10 px-10 mb-4">
+                            <span class="font-semibold text-amber-500">Request is Waiting Decision from {{ $item->booking->user->name }}</span>
+                        </div>
                     @elseif ( $item->request_status == 1 )
                         <div class="mt-10 px-10 mb-4">
                             <span class="font-semibold text-emerald-500">{{ $item->approve->name }} Have Accept Request From {{ $item->user->name }}</span>
