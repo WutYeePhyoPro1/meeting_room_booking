@@ -18,6 +18,7 @@ return new class extends Migration
             $table->integer('seat');
             $table->integer('status')->default(0);
             $table->integer('boss')->default(0);
+            $table->integer('guest')->default(0);
             $table->timestamps();
         });
     }

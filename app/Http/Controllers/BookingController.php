@@ -14,12 +14,14 @@ use Illuminate\Support\Facades\DB;
 use App\Repositories\BookingRepository;
 use Illuminate\Support\Facades\Notification;
 use App\Interfaces\BookingRepositoryInterface;
+use PDO;
 
 //store booking data
 // go to my booking page
 // go to today's booking
 //go to request Noti page
 //go to booking history page
+//go to overview page
 //search time
 //check resize time(booking တခုနဲ့တခုကြား 30 miခြားမခြားစစ် calander က resize လုပ်တဲ့အချိန် )
 //drop validation fullcalendar
@@ -181,6 +183,12 @@ class BookingController extends Controller
                         ->paginate(15);
         $rooms    = MeetingRoom::orderBy('id')->get();
         return view('user.booking_history',compact('bookings','rooms'));
+    }
+
+    //go to overveiw page
+    public function overview(){
+        $book = Booking::get();
+        return view('user.overview',compact('book'));
     }
 
     //search time
@@ -387,8 +395,12 @@ class BookingController extends Controller
         $data = MeetingRoom::where('id',$id)->first();
         $status1 = $data->status;
         $boss = $data->boss;
+        $guest = $data->guest;
         if($boss == 1){
             $status = 'Boss In';
+            return response()->json(['status'=>$status],200);
+        }elseif($guest == 1){
+            $status = 'Guest In';
             return response()->json(['status'=>$status],200);
         }else{
             if($booking){

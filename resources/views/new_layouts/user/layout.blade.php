@@ -24,6 +24,9 @@
             <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 {{ request()->is('home*')? 'bg-amber-500 px-5 text-white' : ''}}" onclick="this.childNodes[1].click()">
                 <a href="{{ route('home') }}" id="home">HOME</a>
             </li>
+            <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 {{ request()->is('overview*')? 'bg-amber-500 px-5 text-white' : ''}}" onclick="this.childNodes[1].click()">
+                <a href="{{ route('overview') }}" id="home">OVERVIEW</a>
+            </li>
             <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 relative select-none {{ (request()->is('mybooking*') || request()->is('todaybooking*') || request()->is('all_booking/history')) ? 'bg-amber-500 px-5 text-white' : ''}}" id="nav_drop_hov" onclick="this.childNodes[1].click()">
                 <div class="bg-white h-0" onclick="this.childNodes[1].click()">
                     <span class="select-none" id="book_list" data-dropdown-toggle="dropdown">BOOKING</span>
@@ -39,7 +42,7 @@
                             </a>
                             <a href="{{ route('booking_history') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('all_booking/history*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
                                 <i class="material-symbols-outlined mr-5">history</i>
-                             My BOOKING HISTORY
+                             MY BOOKING HISTORY
                             </a>
                             <a href="{{ route('today_booking') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('todaybooking*') ? 'bg-amber-500 text-white' : ''  }}" role="menuitem" tabindex="-1" id="menu-item-1">
                                 <i class="material-symbols-outlined mr-5">list</i>

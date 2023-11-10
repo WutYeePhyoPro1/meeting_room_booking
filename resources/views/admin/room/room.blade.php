@@ -19,7 +19,8 @@
                 <th class="text-left">Branch</th>
                 <th class="text-left">Avaliable Seat</th>
                 <th class="text-left ">Action</th>
-                <th class="text-left rounded-tr-lg">Boss</th>
+                <th class="text-left">Boss</th>
+                <th class="text-left rounded-tr-lg">Guest</th>
             </tr>
         </thead>
         <tbody class="font-light admin_userbody">
@@ -36,6 +37,12 @@
                     <td>
                         <label class="relative inline-flex items-center cursor-pointer">
                             <input type="checkbox" value="{{ $item->id }}" class="sr-only peer boss_in" {{ $item->boss == 1 ? 'checked' : '' }}>
+                            <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
+                          </label>
+                    </td>
+                    <td>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" value="{{ $item->id }}" class="sr-only peer guest_in" {{ $item->guest == 1 ? 'checked' : '' }}>
                             <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600"></div>
                           </label>
                     </td>
@@ -67,6 +74,18 @@
 
                 $.ajax({
                     url : 'room/boss/'+$val,
+                    type: 'get',
+                    success: function(res){
+
+                    }
+                })
+            })
+
+            $(document).on('click','.guest_in',function(){
+                $val = $(this).val();
+
+                $.ajax({
+                    url : 'room/guest/'+$val,
                     type: 'get',
                     success: function(res){
 

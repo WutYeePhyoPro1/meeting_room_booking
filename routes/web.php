@@ -17,6 +17,7 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
             route::post('request_booking/reject','req_reject')->name('request_reject');
             route::post('my_booking/extend_time','extend')->name('extend');
             route::get('all_booking/history','booking_history')->name('booking_history');
+            route::get('overview','overview')->name('overview');
 
             // ajax
             //booking

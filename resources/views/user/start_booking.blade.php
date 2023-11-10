@@ -145,7 +145,7 @@
                     ],
                     eventConstraint: {
                         start: moment().format('YYYY-MM-DD'),
-                        end: moment().add(6,'days').format('YYYY-MM-DD'),
+                        end: moment().add(7,'days').format('YYYY-MM-DD'),
                     },
                     // eventAllow: function(info){
                     //     return info.start >= '09:00' && info.end <= '17:00';

@@ -36,7 +36,7 @@
                     </div>
             </fieldset>
         </form>
-        <div class="grid grid-cols-4 gap-4 mt-5">
+        {{-- <div class="grid grid-cols-4 gap-4 mt-5">
             <div class="flex flex-col mb-5">
                 <label for="bg_color">Background Color :</label>
                 <input type="color" name="bg_color" class="mt-3" id="bg_color" value="{{ getAuth()->bg_color }}">
@@ -53,7 +53,7 @@
                 <i class="material-symbols-outlined font-extrathin cursor-pointer" title="color တွေပြောင်းပြီးရင်
                 save နှိပ်စရာမလိုပါ">info</i>
             </div>
-        </div>
+        </div> --}}
         <div class="grid grid-cols-4 gap-4 mt-5">
             <i class="material-symbols-outlined py-3 cursor-pointer bg-emerald-200 font-thin duration-500 rounded-full lg:w-1/2 md:w-full xl:w-1/2 2xl:w-1/3 pl-3 select-none text-5xl user_icon {{ getAuth()->icon == 'support_agent' ? 'bg-sky-600 pointer-events-none text-white' : '' }}">support_agent</i>
             <i class="material-symbols-outlined py-3 cursor-pointer bg-emerald-200 font-thin duration-500 rounded-full lg:w-1/2 md:w-full xl:w-1/2 2xl:w-1/3 pl-3 select-none text-5xl user_icon {{ getAuth()->icon == 'face' ? 'bg-sky-600 pointer-events-none text-white' : '' }}">face</i>
@@ -111,13 +111,11 @@
                 $(document).on('click','.user_icon',function(){
                     $val = $(this).text();
                     $this = $(this);
-                    $.ajaxSetup({
-                        headers : {'X-CSRF-TOKEN' : csrfTokenMeta.attr('content')}
-                    })
+
                     $.ajax({
                         url : "{{ route('change_icon') }}",
                         type: 'post',
-                        data: {'data' : $val},
+                        data: {_token: '{{ csrf_token() }}','data' : $val},
                         success: function(res){
                             $this.addClass('bg-sky-600 pointer-events-none text-white').siblings().removeClass('bg-sky-600 pointer-events-none text-white');
                             $('#profile_icon').text($val);

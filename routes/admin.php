@@ -46,5 +46,6 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
 
         //ajax
         route::get('room/boss/{id}','boss_in');
+        route::get('room/guest/{id}','guest_in');
     });
 });

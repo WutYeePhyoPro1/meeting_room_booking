@@ -350,6 +350,20 @@ class adminController extends Controller
         }
     }
 
+    public function guest_in($id)
+    {
+        $data = MeetingRoom::where('id',$id)->first();
+        if($data->guest == 0){
+            MeetingRoom::where('id',$id)->update([
+                'guest' => 1
+            ]);
+        }else{
+            MeetingRoom::where('id',$id)->update([
+                'guest' => 0
+            ]);
+        }
+    }
+
     //validate
     public function cus_validate($data,$action)
     {

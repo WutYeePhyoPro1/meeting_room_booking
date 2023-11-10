@@ -153,6 +153,9 @@
                                 }else if(res.status == 'Not Avaliable'){
                                     $('.room_status').eq(i).addClass('text-amber-500');
                                     $('.room_status').eq(i).text(res.status);
+                                }else if(res.status == 'Guest In'){
+                                    $('.room_status').eq(i).addClass('text-sky-500');
+                                    $('.room_status').eq(i).text(res.status);
                                 }
                             }
                         })
