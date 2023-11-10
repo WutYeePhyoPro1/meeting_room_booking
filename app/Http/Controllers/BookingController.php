@@ -775,7 +775,7 @@ class BookingController extends Controller
                 ],200);
             }
         }else{
-            return response()->json(200);
+            return response()->json(['status'=>'no'],200);
         }
     }
 

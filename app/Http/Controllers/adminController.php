@@ -99,9 +99,12 @@ class adminController extends Controller
             return view('admin.home',compact('this_year_data','last_year_data','final_data','user_data','user','color','all_data'));
         }else{
             $room = MeetingRoom::orderBy('created_at','asc')->get();
-            $current_month = Carbon::now()->format('m');
-            $current_year = Carbon::now()->format('Y');
-            $bookings = Booking::whereMonth('date',$current_month)->whereYear('date',$current_year)->orderBy('date','desc')->withTrashed()->paginate(10);
+            // $week_date = Carbon::now()->subDay(7);
+            $bookings = Booking::whereDate('date','>=',Carbon::now())
+                                ->orderBy('date','desc')
+                                ->orderBy('start_time','desc')
+                                ->withTrashed()
+                                ->paginate(10);
             return view('user.home',compact('room','bookings'));
         }
     }

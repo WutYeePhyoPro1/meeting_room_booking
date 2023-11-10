@@ -39,7 +39,7 @@
                             </a>
                             <a href="{{ route('booking_history') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('all_booking/history*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
                                 <i class="material-symbols-outlined mr-5">history</i>
-                              BOOKING HISTORY
+                             My BOOKING HISTORY
                             </a>
                             <a href="{{ route('today_booking') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('todaybooking*') ? 'bg-amber-500 text-white' : ''  }}" role="menuitem" tabindex="-1" id="menu-item-1">
                                 <i class="material-symbols-outlined mr-5">list</i>
@@ -155,6 +155,15 @@
                         $('.noti_div').removeClass('w-0 opacity-0 pointer-events-none');
                         $('.noti_div').addClass('w-4/12');
                         $('#close_noti_btn').attr('data-id',res.data.id);
+                    }
+                    if(res.status == 'no'){
+                        if(!$('.noti_div').hasClass('w-0 opacity-0 pointer-events-none')){
+                            $('.noti_div').addClass('w-0 opacity-0 pointer-events-none');
+                        }
+                        if(!$('.noti_div').hasClass('w-4/12')){
+                            $('.noti_div').removeClass('w-4/12');
+                            $('.noti_div').addClass('w-0');
+                        }
                     }
                 }
             })

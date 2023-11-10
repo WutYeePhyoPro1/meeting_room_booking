@@ -24,7 +24,32 @@
                 @foreach ($booking as $item)
                     <div class="max-w bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 px-1 overflow-hidden bg_img1" style="background: linear-gradient(rgba(61, 57, 57, 0.7), rgba(59, 57, 57, 0.7)),url('{{ asset('storage/uploads/room_image/'.$item->room->image->file_name) }}');background-repeat:no-repeat;background-position:center;background-size:cover;color:white;">
                         <div class="text-center py-2 my_booking_card ">
-                            <span class="booking_title">{{ $item->title }}</span>
+                            <span class="booking_title">{{ $item->title }}
+                                @if (is_request($item->id))
+                                    @switch(is_request($item->id)->request_status)
+                                        @case(0)
+                                            <span class="text-amber-500">(Pending)</span>
+                                            @break
+                                        @case(1)
+                                            <span class="text-emerald-500">(Accept)</span>
+                                            @break
+                                        @case(2)
+                                            <span class="text-rose-500">(Reject)</span>
+                                            @break
+                                        @case(3)
+                                            <span class="text-rose-500">(Reject)</span>
+                                            @break
+                                        @case(4)
+                                            <span class="text-sky-500">(Resend)</span>
+                                            @break
+                                        @case(5)
+                                            <span class="text-sky-500">(Resended)</span>
+                                            @break
+                                        @default
+
+                                    @endswitch
+                                @endif
+                            </span>
                         </div>
                         <hr>
                         <div class="flex">
@@ -216,10 +241,10 @@
                                         case(4) : $status = 'Waiting your answer'; $text_color = 'text-rose-500';break;
                                         default :break;
                                     }
-                                    $status_title = `
-                                    <b class="req_status ${$text_color}">(${$status})</b>
-                                    `;
-                                    $this.parent().parent().parent().parent().find('.booking_title').append($status_title);
+                                    // $status_title = `
+                                    // <b class="req_status ${$text_color}">(${$status})</b>
+                                    // `;
+                                    // $this.parent().parent().parent().parent().find('.booking_title').append($status_title);
                                 }
                             },
                             complete:function(){

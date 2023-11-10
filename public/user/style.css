@@ -57,4 +57,18 @@ nav{
     color: white;
 }
 
+.text_highlight{
+    animation: text_high 0.5s infinite alternate;
+}
 
+@keyframes text_high {
+    0% {
+        color: red;
+    }
+    50% {
+        color: blue;
+    }
+    100% {
+        color: green;
+    }
+}

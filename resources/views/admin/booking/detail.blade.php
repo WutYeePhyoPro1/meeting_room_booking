@@ -53,8 +53,11 @@
                     <span class="px-10 ring-2 ring-offset-1 ring-slate-200 py-2 rounded-lg" style="background-color: {{ $item->user->bg_color }};color:{{ $item->user->text_color }}">{{ $item->user->name }}</span>
                 </div>
 
-                <div class="flex flex-col text-center mb-10">
+                <div class="flex flex-col text-center">
                     <i class="material-symbols-outlined text-8xl cursor-auto select-none">{{ $item->user->icon }}</i>
+                </div>
+                <div class="flex flex-col text-center my-2 underline">
+                    <span>{{ $item->booking->title }}</span>
                 </div>
                 {{-- {{ $item->booking }} --}}
                 <div class="overflow-hidden max-h-full main_div">

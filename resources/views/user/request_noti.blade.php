@@ -7,10 +7,14 @@
                     <input type="hidden" id="req_booking_id" value="{{ $data->id }}">
                 </div>
 
+
                 <input type="hidden" id="success" data-msg="{{ Session::has('success') ? Session::get('success') : '' }}" value="{{ Session::has('success') ? 1 : 0 }}">
 
-                <div class="flex flex-col text-center mb-10">
+                <div class="flex flex-col text-center ">
                     <i class="material-symbols-outlined text-8xl cursor-auto select-none">{{ $data->user->icon }}</i>
+                </div>
+                <div class="flex flex-col text-center my-2 underline">
+                    <span>{{ $data->booking->title }}</span>
                 </div>
                 {{-- {{ $data->booking }} --}}
                 <div class="overflow-hidden max-h-full main_div">

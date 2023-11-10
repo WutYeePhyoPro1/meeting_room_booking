@@ -3,7 +3,10 @@
     {{-- <div class="mt-1 bg-red-400">
         <img src="{{ asset('storage/uploads/room_image/'.$data->image->file_name) }}" class="object-fill w-full" style="height: 600px" alt="">
     </div> --}}
-    <div class="px-8 py-5 mt-4 flex relative">
+    <div class="text-center my-5">
+        <span class="text-2xl font-serif underline">{{ $data->room_name }}</span>
+    </div>
+    <div class="px-8 pb-5 flex relative">
         <div id='calendar' class="w-2/3 duration-500"></div>
         <i class="material-symbols-outlined fixed right-1 top-1/3 cursor-pointer duration-500 bg-slate-500 rounded-xl text-white select-none booking_icon">arrow_right</i>
         <div class="w-1/3 p-2 overflow-hidden rounded-lg mt-4 duration-500 whitespace-nowrap ml-3" id="booking_div" style="background-color: rgb(255,250,223)">
@@ -113,7 +116,7 @@
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     contentHeight: "auto",
                     slotMinTime : "09:00:00",
-                    slotMaxTime : "17:30:00",
+                    slotMaxTime : "18:00:00",
                     weekNumbers  : true,
                     eventOverlap:false,
                     editable: true,

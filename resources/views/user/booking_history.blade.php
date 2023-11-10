@@ -30,7 +30,7 @@
                         <option value="6" {{ request('status') == 6 ? 'selected' : ''}} >Pending</option>
                         <option value="1" {{ request('status') == 1 ? 'selected' : '' }} >Started</option>
                         <option value="2" {{ request('status') == 2 ? 'selected' : '' }} >Ended</option>
-                        <option value="3" {{ request('status') == 3 ? 'selected' : '' }} >Canceled</option>
+                        <option value="3" {{ request('status') == 3 ? 'selected' : '' }} >Cancelled</option>
                         <option value="4" {{ request('status') == 4 ? 'selected' : '' }} >Missed</option>
                         <option value="5" {{ request('status') == 5 ? 'selected' : '' }} >Finished</option>
                     </select>
@@ -48,6 +48,7 @@
                     <th class="text-left w-20">Room</th>
                     <th class="text-left">Date</th>
                     <th class="text-left">Meeeting Title</th>
+                    <th class="text-left">Remark</th>
                     <th class="text-left">Start Time</th>
                     <th class="text-left">End Time</th>
                     <th class="text-left">Duration</th>
@@ -64,6 +65,7 @@
                         <td >{{ $item->room->room_name }}</td>
                         <td class="">{{ $item->date }}</td>
                         <td class="">{{ $item->title }}</td>
+                        <td class="">{{ $item->remark }}</td>
                         <td>{{ $item->start_time }}</td>
                         <td>{{ $item->end_time }}</td>
                         <td>{{ $item->duration }}</td>
@@ -71,22 +73,22 @@
                         <td>
                             @switch($item->status)
                             @case(0)
-                                Pending
+                                <span>Pending</span>
                                 @break
                             @case(1)
-                                Started
+                                <span>Started</span>
                                 @break
                             @case(2)
-                                Ended
+                                <span>Ended</span>
                                 @break
                             @case(3)
-                                Canceled
+                                <span>Cancelled</span>
                                 @break
                             @case(4)
-                                Missed
+                                <span>Missed</span>
                                 @break
                             @case(5)
-                                Finished
+                                <span>Finished</span>
                                 @break
                                 @default
                             @endswitch

@@ -27,7 +27,7 @@
         </div><hr class="mt-2">
 
         <div class="mt-3 ps-3">
-            <span class="text-2xl italic font-medium uppercase underline">Meeting &nbsp; Plan &nbsp; This &nbsp; Month</span>
+            <span class="text-2xl italic font-medium uppercase underline">Weekly &nbsp; Meeting &nbsp; Plan</span>
 
             <table class="table-responsive mt-4" style="width: 99%">
                 <thead class="h-12 bg-slate-300 z-0">
@@ -59,22 +59,30 @@
                             <td>
                                 @switch($item->status)
                                 @case(0)
-                                    Pending
+                                @if (today_booking_or_not($item->id) == 1)
+                                    <span class="text_highlight">Coming Soon</span>
+                                @else
+                                    <span>Pending</span>
+                                @endif
                                     @break
                                 @case(1)
-                                    Started
+                                    <span>Started</span>
                                     @break
                                 @case(2)
-                                    Ended
+                                    <span>Ended</span>
                                     @break
                                 @case(3)
-                                    Canceled
+                                    <span>Cancelled</span>
                                     @break
                                 @case(4)
-                                    Missed
+                                    <span>Missed</span>
                                     @break
                                 @case(5)
-                                    Finished
+                                    @if (is_early_end($item->id) == 1)
+                                        <span>Finished</span>
+                                    @else
+                                        <span>Early Finished</span>
+                                    @endif
                                     @break
                                     @default
                                 @endswitch

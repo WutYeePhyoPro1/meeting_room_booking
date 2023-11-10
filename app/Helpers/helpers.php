@@ -211,3 +211,33 @@ function check_extendable($id)
     }
     return $arr;
 }
+
+function today_booking_or_not($id){
+    $booking = Booking::where('id',$id)->first();
+    $now     = Carbon::now()->format('Y-m-d');
+    if($now == $booking->date){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+function is_early_end($id){
+    $booking = Booking::where('id',$id)->first();
+    $end_time= strtotime($booking->end_time);
+    $valid_time = floor(strtotime($booking->end_time)-5*60);
+
+    $finish_time = strtotime($booking->finished_time);
+
+    if($finish_time >= $valid_time && $finish_time < $end_time){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+function is_request($id){
+    $req = BookingRequest::where('booking_id',$id)
+                        ->where('request_user',getAuth()->id)->first();
+    return $req;
+}
