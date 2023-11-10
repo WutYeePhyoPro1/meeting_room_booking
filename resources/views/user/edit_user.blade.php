@@ -71,7 +71,7 @@
     @push('js')
         <script>
             $(document).ready(function(e){
-                var csrfTokenMeta = $("meta[name='__token']");
+
                 $status = $('#check_status').val();
                 if($status == 1){
                     Swal.fire({
@@ -83,14 +83,11 @@
                 $(document).on('change','#bg_color',function(e){
                     $val = $(this).val();
                     $this = $(this);
-                    $.ajaxSetup({
-                        headers : { 'X-CSRF_TOKEN' : csrfTokenMeta.attr('content') }
-                    })
 
                     $.ajax({
                         url     : "{{ route('change_bg_color') }}",
                         type    : 'POST',
-                        data    : {'data' : $val},
+                        data    : {_token: '{{ csrf_token() }}','data' : $val},
                         success : function(res){
                             $this.val($val);
                         }
@@ -101,13 +98,10 @@
                     // console.log('yes');
                     $val = $('.text_color:checked').val();
                     $this = $(this);
-                    $.ajaxSetup({
-                        headers : { 'X-CSRF_TOKEN' : csrfTokenMeta.attr('content') }
-                    })
                     $.ajax({
                         url     : "{{ route('change_text_color') }}",
                         type    : 'POST',
-                        data    : {'data' : $val},
+                        data    : {_token: '{{ csrf_token() }}','data' : $val},
                         success : function(res){
                             $this.val($val);
                         }

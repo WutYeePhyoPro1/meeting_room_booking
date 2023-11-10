@@ -110,13 +110,10 @@
                         room_status();
                     }, 60000);
 
-                    $.ajaxSetup({
-                        headers : {'X-CSRF-TOKEN' : $('meta[name = __token]').attr('content')}
-                    })
-
                     $.ajax({
                         url : "{{ route('booking_status') }}",
                         type: "POST",
+                        data: {_token: '{{ csrf_token() }}'},
                         success:function(res){
                             console.log('change status success');
                         }

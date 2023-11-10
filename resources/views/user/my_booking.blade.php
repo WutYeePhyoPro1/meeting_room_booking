@@ -89,7 +89,6 @@
         @push('js')
             <script>
                 $(document).ready(function(){
-                    var csrfTokenMeta = $("meta[name='__token']");
                     $success = $('#success').val();
                 $error = $('#error').val();
                 if($error == 1)
@@ -218,14 +217,11 @@
                             confirmButtonText: 'Yes',
                         }).then((result)=>{
                             if(result.isConfirmed){
-                                $.ajaxSetup({
-                                    headers : { 'X-CSRF-TOKEN': csrfTokenMeta.attr('content')}
-                                })
 
                                 $.ajax({
                                     url  : "{{ route('booking_cancel') }}",
                                     type : 'POST',
-                                    data : {'id' :$id} ,
+                                    data : {_token: '{{ csrf_token() }}','id' :$id} ,
                                     beforeSend:function(){
                                         $this.text('Loading....');
                                         $this.addClass('pointer-events-none');
@@ -310,13 +306,10 @@
                     $(document).on('click','.end_btn',function(e){
                         $id = $(this).data('id');
                         $this= $(this);
-                        $.ajaxSetup({
-                            headers : { 'X-CSRF-TOKEN': csrfTokenMeta.attr('content')}
-                        })
                         $.ajax({
                             url : "{{ route('end_booking') }}",
                             type: 'POST',
-                            data: {'data':$id},
+                            data: {_token: '{{ csrf_token() }}','data':$id},
                             success:function(res){
                                 $this.parent().parent().parent().remove();
                             }

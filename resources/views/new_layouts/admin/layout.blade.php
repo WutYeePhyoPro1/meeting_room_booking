@@ -99,14 +99,12 @@
 
 <script>
     $(document).ready(function(e){
-        var csrfTokenMeta = $("meta[name='__token']");
-        $.ajaxSetup({
-                        headers : {'X-CSRF-TOKEN' : csrfTokenMeta.attr('content')}
-                    })
+
 
         $.ajax({
             url : "{{ route('booking_status') }}",
             type: "POST",
+            data: {_token: '{{ csrf_token() }}'},
             success:function(res){
                 console.log('change status success');
             }

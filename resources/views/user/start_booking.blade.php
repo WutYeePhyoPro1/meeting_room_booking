@@ -109,7 +109,6 @@
 
     @push('js')
         <script>
-            var csrfTokenMeta = $("meta[name='__token']");
             var booking_id;
             document.addEventListener('DOMContentLoaded', function() {
                 var calendarEl = document.getElementById('calendar');
@@ -280,14 +279,10 @@
                             }
                             // var start_date = moment(end).format('YYYY-MM-DD');
                             // var today = moment().format('YYYY-MM-DD'),
-                            $.ajaxSetup({
-                                headers : {  'X-CSRF-TOKEN': csrfTokenMeta.attr('content') }
-                            })
-
                             $.ajax({
                                 type: "POST",
                                 url: "{{ route('resize_check') }}",
-                                data: {'start' : formattedStartDate , 'end' : formattedEndDate ,'id' : id,'room_id':room_id},
+                                data: {_token: '{{ csrf_token() }}','start' : formattedStartDate , 'end' : formattedEndDate ,'id' : id,'room_id':room_id},
                                 success: function (res) {
                                     console.log('Event resized successfully.');
                                     Swal.fire({
@@ -319,15 +314,12 @@
                         let id      = event.id;
                         let room_id = $('#room_id').val();
                         let data = {
+                            _token: '{{ csrf_token() }}',
                             'start'     : newStart,
                             'end'       : newEnd,
                             'id'        : id,
                             'room_id'   : room_id
                         }
-
-                        $.ajaxSetup({
-                            headers : { 'X-CSRF-Token' : csrfTokenMeta.attr('content') }
-                        })
 
                         $.ajax({
                             type    : "POST",
@@ -402,14 +394,12 @@
                 $(document).on('change','#date',function(e){
                     $val = $(this).val();
                     $room_id = $('#room_id').val();
-                    $.ajaxSetup({
-                            headers : {  'X-CSRF-TOKEN': "{{ csrf_token() }}" }
-                        })
+
 
                     $.ajax({
                         type: "POST",
                         url: "{{ route('time_search') }}",
-                        data: {'date':$val,'room_id' : $room_id},
+                        data: {_token: '{{ csrf_token() }}','date':$val,'room_id' : $room_id},
                         beforeSend:function(){
                             $('.time_interval').html('');
                         },

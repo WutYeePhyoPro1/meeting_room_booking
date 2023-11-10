@@ -142,14 +142,11 @@
                     showCancelButton:true,
                 }).then((result)=>{
                     if(result.isConfirmed){
-                        $.ajaxSetup({
-                                    headers : { 'X-CSRF_TOKEN' : $("meta[name='__token']").attr('content') }
-                                })
 
                                 $.ajax({
                                     url  : "{{ route('booking_cancel') }}",
                                     type : 'POST',
-                                    data : {'id' :$id} ,
+                                    data : {_token: '{{ csrf_token() }}','id' :$id} ,
                                     success: function(res){
                                         Swal.fire({
                                             icon: 'success',

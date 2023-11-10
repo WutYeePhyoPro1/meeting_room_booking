@@ -110,7 +110,6 @@
     @push('js')
         <script>
             $(document).ready(function(e){
-                var csrfTokenMeta = $("meta[name='__token']");
                 read();
 
                 $success = $('#success').val();
@@ -180,6 +179,7 @@
                     $og_duration = $('#duration').val();
                     $id         = $('#req_booking_id').val();
                     $data = {
+                        _token: '{{ csrf_token() }}',
                         'duration'  : $duration,
                         'from'      : $from,
                         'id'        : $id
@@ -190,10 +190,6 @@
                             text : 'condition ပြောင်းပြီးမှ send လုပ်ပါ'
                         })
                     }else{
-                        $.ajaxSetup({
-                            headers : { 'X-CSRF-TOKEN' : csrfTokenMeta.attr('content') }
-                        })
-
                         $.ajax({
                             url : "{{ route('resend_noti') }}",
                             type: 'POST',
