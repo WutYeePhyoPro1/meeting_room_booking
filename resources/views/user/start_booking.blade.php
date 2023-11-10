@@ -109,6 +109,7 @@
 
     @push('js')
         <script>
+            var csrfTokenMeta = $("meta[name='__token']");
             var booking_id;
             document.addEventListener('DOMContentLoaded', function() {
                 var calendarEl = document.getElementById('calendar');
@@ -280,7 +281,7 @@
                             // var start_date = moment(end).format('YYYY-MM-DD');
                             // var today = moment().format('YYYY-MM-DD'),
                             $.ajaxSetup({
-                                headers : {  'X-CSRF-TOKEN': $("meta[name='__token']").attr('content') }
+                                headers : {  'X-CSRF-TOKEN': csrfTokenMeta.attr('content') }
                             })
 
                             $.ajax({
@@ -325,7 +326,7 @@
                         }
 
                         $.ajaxSetup({
-                            headers : { 'X-CSRF-Token' : $("meta[name='__token']").attr('content') }
+                            headers : { 'X-CSRF-Token' : csrfTokenMeta.attr('content') }
                         })
 
                         $.ajax({

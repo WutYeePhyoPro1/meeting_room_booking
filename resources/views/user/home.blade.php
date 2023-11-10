@@ -4,7 +4,7 @@
             <span class="absolute z-10 bottom-5 ps-10 pt-1 whitespace-nowrap bg-gray-100 cursor-pointer font-semibold uppercase rounded-lg text-4xl hover:bg-slate-500 hover:text-white duration-500" style="width: 200px ;height:50px;right:45%">Room 1</span>
             <img src="{{ asset('images/background_img/office1.jpg') }}" class="object-cover w-full" style="height:inherit;" alt="">
         </div> --}}
-        <div class="grid grid-cols-3 gap-6 pt-10 px-32">
+        <div class="grid grid-cols-3 gap-6 pt-10 px-5 xl:px-32">
 
             @foreach ($room as $item)
                 <div class="max-w bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 overflow-hidden room_card">

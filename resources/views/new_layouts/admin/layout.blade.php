@@ -99,8 +99,9 @@
 
 <script>
     $(document).ready(function(e){
+        var csrfTokenMeta = $("meta[name='__token']");
         $.ajaxSetup({
-                        headers : {'X-CSRF-TOKEN' : $('meta[name = __token]').attr('content')}
+                        headers : {'X-CSRF-TOKEN' : csrfTokenMeta.attr('content')}
                     })
 
         $.ajax({
