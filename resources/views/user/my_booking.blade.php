@@ -89,6 +89,7 @@
         @push('js')
             <script>
                 $(document).ready(function(){
+                    var csrfTokenMeta = $("meta[name='__token']");
                     $success = $('#success').val();
                 $error = $('#error').val();
                 if($error == 1)
@@ -218,7 +219,7 @@
                         }).then((result)=>{
                             if(result.isConfirmed){
                                 $.ajaxSetup({
-                                    headers : { 'X-CSRF_TOKEN' : $("meta[name='__token']").attr('content') }
+                                    headers : { 'X-CSRF-TOKEN': csrfTokenMeta.attr('content')}
                                 })
 
                                 $.ajax({
@@ -310,7 +311,7 @@
                         $id = $(this).data('id');
                         $this= $(this);
                         $.ajaxSetup({
-                            headers : {'X-CSRF-TOKEN' : $('meta[name=__token]').attr('content')}
+                            headers : { 'X-CSRF-TOKEN': csrfTokenMeta.attr('content')}
                         })
                         $.ajax({
                             url : "{{ route('end_booking') }}",

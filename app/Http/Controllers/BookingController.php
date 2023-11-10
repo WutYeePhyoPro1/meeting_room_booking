@@ -750,6 +750,7 @@ class BookingController extends Controller
 
     //check booking
     public function check_booking(){
+
         $now_date = Carbon::now()->format('Y-m-d');
         $now_time = Carbon::now()->format('H:i:s');
         $data = Booking::with('room')
