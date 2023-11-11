@@ -49,7 +49,15 @@
                             <span class="-translate-x-5">Room</span>
                         </a>
                     </li>
-                @endif
+                    @endif
+                    @if (getAuth()->employee_id != '000-000000')
+                        <li class="link_item" onclick="this.childNodes[1].click()">
+                            <a href="{{ route('admin#user_home') }}">
+                                <i class="material-symbols-outlined text-white mt-4 text-md">keyboard_return</i>
+                                <span class="-translate-x-1">Back to UI</span>
+                            </a>
+                        </li>
+                    @endif
                 {{-- <li class="link_item">
                     <a href="#">
                         <span>Post</span>

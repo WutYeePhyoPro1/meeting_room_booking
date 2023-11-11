@@ -22,7 +22,7 @@
         <img class="cursor-pointer" onclick="$('#home').click()" src="{{ asset('images/logo/finallogo.png') }}" alt="">
         <ul class="flex ms-4 h-full" style="line-height:64px">
             <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 {{ request()->is('home*')? 'bg-amber-500 px-5 text-white' : ''}}" onclick="this.childNodes[1].click()">
-                <a href="{{ route('home') }}" id="home">HOME</a>
+                <a href="{{ route('admin#user_home') }}" id="home">HOME</a>
             </li>
             <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 {{ request()->is('overview*')? 'bg-amber-500 px-5 text-white' : ''}}" onclick="this.childNodes[1].click()">
                 <a href="{{ route('overview') }}" id="home">OVERVIEW</a>
@@ -100,6 +100,10 @@
                         <span href="#" class="text-gray-700 text-xl justify-center group flex items-center px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">
                           {{ getAuth()->name }}
                         </span><hr>
+                        <a href="{{ route('home') }}" class="whitespace-nowrap text-gray-700 group flex items-center px-4 py-2 text-sm hover:bg-slate-200" role="menuitem" tabindex="-1" id="menu-item-1">
+                            <i class="material-symbols-outlined mr-3">keyboard_return</i>
+                          Go To Dashboard
+                        </a>
                         <a href="{{ route('user_edit') }}" class="whitespace-nowrap text-gray-700 group flex items-center px-4 py-2 text-sm hover:bg-slate-200" role="menuitem" tabindex="-1" id="menu-item-1">
                             <i class="material-symbols-outlined mr-3">key</i>
                           Change Password

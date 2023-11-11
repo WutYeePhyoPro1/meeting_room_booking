@@ -30,13 +30,5 @@ class userseeder extends Seeder
             'branch_id'     => 0,
             'department_id' => 1
         ]);
-        DB::table('users')->insert([
-            'name'          => 'Admin',
-            'employee_id'   => '222-222222',
-            'password'      => Hash::make('222-222222'),
-            'password_str'  => '222-222222',
-            'branch_id'     => 0,
-            'department_id' => 4
-        ]);
     }
 }
