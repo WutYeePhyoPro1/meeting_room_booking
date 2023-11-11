@@ -27,62 +27,71 @@
             <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 {{ request()->is('overview*')? 'bg-amber-500 px-5 text-white' : ''}}" onclick="this.childNodes[1].click()">
                 <a href="{{ route('overview') }}" id="home">OVERVIEW</a>
             </li>
-            <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 relative select-none {{ (request()->is('mybooking*') || request()->is('todaybooking*') || request()->is('all_booking/history')) ? 'bg-amber-500 px-5 text-white' : ''}}" id="nav_drop_hov" onclick="this.childNodes[1].click()">
-                <div class="bg-white h-0" onclick="this.childNodes[1].click()">
-                    <span class="select-none" id="book_list" data-dropdown-toggle="dropdown">BOOKING</span>
+                @if (getAuth()->employee_id != '111-111111')
+                    <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 relative select-none {{ (request()->is('mybooking*') || request()->is('todaybooking*') || request()->is('all_booking/history')) ? 'bg-amber-500 px-5 text-white' : ''}}" id="nav_drop_hov" onclick="this.childNodes[1].click()">
+                        <div class="bg-white h-0" onclick="this.childNodes[1].click()">
+                            <span class="select-none" id="book_list" data-dropdown-toggle="dropdown">BOOKING</span>
 
-                    <div class=" inline-block text-left">
+                            <div class=" inline-block text-left">
 
-                        <div class="absolute  z-10 w-60 origin-top-right translate-y-6 divide-y divide-gray-100  bg-cus2 text-black shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="nav_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999;right:-100px">
-                          <div class="" role="none">
+                                <div class="absolute  z-10 w-60 origin-top-right translate-y-6 divide-y divide-gray-100  bg-cus2 text-black shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="nav_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999;right:-100px">
+                                <div class="" role="none">
 
-                            <a href="{{ route('my_booking') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('mybooking*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
-                                <i class="material-symbols-outlined mr-5">keyboard_tab</i>
-                              MY UPCOMING BOOKING
-                            </a>
-                            <a href="{{ route('booking_history') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('all_booking/history*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
-                                <i class="material-symbols-outlined mr-5">history</i>
-                             MY BOOKING HISTORY
-                            </a>
-                            <a href="{{ route('today_booking') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('todaybooking*') ? 'bg-amber-500 text-white' : ''  }}" role="menuitem" tabindex="-1" id="menu-item-1">
-                                <i class="material-symbols-outlined mr-5">list</i>
-                              ALL BOOKING WITHIN WEEK
-                            </a>
-                          </div>
+                                    <a href="{{ route('my_booking') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('mybooking*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
+                                        <i class="material-symbols-outlined mr-5">keyboard_tab</i>
+                                    MY UPCOMING BOOKING
+                                    </a>
+                                    <a href="{{ route('booking_history') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('all_booking/history*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
+                                        <i class="material-symbols-outlined mr-5">history</i>
+                                    MY BOOKING HISTORY
+                                    </a>
+                                    <a href="{{ route('today_booking') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('todaybooking*') ? 'bg-amber-500 text-white' : ''  }}" role="menuitem" tabindex="-1" id="menu-item-1">
+                                        <i class="material-symbols-outlined mr-5">list</i>
+                                    ALL BOOKING WITHIN WEEK
+                                    </a>
+                                </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
-                </div>
-            </li>
+                    </li>
+                @endif
+                @if (getAuth()->employee_id == '111-111111')
+                <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 {{ request()->is('action*') ? 'bg-amber-500 text-white px-5' : ''  }}" onclick="this.childNodes[1].click()">
+                    <a href="{{ route('action') }}" id="home" class="uppercase">action</a>
+                </li>
+            @endif
             {{-- <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500" onclick="this.childNodes[1].click()">BOOKING TODAY'S LIST</li> --}}
             {{-- <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500" onclick="this.childNodes[1].click()">BOOKING HISTORY</li> --}}
             {{-- <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500">REQUEST NOTI</li> --}}
         </ul>
         <div class="header flex justify-between px-10 z-10 relative">
-            <div class="relative me-10">
-                <i class="material-symbols-outlined text-4xl mt-3 cursor-pointer font-extralight select-none mr-16" id="noti_btn">notifications</i>
-                <span class="bg-rose-600 text-white text-xs px-1 rounded-full absolute left-5 top-3 cursor-pointer" onclick="$('#noti_btn').click()" id="id_count"></span>
+            @if (getAuth()->employee_id != '111-111111')
+                    <div class="relative me-10">
+                        <i class="material-symbols-outlined text-4xl mt-3 cursor-pointer font-extralight select-none mr-16" id="noti_btn">notifications</i>
+                        <span class="bg-rose-600 text-white text-xs px-1 rounded-full absolute left-5 top-3 cursor-pointer" onclick="$('#noti_btn').click()" id="id_count"></span>
 
-                <div class=" inline-block text-left">
+                        <div class=" inline-block text-left">
 
-                    <div class="absolute overflow-hidden overflow-y-scroll right-28 top-14 z-10 w-72 origin-top-right translate-y-2 translate-x-10 divide-y divide-gray-100 rounded-md bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="noti_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999;max-height:500px;">
-                      <div class="" role="none">
-                        @foreach (noti_in_one_week() as $item)
-                                @php
-                                    $data = json_decode($item->data,true);
-                                @endphp
-                            <a href="{{ route('request_page',['id'=>$data['request_id']]) }}" class="break-word flex flex-col {{ $item->read_at ? '' : 'bg-sky-50' }} text-gray-700 group px-4 py-2 text-sm hover:bg-slate-200" role="menuitem" tabindex="-1" id="menu-item-1">
-                                <span>{!! noti_msg($data['request_id'],$data['req_user_id']) !!}</span>
-                                <div class="text-end">
-                                    <small class="">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small>
-                                </div>
-                            </a><hr>
-                        @endforeach
-                      </div>
+                            <div class="absolute overflow-hidden overflow-y-scroll right-28 top-14 z-10 w-72 origin-top-right translate-y-2 translate-x-10 divide-y divide-gray-100 rounded-md bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="noti_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999;max-height:500px;">
+                            <div class="" role="none">
+                                @foreach (noti_in_one_week() as $item)
+                                        @php
+                                            $data = json_decode($item->data,true);
+                                        @endphp
+                                    <a href="{{ route('request_page',['id'=>$data['request_id']]) }}" class="break-word flex flex-col {{ $item->read_at ? '' : 'bg-sky-50' }} text-gray-700 group px-4 py-2 text-sm hover:bg-slate-200" role="menuitem" tabindex="-1" id="menu-item-1">
+                                        <span>{!! noti_msg($data['request_id'],$data['req_user_id']) !!}</span>
+                                        <div class="text-end">
+                                            <small class="">{{ \Carbon\Carbon::parse($item->created_at)->diffForHumans() }}</small>
+                                        </div>
+                                    </a><hr>
+                                @endforeach
+                            </div>
+                            </div>
+                        </div>
                     </div>
-                  </div>
-            </div>
+                @endif
             <div class="w-20 relative ">
-                <i class="material-symbols-outlined cursor-pointer drop_icon text-5xl mt-2 font-thin select-none" id="profile_icon"  data-dropdown-toggle="dropdown">{{ getAuth()->icon }}</i>
+                <i class="material-symbols-outlined cursor-pointer drop_icon text-5xl mt-2 font-thin select-none" id="profile_icon"  data-dropdown-toggle="dropdown">{{ getAuth()->icon ?? 'person' }}</i>
                 <div class=" inline-block text-left">
 
                     <div class="absolute  right-2 z-10 w-48 origin-top-right translate-y-2 translate-x-10 divide-y divide-gray-100 rounded-md bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="auth_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999">

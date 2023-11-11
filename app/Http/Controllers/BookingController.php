@@ -22,6 +22,7 @@ use PDO;
 //go to request Noti page
 //go to booking history page
 //go to overview page
+//go to action page
 //search time
 //check resize time(booking တခုနဲ့တခုကြား 30 miခြားမခြားစစ် calander က resize လုပ်တဲ့အချိန် )
 //drop validation fullcalendar
@@ -185,10 +186,17 @@ class BookingController extends Controller
         return view('user.booking_history',compact('bookings','rooms'));
     }
 
-    //go to overveiw page
+    //go to overview page
     public function overview(){
         $book = Booking::get();
         return view('user.overview',compact('book'));
+    }
+
+    //go to action page
+    public function action()
+    {
+        $data = MeetingRoom::orderBy('id')->paginate(15);
+        return view('user.action',compact('data'));
     }
 
     //search time
