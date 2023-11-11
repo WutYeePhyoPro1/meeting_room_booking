@@ -59,17 +59,17 @@ class BookingController extends Controller
         $data = MeetingRoom::where('id',$id)->first();
         $book = Booking::where('room_id',$id)->where('status','!=',3)->get();
         $reason = Reason::get();
+        $user = User::whereNotIn('employee_id',['000-000000','111-111111'])->get();
         // dd($book);
-        return view('user.start_booking',compact('data','reason','book'));
+        return view('user.start_booking',compact('data','reason','book','user'));
     }
 
     //store booking data
     public  function store(Request $request)
     {
-        // dd($request->all());
         $user_id = getAuth()->id;
         $this->cus_validate($request,'store');
-
+        // dd($request->all());
         if($request->booking_id){
             $book               = Booking::find($request->booking_id);
             $book->id           = $request->booking_id;
@@ -80,6 +80,9 @@ class BookingController extends Controller
             $book->title        = $request->title;
             $book->reason_id    = $request->reason_id;
             $book->remark       = $request->remark;
+            if(isset($request->ch_acc)){
+                $book->reception = 1;
+            }
             $book->save();
             $msg  = 'update';
         }else{
@@ -91,7 +94,14 @@ class BookingController extends Controller
             $book->duration     = $request->duration;
             $book->title        = $request->title;
             $book->reason_id    = $request->reason_id;
-            $book->user_id      = $user_id;
+            if(isset($request->ch_acc)){
+                $book->user_id      = $request->ch_acc;
+                if(!$book->reception){
+                    $book->reception = 1;
+                }
+            }else{
+                $book->user_id      = $user_id;
+            }
             $book->remark       = $request->remark;
             $book->save();
             $msg = 'create';

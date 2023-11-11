@@ -29,7 +29,8 @@ class Booking extends Model
         'extended_time',
         'status',
         'finished_time',
-        'noti'
+        'noti',
+        'reception'
     ];
 
     public function user()

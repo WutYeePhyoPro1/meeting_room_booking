@@ -241,3 +241,9 @@ function is_request($id){
                         ->where('request_user',getAuth()->id)->first();
     return $req;
 }
+
+function get_user_name($id)
+{
+    $name = User::where('id',$id)->first();
+    return $name->name;
+}

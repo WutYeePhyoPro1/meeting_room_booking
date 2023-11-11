@@ -30,6 +30,7 @@ return new class extends Migration
             $table->integer('status')->default(0);
             $table->time('finished_time')->nullable();
             $table->integer('noti')->nullable();
+            $table->integer('reception')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

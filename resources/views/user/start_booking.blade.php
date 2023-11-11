@@ -9,101 +9,105 @@
     <div class="px-8 pb-5 flex relative">
         <div id='calendar' class="w-2/3 duration-500"></div>
         <i class="material-symbols-outlined fixed right-1 top-1/3 cursor-pointer duration-500 bg-slate-500 rounded-xl text-white select-none booking_icon">arrow_right</i>
-        <div class="w-1/3 p-2 overflow-hidden rounded-lg mt-4 duration-500 whitespace-nowrap ml-3" id="booking_div" style="background-color: rgb(255,250,223)">
+        <div class="w-1/3 p-2 overflow-hidden rounded-lg mt-4 duration-500 whitespace-nowrap ml-3 relative" id="booking_div" style="background-color: rgb(255,250,223)">
             <input type="hidden" id="succ_msg" value="{{ Session::has('create') ? 1 : (Session::has('update') ? 2 : 0)}}">
             <input type="hidden" id="user_id" value="{{ getAuth()->id }}">
-            <div class="text-center py-1">
-                <span>Let Choose Date & Time !!</span><hr>
-            </div>
-            <form action="{{ route('booking_store') }}" method="POST" class="mt-3" id="booking_form">
-                @csrf
-                <div class="flex flex-col">
-                    <label for="title">Title <span class="text-red-600">*</span>:</label>
-                    <input type="text" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="title" id="title" value="{{ old('title') }}">
-                    @error('title')
-                        <small class="ml-2 text-red-600">{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="grid grid-cols-2 gap-2 mt-5">
-                    <div class="flex flex-col ">
-                        <label for="">Room <span class="text-red-600">*</span>:</label>
-                        <span class="h-7 w-full bg-white mt-2 border border-slate-300 rounded-md text-center select-none">{{ $data->room_name }}</span>
-                        <input type="hidden" name="room_id" id="room_id" value="{{ $data->id }}">
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="date">Date <span class="text-red-600">*</span>:</label>
-                        <input type="date" min="<?php echo date("Y-m-d"); ?>" max="<?php echo date("Y-m-d", strtotime(date("Y-m-d") . " +6 days"))?>" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="date" id="date">
-                        @error('date')
-                            <small class="ml-2 text-red-600">{{ $message }}</small>
-                        @enderror
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2 mt-5">
-                    <div class="flex flex-col">
-                        <label for="start_time">Start Time <span class="text-red-600">*</span>:</label>
-                        <select id="start_time" name="start_time" class="h-10 mt-2 border-slate-200 rounded-t-md focus:ring-0 focus:border-slate-400 time_interval">
-                            <option value="">Choose StartTime</option>
-                            {{-- <option value="09:00:00" {{ old('start_time') == "09:00:00" ? 'selected' : '' }}>9:00 am</option>
-                            <option value="09:30:00" {{ old('start_time') == "09:30:00" ? 'selected' : '' }}>9:30 am</option>
-                            <option value="10:00:00" {{ old('start_time') == "10:00:00" ? 'selected' : '' }}>10:00 am</option>
-                            <option value="10:30:00" {{ old('start_time') == "10:30:00" ? 'selected' : '' }}>10:30 am</option>
-                            <option value="11:00:00" {{ old('start_time') == "11:00:00" ? 'selected' : '' }}>11:00 am</option>
-                            <option value="11:30:00" {{ old('start_time') == "11:30:00" ? 'selected' : '' }}>11:30 am</option>
-                            <option value="12:00:00" {{ old('start_time') == "12:00:00" ? 'selected' : '' }}>12:00 pm</option>
-                            <option value="12:30:00" {{ old('start_time') == "12:30:00" ? 'selected' : '' }}>12:30 pm</option>
-                            <option value="13:00:00" {{ old('start_time') == "13:00:00" ? 'selected' : '' }}>1:00 pm</option>
-                            <option value="13:30:00" {{ old('start_time') == "13:30:00" ? 'selected' : '' }}>1:30 pm</option>
-                            <option value="14:00:00" {{ old('start_time') == "14:00:00" ? 'selected' : '' }}>2:00 pm</option>
-                            <option value="14:30:00" {{ old('start_time') == "14:30:00" ? 'selected' : '' }}>2:30 pm</option>
-                            <option value="15:00:00" {{ old('start_time') == "15:00:00" ? 'selected' : '' }}>3:00 pm</option>
-                            <option value="15:30:00" {{ old('start_time') == "15:30:00" ? 'selected' : '' }}>3:30 pm</option>
-                            <option value="16:00:00" {{ old('start_time') == "16:00:00" ? 'selected' : '' }}>4:00 pm</option>
-                            <option value="16:30:00" {{ old('start_time') == "16:30:00" ? 'selected' : '' }}>4:30 pm</option>
-                            <option value="17:00:00" {{ old('start_time') == "17:00:00" ? 'selected' : '' }}>5:00 pm</option> --}}
-                        </select>
-                        @error('start_time')
-                            <small class="ml-2 text-red-600">{{ $message }}</small>
-                        @enderror
-                    </div>
-                    <div class="flex flex-col">
-                        <label for="end_time">End Time <span class="text-red-600">*</span>:</label>
-                        <select id="end_time" name="end_time" class="h-10 mt-2 border-slate-200 rounded-t-md focus:ring-0 focus:border-slate-400 time_interval">
-                            <option value="">Choose EndTime</option>
 
-                        </select>
-                        @error('end_time')
+            <div class="{{ (getAuth()->employee_id == '111-111111' && !old('ch_acc')) ? 'hidden' : '' }}" id="start_form">
+                <div class="text-center py-1">
+                    <span>Let Choose Date & Time !!</span><hr>
+                </div>
+                <form action="{{ route('booking_store') }}" method="POST" class="mt-3" id="booking_form">
+                    @csrf
+                    <div class="flex flex-col">
+                        <label for="title">Title <span class="text-red-600">*</span>:</label>
+                        <input type="text" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="title" id="title" value="{{ old('title') }}">
+                        @error('title')
                             <small class="ml-2 text-red-600">{{ $message }}</small>
                         @enderror
                     </div>
-                </div>
-                <input type="hidden" name="booking_id" id="booking_id">
-                <div class="text-center mt-3">
-                    <span>duration ( <b id="total_duration">00:00:00</b> )</span>
-                    <input type="hidden" name="duration" id="duration" value="{{ old('duration') }}">
-                </div>
-                <div class="flex flex-col mt-5">
-                    <label for="reason">Title <span class="text-red-600">*</span>:</label>
-                    <select name="reason_id" id="reason" class="h-10 mt-2 border-slate-200 rounded-t-md focus:ring-0  focus:border-slate-400">
-                        <option value="">Choose Reason</option>
-                        @foreach ($reason as $item)
-                            <option value="{{ $item->id }}" {{ old('reason_id') == $item->id ? 'selected' : '' }}>{{ $item->reason }}</option>
-                        @endforeach
-                    </select>
-                    @error('reason')
-                        <small class="ml-2 text-red-600">{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="flex flex-col mt-5">
-                    <label for="remark">Remark :</label>
-                    <textarea name="remark" id="remark" class="mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" cols="30" rows="3">{{ old('remark') }}</textarea>
-                    @error('remark')
-                        <small class="ml-2 text-red-600">{{ $message }}</small>
-                    @enderror
-                </div>
-                <div class="text-center mt-4" id="btn_div">
-                    <x-button type="submit" class="bg-yellow-400 w-24 h-10 ps-7 focus:ring-yellow-600 hover:bg-yellow-600">{{ __('Book') }}</x-button>
-                </div>
-            </form>
+                    <div class="grid grid-cols-2 gap-2 mt-5">
+                        <div class="flex flex-col ">
+                            <label for="">Room <span class="text-red-600">*</span>:</label>
+                            <span class="h-7 w-full bg-white mt-2 border border-slate-300 rounded-md text-center select-none">{{ $data->room_name }}</span>
+                            <input type="hidden" name="room_id" id="room_id" value="{{ $data->id }}">
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="date">Date <span class="text-red-600">*</span>:</label>
+                            <input type="date" min="<?php echo date("Y-m-d"); ?>" max="<?php echo date("Y-m-d", strtotime(date("Y-m-d") . " +6 days"))?>" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="date" id="date">
+                            @error('date')
+                                <small class="ml-2 text-red-600">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-5">
+                        <div class="flex flex-col">
+                            <label for="start_time">Start Time <span class="text-red-600">*</span>:</label>
+                            <select id="start_time" name="start_time" class="h-10 mt-2 border-slate-200 rounded-t-md focus:ring-0 focus:border-slate-400 time_interval">
+                                <option value="">Choose StartTime</option>
+                            </select>
+                            @error('start_time')
+                                <small class="ml-2 text-red-600">{{ $message }}</small>
+                            @enderror
+                        </div>
+                        <div class="flex flex-col">
+                            <label for="end_time">End Time <span class="text-red-600">*</span>:</label>
+                            <select id="end_time" name="end_time" class="h-10 mt-2 border-slate-200 rounded-t-md focus:ring-0 focus:border-slate-400 time_interval">
+                                <option value="">Choose EndTime</option>
+
+                            </select>
+                            @error('end_time')
+                                <small class="ml-2 text-red-600">{{ $message }}</small>
+                            @enderror
+                        </div>
+                    </div>
+                    <input type="hidden" name="booking_id" id="booking_id">
+                    <div class="text-center mt-3">
+                        <span>duration ( <b id="total_duration">00:00:00</b> )</span>
+                        <input type="hidden" name="duration" id="duration" value="{{ old('duration') }}">
+                    </div>
+                    <div class="flex flex-col mt-5">
+                        <label for="reason">Title <span class="text-red-600">*</span>:</label>
+                        <select name="reason_id" id="reason" class="h-10 mt-2 border-slate-200 rounded-t-md focus:ring-0  focus:border-slate-400">
+                            <option value="">Choose Reason</option>
+                            @foreach ($reason as $item)
+                                <option value="{{ $item->id }}" {{ old('reason_id') == $item->id ? 'selected' : '' }}>{{ $item->reason }}</option>
+                            @endforeach
+                        </select>
+                        @error('reason')
+                            <small class="ml-2 text-red-600">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="flex flex-col mt-5">
+                        <label for="remark">Remark :</label>
+                        <textarea name="remark" id="remark" class="mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" cols="30" rows="3">{{ old('remark') }}</textarea>
+                        @error('remark')
+                            <small class="ml-2 text-red-600">{{ $message }}</small>
+                        @enderror
+                    </div>
+                    <div class="text-center mt-4" id="btn_div">
+                        @if (getAuth()->employee_id == '111-111111')
+                            <x-button type="button" class="bg-rose-400 w-24 h-10 ps-6 focus:ring-rose-600 hover:bg-rose-600" id="return_btn">{{ __('Return') }}</x-button>
+                        @endif
+                        <x-button type="submit" class="bg-yellow-400 w-24 h-10 ps-7 focus:ring-yellow-600 hover:bg-yellow-600">{{ __('Book') }}</x-button>
+                    </div>
+                    @if (getAuth()->employee_id == '111-111111')
+                        <input type="hidden" name="ch_acc" id="ch_acc" value="{{ old('ch_acc') }}">
+                    @endif
+                </form>
+            </div>
+
+            <div class="text-center py-1 {{ (getAuth()->employee_id != '111-111111' || old('ch_acc')) ? 'hidden' : '' }}" id="re_form">
+                <span>Please Choose Your Account</span><hr>
+                <ul class="mt-5 overflow-y-scroll max-h-[30rem] ch_acc">
+                    @foreach ($user as $item)
+                        <li class="w-11/12 ms-5 hover:bg-amber-200 h-8 my-4 leading-8 cursor-pointer rounded-md user_accounts" data-id="{{ $item->id }}">{{ $item->name }}</li>
+                    @endforeach
+                </ul>
+            </div>
+            <div class="text-left py-3 w-full {{ old('ch_acc') ? '' : 'hidden' }}" id="cur_acc"><hr>
+                <span id="cur_user">Your Current Account is : {{ old('ch_acc') ? get_user_name(old('ch_acc')) : ''}}</span>
+            </div>
         </div>
     </div>
 
@@ -165,11 +169,12 @@
                         let start_date = moment(event.start).format('YYYY-MM-DD HH:mm:ss');
                         let today      = moment().format('YYYY-MM-DD HH:mm:ss');
                         let user_id = $('#user_id').val();
+                        let ch_acc = $('#ch_acc').val();
                         // console.log(start_date);
 
                         let b_user_id = event.user_id;
 
-                        if ((start_date < today) || (user_id != b_user_id)) {
+                        if ((start_date < today) || (user_id != b_user_id) || (ch_acc != b_user_id)) {
                             event.editable = false;
                         }
                         return event;
@@ -179,6 +184,7 @@
                         let id = event.id;
                         let user_id = $('#user_id').val();
                         let b_user_id = event.extendedProps.user_id;
+                        let ch_acc = $('#ch_acc').val();
                         let token = $("meta[name='__token']").attr('content');
                         let start_date = moment(event.start).format('YYYY-MM-DD HH:mm:ss');
                         let today      = moment().format('YYYY-MM-DD HH:mm:ss');
@@ -193,7 +199,7 @@
                             return false;
                         }
 
-                        if(user_id == b_user_id && !past){
+                        if(((user_id == b_user_id) || (ch_acc == b_user_id)) && !past){
                             Swal.fire({
                                 icon : 'question',
                                 text : "{{ __('message.confirm') }}",
@@ -501,6 +507,34 @@
                     $('#remark').html('')
                     $('#btn_div').html(`
                     <x-button type="submit" class="bg-yellow-400 w-24 h-10 ps-7 hover:bg-yellow-600">{{ __('Book') }}</x-button>`);
+                })
+
+                $(document).on('click','.user_accounts',function(e){
+                    $id = $(this).data('id');
+                    $name = $(this).text();
+                    if($('#start_form').hasClass('hidden')){
+                        $('#start_form').removeClass('hidden');
+                    }
+                    if(!$('#re_form').hasClass('hidden'))
+                    {
+                        $('#re_form').addClass('hidden');
+                        $('#cur_acc').removeClass('hidden');
+                        $('#cur_user').append($name);
+                    }
+                    $('#ch_acc').val($id);
+                })
+
+                $(document).on('click','#return_btn',function(e){
+                    $('#ch_acc').val('');
+                    if(!$('#start_form').hasClass('hidden')){
+                        $('#start_form').addClass('hidden');
+                    }
+                    if($('#re_form').hasClass('hidden'))
+                    {
+                        $('#re_form').removeClass('hidden');
+                        $('#cur_acc').addClass('hidden');
+                        $('#cur_user').text('Your Current Account is : ');
+                    }
                 })
             })
         </script>

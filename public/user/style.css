@@ -1,6 +1,6 @@
 
 
-body::-webkit-scrollbar,.fc-scroller::-webkit-scrollbar,#noti_drop::-webkit-scrollbar{
+body::-webkit-scrollbar,.fc-scroller::-webkit-scrollbar,#noti_drop::-webkit-scrollbar,.ch_acc::-webkit-scrollbar{
     width: 5px;
 }
 
@@ -14,6 +14,12 @@ body::-webkit-scrollbar-thumb,.fc-scroller::-webkit-scrollbar-thumb,#noti_drop::
 
 body::-webkit-scrollbar-track-piece,.fc-scroller::-webkit-scrollbar-track-piece,#noti_drop::-webkit-scrollbar-track-piece{
     background-color: rgb(163, 163, 163);
+}
+
+
+
+.ch_acc::-webkit-scrollbar-thumb{
+    background-color: rgb(253 230 138);
 }
 
 nav{
