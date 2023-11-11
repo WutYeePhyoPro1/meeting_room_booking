@@ -24,7 +24,7 @@ use Symfony\Component\CssSelector\Node\FunctionNode;
 class adminController extends Controller
 {
     public function dashboard(){
-        if(getAuth()->employee_id == '000-000000'){
+        if(getAuth()->employee_id == '000-000000' || getAuth()->employee_id == '222-222222'){
             $this_year = Carbon::now()->format('Y');
             $last_year = Carbon::now()->subYear(1)->format('Y');
             $data = Booking::selectRaw('TO_CHAR(date,\'Month\')  as month, count(date) as count')

@@ -30,24 +30,26 @@
                         <span>Dashboard</span>
                     </a>
                 </li>
-                <li class="link_item {{ request()->is('admin/booking*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
-                    <a href="{{ route('admin#booking') }}" class="">
-                        <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-1">book_online</i>
-                        <span class="-translate-x-3">Booking</span>
-                    </a>
-                </li>
-                <li class="link_item {{ request()->is('admin/user*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
-                    <a href="{{ route('admin#user') }}" class="">
-                        <i class="material-symbols-outlined text-white mt-3 text-md" style="transform:translateX(-10px)">person_add</i>
-                        <span class="-translate-x-7">User</span>
-                    </a>
-                </li>
-                <li class="link_item {{ request()->is('admin/room*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
-                    <a href="{{ route('admin#room') }}">
-                        <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-2">meeting_room</i>
-                        <span class="-translate-x-5">Room</span>
-                    </a>
-                </li>
+                @if (getAuth()->employee_id == '000-000000')
+                    <li class="link_item {{ request()->is('admin/booking*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
+                        <a href="{{ route('admin#booking') }}" class="">
+                            <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-1">book_online</i>
+                            <span class="-translate-x-3">Booking</span>
+                        </a>
+                    </li>
+                    <li class="link_item {{ request()->is('admin/user*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
+                        <a href="{{ route('admin#user') }}" class="">
+                            <i class="material-symbols-outlined text-white mt-3 text-md" style="transform:translateX(-10px)">person_add</i>
+                            <span class="-translate-x-7">User</span>
+                        </a>
+                    </li>
+                    <li class="link_item {{ request()->is('admin/room*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
+                        <a href="{{ route('admin#room') }}">
+                            <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-2">meeting_room</i>
+                            <span class="-translate-x-5">Room</span>
+                        </a>
+                    </li>
+                @endif
                 {{-- <li class="link_item">
                     <a href="#">
                         <span>Post</span>
@@ -76,7 +78,7 @@
                       <div class="pt-1" role="none">
                         <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                         <span href="#" class="text-gray-700 text-xl justify-center group flex items-center px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">
-                          Admin
+                          {{ getAuth()->name }}
                         </span>
                         <form action="{{ route('logout') }}" method="post" id="logout">
                             @csrf
