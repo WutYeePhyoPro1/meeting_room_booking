@@ -53,7 +53,7 @@ class adminController extends Controller
                                         $q->where('date','>=',request('from_date'));
                                     })
                                     ->when(request('to_date') && !request('month'),function($q){
-                                        $q->where('date','၊=',request('to_date'));
+                                        $q->where('date','<=',request('to_date'));
                                     })
                                     ->groupBy('user_id')
                                     ->orderBy('user_id')
@@ -67,7 +67,7 @@ class adminController extends Controller
                                     $q->where('date','>=',request('from_date'));
                                 })
                                 ->when(request('to_date') && !request('month'),function($q){
-                                    $q->where('date','၊=',request('to_date'));
+                                    $q->where('date','<=',request('to_date'));
                                 })
                                 ->withTrashed()
                                 ->get();
@@ -139,7 +139,7 @@ class adminController extends Controller
                                     $q->where('date','>=',request('from_date'));
                                 })
                                 ->when(request('to_date') && !request('month'),function($q){
-                                    $q->where('date','၊=',request('to_date'));
+                                    $q->where('date','<=',request('to_date'));
                                 })
                                 ->when(request('status') , function($q){
                                     $q->when(in_array(6,request('status')),function($q){
@@ -162,10 +162,16 @@ class adminController extends Controller
                                 $q->where('date','>=',request('from_date'));
                             })
                             ->when(request('to_date') && !request('month'),function($q){
-                                $q->where('date','၊=',request('to_date'));
+                                $q->where('date','<=',request('to_date'));
                             })
                             ->when(request('status') , function($q){
-                                $q->whereIn('status',request('status'));
+                                $q->when(in_array(6,request('status')),function($q){
+                                    $q->whereIn('status',request('status'))
+                                    ->orwhere('status',0);
+                                })
+                                ->when(!in_array(6,request('status')) , function($q){
+                                    $q->whereIn('status',request('status'));
+                                });
                             })
                             ->withTrashed()
                             ->get();
