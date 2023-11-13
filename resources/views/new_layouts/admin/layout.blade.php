@@ -88,7 +88,7 @@
                 @endif
                 <div class=" inline-block text-left">
 
-                    <div class="absolute  right-0 z-10 w-60 origin-top-right -translate-y-4 divide-y divide-gray-100 rounded-md bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="auth_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999">
+                    <div class="absolute  right-0 z-10 w-60 origin-top-right {{ getAuth()->employee_id == '000-000000' ? '-translate-y-4' : 'translate-y-3' }}  divide-y divide-gray-100 rounded-md bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="auth_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999">
                       <div class="pt-1" role="none">
                         <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                         <span href="#" class="text-gray-700 text-xl justify-center group flex items-center px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">
