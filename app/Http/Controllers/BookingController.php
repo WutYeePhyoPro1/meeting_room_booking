@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use PDO;
 use Carbon\Carbon;
+use App\Models\Log;
 use App\Models\User;
 use App\Models\Branch;
 use App\Models\Reason;
@@ -14,7 +16,6 @@ use Illuminate\Support\Facades\DB;
 use App\Repositories\BookingRepository;
 use Illuminate\Support\Facades\Notification;
 use App\Interfaces\BookingRepositoryInterface;
-use PDO;
 
 //store booking data
 // go to my booking page
@@ -118,19 +119,33 @@ class BookingController extends Controller
         $date = Carbon::now()->format('Y-m-d');
         $now = Carbon::now()->format('H:i:s');
 
-
-        $booking = Booking::where(function($q) use($date,$now){
-                                    $q->where('date', '>', $date)
-                                                    ->orWhere(function ($q) use ($date,$now) {
-                                                        $q->where('date', $date)
-                                                            ->where('end_time', '>', $now);
-                                                    });
-                                })
+        if(getAuth()->employee_id == '111-111111'){
+            $booking = Booking::where(function($q) use($date,$now){
+                            $q->where('date', '>', $date)
+                                            ->orWhere(function ($q) use ($date,$now) {
+                                                $q->where('date', $date)
+                                                    ->where('end_time', '>', $now);
+                                            });
+                            })
+                            ->whereIn('status',[0,1])
+                            ->orderBy('date','asc')
+                            ->orderBy('start_time','asc')
+                            ->get();
+        }else{
+            $booking = Booking::where(function($q) use($date,$now){
+                            $q->where('date', '>', $date)
+                                            ->orWhere(function ($q) use ($date,$now) {
+                                                $q->where('date', $date)
+                                                    ->where('end_time', '>', $now);
+                                            });
+                        })
                             ->where('user_id',getAuth()->id)
                             ->whereIn('status',[0,1])
                             ->orderBy('date','asc')
                             ->orderBy('start_time','asc')
                             ->get();
+        }
+
         // dd($booking);
         return view('user.my_booking',compact('booking'));
     }
@@ -191,6 +206,7 @@ class BookingController extends Controller
                         })
                         ->orderBy('date','desc')
                         ->orderBy('start_time','desc')
+                        ->withTrashed()
                         ->paginate(15);
         $rooms    = MeetingRoom::orderBy('id')->get();
         return view('user.booking_history',compact('bookings','rooms'));
@@ -310,6 +326,12 @@ class BookingController extends Controller
             'status'    => 3
         ]);
         Booking::where('id',$id)->delete();
+        $log = new Log;
+        $log->booking_id = $id;
+        $log->user_id = getAuth()->id;
+        $log->user_name = getAuth()->name;
+        $log->action = 'cancel';
+        $log->save();
         return response()->json(200);
     }
 
@@ -319,17 +341,30 @@ class BookingController extends Controller
         date_default_timezone_set('Asia/Yangon');
         $date = Carbon::now()->format('Y-m-d');
         $now = Carbon::now()->format('H:i:s');
-        $booking = Booking::where(function($q) use($date,$now){
+        if(getAuth()->employee_id == '111-111111'){
+            $booking = Booking::where(function($q) use($date,$now){
+                            $q->where('date', '>', $date)
+                                            ->orWhere(function ($q) use ($date,$now) {
+                                                $q->where('date', $date)
+                                                    ->where('end_time', '>', $now);
+                                            });
+                            })
+                            ->whereIn('status',[0,1])
+                            ->orderBy('date','asc')
+                            ->orderBy('start_time','asc');
+        }else{
+            $booking = Booking::where(function($q) use($date,$now){
                             $q->where('date', '>', $date)
                                             ->orWhere(function ($q) use ($date,$now) {
                                                 $q->where('date', $date)
                                                     ->where('end_time', '>', $now);
                                             });
                         })
-                    ->where('user_id',getAuth()->id)
-                    ->where('status','!=',3)
-                    ->orderBy('date','asc')
-                    ->orderBy('start_time','asc');
+                            ->where('user_id',getAuth()->id)
+                            ->whereIn('status',[0,1])
+                            ->orderBy('date','asc')
+                            ->orderBy('start_time','asc');
+        }
         switch ($id) {
             case 0:
                 break;
@@ -460,6 +495,12 @@ class BookingController extends Controller
         $booking = Booking::where('id',$id)->first();
         Booking::where('id',$id)->update(['status'=>1]);
         MeetingRoom::where('id',$booking->room_id)->update(['status' =>1]);
+        $log = new Log;
+        $log->booking_id = $id;
+        $log->user_id = getAuth()->id;
+        $log->user_name = getAuth()->name;
+        $log->action = 'start';
+        $log->save();
         return response()->json(200);
     }
 
@@ -595,6 +636,12 @@ class BookingController extends Controller
             'extended_duration' => $request->extend_time,
             'extended_time'     => Carbon::now()
         ]);
+        $log = new Log;
+        $log->booking_id = $book->id;
+        $log->user_id = getAuth()->id;
+        $log->user_name = getAuth()->name;
+        $log->action = 'extend';
+        $log->save();
         return back()->with('success','Extend Time Success');
     }
 
@@ -702,6 +749,12 @@ class BookingController extends Controller
         MeetingRoom::where('id',$booking->room_id)->update([
             'status'    => 0
         ]);
+        $log = new Log;
+        $log->booking_id = $id;
+        $log->user_id = getAuth()->id;
+        $log->user_name = getAuth()->name;
+        $log->action = 'end';
+        $log->save();
         return response(200);
     }
 
@@ -783,13 +836,24 @@ class BookingController extends Controller
 
         $now_date = Carbon::now()->format('Y-m-d');
         $now_time = Carbon::now()->format('H:i:s');
-        $data = Booking::with('room')
-                        ->where('date',$now_date)
-                        ->where('start_time','>',$now_time)
-                        ->where('user_id',getAuth()->id)
-                        ->whereNull('noti')
-                        ->orderBy('start_time','asc')
-                        ->first();
+        if(getAuth()->employee_id == '111-111111'){
+            $data = Booking::with('room')
+                            ->with('user')
+                            ->where('date',$now_date)
+                            ->where('start_time','>',$now_time)
+                            ->whereNull('noti')
+                            ->orderBy('start_time','asc')
+                            ->first();
+        }else{
+            $data = Booking::with('room')
+                            ->with('user')
+                            ->where('date',$now_date)
+                            ->where('start_time','>',$now_time)
+                            ->where('user_id',getAuth()->id)
+                            ->whereNull('noti')
+                            ->orderBy('start_time','asc')
+                            ->first();
+        }
 
         if($data)
         {

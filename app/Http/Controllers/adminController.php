@@ -23,8 +23,8 @@ use Symfony\Component\CssSelector\Node\FunctionNode;
 
 class adminController extends Controller
 {
-    public function dashboard(){
-        if(getAuth()->employee_id != '111-111111'){
+    public function home(){
+        if(getAuth()->employee_id == '000-000000'){
             $this_year = Carbon::now()->format('Y');
             $last_year = Carbon::now()->subYear(1)->format('Y');
             $data = Booking::selectRaw('TO_CHAR(date,\'Month\')  as month, count(date) as count')
@@ -110,15 +110,91 @@ class adminController extends Controller
     }
 
     //go to user home page
-    public function home(){
-        $room = MeetingRoom::orderBy('created_at','asc')->get();
-        // $week_date = Carbon::now()->subDay(7);
-        $bookings = Booking::whereDate('date','>=',Carbon::now())
-                            ->orderBy('date','desc')
-                            ->orderBy('start_time','desc')
+    public function dashboard(){
+
+        $this_year = Carbon::now()->format('Y');
+        $last_year = Carbon::now()->subYear(1)->format('Y');
+        $data = Booking::selectRaw('TO_CHAR(date,\'Month\')  as month, count(date) as count')
+                        ->whereYear('date',$this_year)
+                        ->groupBy(DB::raw('TO_CHAR(date,\'Month\') '))
+                        ->orderBy('month')
+                        ->get();
+
+        $data1 = Booking::selectRaw('TO_CHAR(date,\'Month\')  as month, count(date) as count')
+                        ->whereYear('date',$last_year)
+                        ->groupBy(DB::raw('TO_CHAR(date,\'Month\') '))
+                        ->orderBy('month')
+                        ->get();
+
+
+            $year = date('Y',strtotime(request('month')));
+            $month= date('m',strtotime(request('month')));
+
+        $user_data = Booking::with('user')->select(DB::raw('count(user_id) as count'),'user_id')
+                                ->when(request('month'),function($q) use($year,$month){
+                                    $q->whereMonth('date',$month)
+                                    ->whereYear('date',$year);
+                                })
+                                ->when(request('from_date') && !request('month'),function($q){
+                                    $q->where('date','>=',request('from_date'));
+                                })
+                                ->when(request('to_date') && !request('month'),function($q){
+                                    $q->where('date','၊=',request('to_date'));
+                                })
+                                ->when(request('status') , function($q){
+                                    $q->when(in_array(6,request('status')),function($q){
+                                        $q->whereIn('status',request('status'))
+                                        ->orwhere('status',0);
+                                    })
+                                    ->when(!in_array(6,request('status')) , function($q){
+                                        $q->whereIn('status',request('status'));
+                                    });
+                                })
+                                ->groupBy('user_id')
+                                ->orderBy('user_id')
+                                ->withTrashed()
+                                ->get();
+        $all_data = Booking::when(request('month'),function($q) use($year,$month){
+                                $q->whereMonth('date',$month)
+                                ->whereYear('date',$year);
+                            })
+                            ->when(request('from_date') && !request('month'),function($q){
+                                $q->where('date','>=',request('from_date'));
+                            })
+                            ->when(request('to_date') && !request('month'),function($q){
+                                $q->where('date','၊=',request('to_date'));
+                            })
+                            ->when(request('status') , function($q){
+                                $q->whereIn('status',request('status'));
+                            })
                             ->withTrashed()
-                            ->paginate(10);
-        return view('user.home',compact('room','bookings'));
+                            ->get();
+        $all_user = User::whereNot('employee_id','000-000000')->orderBy('id')->get();
+        $user = $all_user->pluck('name')->all();
+        $color = $all_user->pluck('bg_color')->all();
+        $data_user = [];
+        $final_data= [];
+        foreach($all_user as $item){
+            $data_user[$item->name] = null;
+        }
+        foreach($user_data as $item)
+        {
+                $data_user[$item->user->name] = $item->count;
+        }
+        foreach($data_user as $index=>$item){
+            $final_data[]=$item;
+        }
+
+        $this_year_data = ['January' => null, 'February' => null, 'March' => null, 'April' => null, 'May' => null, 'June' => null, 'July' => null,'August' => null,'September' => null,'October' => null,'November' => null,'December' => null];
+        $last_year_data = $this_year_data;
+        foreach($data as $item){
+            $this_year_data[trim($item->month,' ')] = $item->count;
+        }
+        foreach($data1 as $item){
+            $last_year_data[trim($item->month,' ')] = $item->count;
+        }
+
+        return view('admin.home',compact('this_year_data','last_year_data','final_data','user_data','user','color','all_data'));
     }
 
     public function user()

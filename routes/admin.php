@@ -24,8 +24,8 @@ Route::get('/', function () {
 })->middleware(AuthCheckMiddleware::class);
 
 Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])->group(function () {
-    route::get('/dashboard',[adminController::class,'dashboard'])->name('home');
-    route::get('/home',[adminController::class,'home'])->name('admin#user_home');
+    route::get('/home',[adminController::class,'home'])->name('home');
+    route::get('/dashboard',[adminController::class,'dashboard'])->name('admin#dashboard');
 
     route::group(['prefix'=>'admin','controller'=>adminController::class],function(){
         route::group(['middleware'=>AdminCheckMiddleware::class],function(){

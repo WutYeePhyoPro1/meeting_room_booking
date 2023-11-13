@@ -9,6 +9,8 @@
     <title>{{ config('app.name', 'Meeting Room Booking System') }}</title>
     <link rel="icon" href="{{ asset('images/logo/finallogo.png') }}">
     <link rel="stylesheet" href="{{ asset('admin/style.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/select2.min.css') }}">
+    {{-- <link rel="stylesheet" href="{{ asset('css/select2.css') }}"> --}}
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -24,12 +26,12 @@
         </div>
         <nav class="sidebar_body">
             <ul class="nav_link">
-                <li class="link_item {{ request()->is('home')? 'active' : '' }}" onclick="this.childNodes[1].click()">
-                    <a href="{{ route('home') }}" class="">
-                        <i class="material-symbols-outlined text-white mt-3 text-md">dashboard</i>
-                        <span>Dashboard</span>
-                    </a>
-                </li>
+                    <li class="link_item {{ request()->is('home*') || request()->is('dashboard*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
+                        <a href="{{ getAuth()->employee_id == '000-000000' ? route('home') : route('admin#dashboard') }}" class="">
+                            <i class="material-symbols-outlined text-white mt-3 text-md">dashboard</i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
                 @if (getAuth()->employee_id == '000-000000')
                     <li class="link_item {{ request()->is('admin/booking*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
                         <a href="{{ route('admin#booking') }}" class="">
@@ -52,7 +54,7 @@
                     @endif
                     @if (getAuth()->employee_id != '000-000000')
                         <li class="link_item" onclick="this.childNodes[1].click()">
-                            <a href="{{ route('admin#user_home') }}">
+                            <a href="{{ route('home') }}">
                                 <i class="material-symbols-outlined text-white mt-4 text-md">keyboard_return</i>
                                 <span class="-translate-x-1">Back to UI</span>
                             </a>
@@ -79,7 +81,11 @@
 
             </div>
             <div class="w-20 relative ">
-                <img src="{{ asset('images/user_image/user(male).jpeg') }}" class="object-cover cursor-pointer drop_icon" id="profile_icon"  data-dropdown-toggle="dropdown">
+                @if (getAuth()->employee_id == '000-000000')
+                    <img src="{{ asset('images/user_image/user(male).jpeg') }}" class="object-cover cursor-pointer drop_icon" id="profile_icon"  data-dropdown-toggle="dropdown">
+                @else
+                    <i class="material-symbols-outlined cursor-pointer drop_icon text-5xl mt-2 font-thin select-none" id="profile_icon"  data-dropdown-toggle="dropdown">{{ getAuth()->icon ?? 'person' }}</i>
+                @endif
                 <div class=" inline-block text-left">
 
                     <div class="absolute  right-0 z-10 w-60 origin-top-right -translate-y-4 divide-y divide-gray-100 rounded-md bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="auth_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999">
@@ -106,7 +112,8 @@
     </div>
 </body>
 @stack('js')
-
+<script src="{{ asset('js/select2.min.js') }}"></script>
+{{-- <script src="{{ asset('js/select2.js') }}"></script> --}}
 <script>
     $(document).ready(function(e){
 

@@ -1,5 +1,15 @@
 @extends('new_layouts.admin.layout')
 @section('content')
+<style>
+    .select2-selection__choice {
+        padding: 5px 10px;
+        line-height: 1.5;
+    }
+
+    .select2-selection{
+        overflow: auto;
+    }
+</style>
     <div class="ps-5">
         <div class="p-4">
             <span class="text-2xl font-serif">Dashboard</span>
@@ -19,8 +29,8 @@
         </div>
         <div class="col-span-2 ms-10">
             <div class="">
-                <form action="{{ route('home') }}" method="GET">
-                    <div class="p-5 grid grid-cols-4 gap-8">
+                <form action="{{ getAuth()->employee_id == '000-000000' ? route('home') : route('admin#dashboard') }}" method="GET">
+                    <div class="p-5 grid grid-cols-5 gap-8">
                         <div class="flex flex-col">
                             <label for="from_date">From Date :</label>
                             <input type="date" id="from_date" value="{{ request('from_date') }}" name="from_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
@@ -33,8 +43,20 @@
                             <label for="status">Month :</label>
                             <input type="month" id="month" value="{{ request('month') }}" name="month" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
                         </div>
+                        <div class="flex flex-col">
+                            <label for="status" class="mb-1">Status :</label>
+                            <select id="status" name="status[]" style="" multiple="multiple">
+                                <option value="">Choose Status</option>
+                                <option value="6" {{ request('status') ? (in_array(6,request('status')) ? 'selected' : '') : '' }} >Pending</option>
+                                <option value="1" {{ request('status') ? (in_array(1,request('status')) ? 'selected' : '') : '' }}>Started</option>
+                                <option value="2" {{ request('status') ? (in_array(2,request('status')) ? 'selected' : '') : '' }} >Ended</option>
+                                <option value="3" {{ request('status') ? (in_array(3,request('status')) ? 'selected' : '') : '' }} >Cancelled</option>
+                                <option value="4" {{ request('status') ? (in_array(4,request('status')) ? 'selected' : '') : '' }} >Missed</option>
+                                <option value="5" {{ request('status') ? (in_array(5,request('status')) ? 'selected' : '') : '' }} >Finished</option>
+                            </select>
+                        </div>
                         <div class="">
-                            <x-button class="bg-emerald-600 text-white w-1/2 mt-8 h-10 ms-5 ps-8 hover:bg-emerald-800">Search</x-button>
+                            <x-button class="bg-emerald-600 text-white mt-8 h-10 ps-6 hover:bg-emerald-800">Search</x-button>
                         </div>
                     </div>
                 </form>
@@ -55,6 +77,9 @@
         </div>
     </div>
     <script>
+        $(document).ready(function(e){
+            $('#status').select2();
+        })
         const this_year = JSON.parse(document.getElementById('this_year').dataset.item);
         const last_year = JSON.parse(document.getElementById('last_year').dataset.item);
 

@@ -1,7 +1,7 @@
 import './bootstrap';
 
 import $ from 'jquery';
-window.$ = window.jQuery = $;
+window.jQuery = window.$;
 
 import swal from 'sweetalert2';
 window.Swal = swal;
@@ -11,6 +11,8 @@ window.Chart = Chart;
 
 import moment from 'moment';
 window.moment = moment;
+
+
 // import { Calendar } from '@fullcalendar/core';
 // import dayGridPlugin from '@fullcalendar/daygrid';
 // import timeGridPlugin from '@fullcalendar/timegrid';
