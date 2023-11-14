@@ -247,3 +247,26 @@ function get_user_name($id)
     $name = User::where('id',$id)->first();
     return $name->name;
 }
+
+function get_status($id)
+{
+    $id = $id==6 ?  0 : $id;
+    $msg = '';
+    switch ($id) {
+        case 0: $msg = 'Pending';
+            break;
+        case 1 : $msg = 'Started';
+            break;
+        case 2 : $msg = 'Ended';
+            break;
+        case 3: $msg = 'Cancelled';
+            break;
+        case 4: $msg = 'Missed';
+            break;
+        case 5: $msg = 'Finished';
+            break;
+        default: $msg = '';
+            break;
+    }
+    return $msg;
+}

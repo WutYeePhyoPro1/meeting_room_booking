@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\bookingExport;
 use PDO;
 use Carbon\Carbon;
 use App\Models\Log;
@@ -13,6 +14,7 @@ use App\Models\MeetingRoom;
 use Illuminate\Http\Request;
 use App\Models\BookingRequest;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Repositories\BookingRepository;
 use Illuminate\Support\Facades\Notification;
 use App\Interfaces\BookingRepositoryInterface;
@@ -45,6 +47,7 @@ use App\Interfaces\BookingRepositoryInterface;
 //noti pass(10 min အလို alerm ပေးတာကို သိပြီကြောင်း)
 //read noti
 //resend_noti
+//excel_export
 //get avaliable extend time
 
 class BookingController extends Controller
@@ -940,6 +943,15 @@ class BookingController extends Controller
         }
         sendNoti($user,$req_booking->booking_id,$new_req->id,$user->id);
         return response(200);
+    }
+
+    //excel_export
+    public function excel_export(Request $request)
+    {
+        // dd($request->all());
+        $date = Carbon::now()->format('Ymd');
+        $search = $request->only(['room','status','from_date','to_date']);
+        return Excel::download(new bookingExport($search), "mrbs$date.xlsx");
     }
 
     //validation

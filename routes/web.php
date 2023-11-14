@@ -20,6 +20,9 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
             route::get('overview','overview')->name('overview');
             route::get('action','action')->name('action');
 
+            // excel export
+            route::post('excel_export','excel_export')->name('excel_export');
+
             // ajax
             //booking
             route::post('booking/ajax/time_search','time_search')->name('time_search');

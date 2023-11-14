@@ -37,7 +37,7 @@
                                 <div class="absolute  z-10 w-60 origin-top-right translate-y-6 divide-y divide-gray-100  bg-cus2 text-black shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="nav_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999;right:-100px">
                                 <div class="" role="none">
                                     @if (getAuth()->employee_id == '111-111111')
-                                        <a href="{{ route('my_booking') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('action*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
+                                        <a href="{{ route('action') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('action*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
                                             <i class="material-symbols-outlined mr-5">check</i>
                                             ACTION
                                         </a>

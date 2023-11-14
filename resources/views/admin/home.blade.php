@@ -127,7 +127,7 @@
                 plugins: {
                     title: {
                         display: true,
-                        text: 'Comparism Between This Year And Last Year'
+                        text: 'Comparison Between This Year And Last Year'
                     }
                 },
             }

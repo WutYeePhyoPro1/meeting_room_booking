@@ -35,10 +35,18 @@
                         <option value="5" {{ request('status') == 5 ? 'selected' : '' }} >Finished</option>
                     </select>
                 </div>
-                <div class="flex flex-col">
-                    <x-button class="bg-emerald-600 text-white w-1/2 mt-8 h-10 ms-5 ps-14 hover:bg-emerald-800">Search</x-button>
+                <div class="grid grid-cols-4 gap-6">
+                    <x-button class="bg-emerald-600 text-white col-span-2 mt-8 h-10 ms-6 ps-10 hover:bg-emerald-800">Search</x-button>
+                    <x-button type="button" title="Export" id="export_btn" class="bg-sky-600 text-white mt-8 h-10 ms-2 hover:bg-sky-800"><i class="material-symbols-outlined">ios_share</i></x-button>
                 </div>
             </div>
+        </form>
+        <form action="{{ route('excel_export') }}" method="POST" id="export_form">
+            @csrf
+            <input type="hidden" name="{{ request('room') ? 'room' : '' }}" value="{{ request('room') ? request('room') : '' }}">
+            <input type="hidden" name="{{ request('status') ? 'status' : '' }}" value="{{ request('status') ? request('status') : '' }}">
+            <input type="hidden" name="{{ request('from_date') ? 'from_date' : '' }}" value="{{ request('from_date') ? request('from_date') : '' }}">
+            <input type="hidden" name="{{ request('to_date') ? 'to_date' : '' }}" value="{{ request('to_date') ? request('to_date') : '' }}">
         </form>
 
         <table class="table-responsive mt-4" style="width: 99%">
@@ -69,7 +77,7 @@
                         <td>{{ $item->start_time }}</td>
                         <td>{{ $item->end_time }}</td>
                         <td>{{ $item->duration }}</td>
-                        <td>{{ $item->user->name }}</td>
+                        <td>{{ $item->user->name . ($item->reception == 1 ? '(Reception)' : '') }}</td>
                         <td>
                             @switch($item->status)
                             @case(0)
@@ -105,7 +113,25 @@
         </table>
         @if (request('room') || request('status') || request('from_date') || request('to_date') )
             <div class="mt-3">
-                <a href="{{ route('booking_history') }}"><x-button class="bg-sky-800 hover:bg-sky-900 text-white">Go To Default</x-button></a>
+                <a href="{{ route('booking_history') }}" class="me-4"><x-button class="bg-sky-800 hover:bg-sky-900 text-white">Go To Default</x-button></a>
+                @if (request('room'))
+                    <span class="mx-3">room: {{ request('room') }}</span> |
+                @endif
+
+                @if (request('status'))
+                    <span class="mx-3">status: {{ get_status(request('status')) }}</span> |
+                @endif
+
+                @if (request('from_date') && request('to_date'))
+                    <span class="mx-3">{{ request('from_date') .' ~ '.request('to_date') }} </span> |
+                @endif
+
+                @if (request('from_date') && !request('to_date'))
+                    <span class="mx-3">{{ request('from_date') .' > ' }} </span> |
+                @endif
+                @if (request('to_date') && !request('from_date'))
+                    <span class="mx-3">{{ '< '.request('to_date') }}</span> |
+                @endif
             </div>
         @endif
         <div class="flex justify-center text-xs bg-white">
@@ -113,4 +139,14 @@
 
 
     </div>
+
+    @push('js')
+        <script>
+            $(document).ready(function(e){
+                $(document).on('click','#export_btn',function(e){
+                    $('#export_form').submit();
+                })
+            })
+        </script>
+    @endpush
 @endsection
