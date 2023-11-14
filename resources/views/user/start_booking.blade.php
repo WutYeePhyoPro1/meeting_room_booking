@@ -11,7 +11,7 @@
         <i class="material-symbols-outlined fixed right-1 top-1/3 cursor-pointer duration-500 bg-slate-500 rounded-xl text-white select-none booking_icon">arrow_right</i>
         <div class="w-1/3 p-2 overflow-hidden rounded-lg mt-4 duration-500 whitespace-nowrap ml-3 relative" id="booking_div" style="background-color: rgb(255,250,223)">
             <input type="hidden" id="succ_msg" value="{{ Session::has('create') ? 1 : (Session::has('update') ? 2 : 0)}}">
-            <input type="hidden" id="user_id" value="{{ getAuth()->id }}">
+            <input type="hidden" id="cur_user_id" value="{{ getAuth()->id }}">
 
             <div class="{{ (getAuth()->employee_id == '111-111111' && !old('ch_acc')) ? 'hidden' : '' }}" id="start_form">
                 <div class="text-center py-1">
@@ -168,13 +168,13 @@
                     eventDataTransform: function(event) {
                         let start_date = moment(event.start).format('YYYY-MM-DD HH:mm:ss');
                         let today      = moment().format('YYYY-MM-DD HH:mm:ss');
-                        let user_id = $('#user_id').val();
+                        let user_id = $('#cur_user_id').val();
                         let ch_acc = $('#ch_acc').val();
-                        // console.log(start_date);
+                        console.log(ch_acc);
 
                         let b_user_id = event.user_id;
 
-                        if ((start_date < today) || (user_id != b_user_id) || (ch_acc != b_user_id)) {
+                        if ((start_date < today) || (user_id != b_user_id) || (ch_acc && ch_acc != b_user_id)) {
                             event.editable = false;
                         }
                         return event;
@@ -182,7 +182,7 @@
                     eventClick:function(info){
                         let event = info.event;
                         let id = event.id;
-                        let user_id = $('#user_id').val();
+                        let user_id = $('#cur_user_id').val();
                         let b_user_id = event.extendedProps.user_id;
                         let ch_acc = $('#ch_acc').val();
                         let token = $("meta[name='__token']").attr('content');

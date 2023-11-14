@@ -13,8 +13,8 @@
             @csrf
 
             <div>
-                <x-label for="employee_id" value="{{ __('Employee Id') }}" />
-                <x-input id="employee_id" class="block mt-1 w-full" type="text" name="employee_id" :value="old('employee_id')" placeholder="employee id"  autofocus autocomplete="username" />
+                <x-label for="employee_id" value="{{ __('User Id') }}" />
+                <x-input id="employee_id" class="block mt-1 w-full" type="text" name="employee_id" :value="old('employee_id')" placeholder="user id"  autofocus autocomplete="username" />
             </div>
 
             <div class="mt-4">
