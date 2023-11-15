@@ -109,6 +109,10 @@
                             Go To Dashboard
                             </a>
                         @endif
+                        <a href="javascript:{}" class="whitespace-nowrap text-gray-700 group flex items-center px-4 py-2 text-sm hover:bg-slate-200" role="menuitem" tabindex="-1" id="menu-item-1">
+                            <i class="material-symbols-outlined mr-3">developer_guide</i>
+                          User Guide
+                        </a>
                         <a href="{{ route('user_edit') }}" class="whitespace-nowrap text-gray-700 group flex items-center px-4 py-2 text-sm hover:bg-slate-200" role="menuitem" tabindex="-1" id="menu-item-1">
                             <i class="material-symbols-outlined mr-3">key</i>
                           Change Password

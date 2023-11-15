@@ -446,7 +446,7 @@ class adminController extends Controller
                 return response()->json(['status' => 0],200);
             }
         }else{
-            return response()->json(505);
+            return response()->json(['msg'=>'error'],500);
         }
     }
 
@@ -467,7 +467,7 @@ class adminController extends Controller
                 return response()->json(['status' => 0],200);
             }
         }else{
-            return response()->json(505);
+            return response()->json(['msg'=>'error'],500);
         }
     }
 

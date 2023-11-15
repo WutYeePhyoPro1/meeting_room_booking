@@ -60,7 +60,9 @@
                     },
                     error: function(xhr, status, error){
                         $this.parent().parent().parent().find('.status').text('Occupied');
-                        $this.attr('checked',false);
+                        $this.prop('checked', false);
+                        $this.prop('disabled', true);
+                        $this.parent().parent().parent().find('.guest_in').attr('disabled',true);
                     }
                 })
             })
@@ -83,7 +85,9 @@
                     },
                     error: function(xhr, status, error){
                         $this.parent().parent().parent().find('.status').text('Occupied');
-                        $this.attr('checked',false);
+                        $this.prop('checked', false);
+                        $this.prop('disabled', true);
+                        $this.parent().parent().parent().find('.boss_in').attr('disabled',true);
                     }
                 })
             })
