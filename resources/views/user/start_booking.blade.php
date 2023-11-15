@@ -249,7 +249,7 @@
                                             booking_id = res.data.id;
                                             $('#booking_id').val(booking_id);
                                             $('#btn_div').append(`
-                                                <x-button type="button" class="bg-rose-400 w-24 h-10 ps-6 hover:bg-rose-600 text-center" id="cancel_btn">{{ __('Cancel') }}</x-button>
+                                                <x-button type="button" class="bg-rose-400 w-24 h-10 ps-6 hover:bg-rose-600 text-center" id="cancel_btn">{{ __('Back') }}</x-button>
                                                 <x-button type="submit" class="bg-emerald-400 w-24 h-10 ps-6 hover:bg-emerald-600">{{ __('Update') }}</x-button>
                                             `);
                                         },
