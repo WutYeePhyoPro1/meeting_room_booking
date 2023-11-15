@@ -433,34 +433,41 @@ class adminController extends Controller
     public function boss_in($id)
     {
         $data = MeetingRoom::where('id',$id)->first();
-        if($data->boss == 0){
-            MeetingRoom::where('id',$id)->update([
-                'boss' => 1
-            ]);
-            return response()->json(['status' => 1],200);
+        if($data->status == 0 ){
+            if($data->boss == 0){
+                MeetingRoom::where('id',$id)->update([
+                    'boss' => 1
+                ]);
+                return response()->json(['status' => 1],200);
+            }else{
+                MeetingRoom::where('id',$id)->update([
+                    'boss' => 0
+                ]);
+                return response()->json(['status' => 0],200);
+            }
         }else{
-            MeetingRoom::where('id',$id)->update([
-                'boss' => 0
-            ]);
-            return response()->json(['status' => 0],200);
+            return response()->json(505);
         }
     }
 
     public function guest_in($id)
     {
         $data = MeetingRoom::where('id',$id)->first();
-        if($data->guest == 0){
-            MeetingRoom::where('id',$id)->update([
-                'guest' => 1
-            ]);
-            return response()->json(['status' => 1],200);
+        if($data->status == 0){
+            if($data->guest == 0){
+                MeetingRoom::where('id',$id)->update([
+                    'guest' => 1
+                ]);
+                return response()->json(['status' => 1],200);
 
+            }else{
+                MeetingRoom::where('id',$id)->update([
+                    'guest' => 0
+                ]);
+                return response()->json(['status' => 0],200);
+            }
         }else{
-            MeetingRoom::where('id',$id)->update([
-                'guest' => 0
-            ]);
-            return response()->json(['status' => 0],200);
-
+            return response()->json(505);
         }
     }
 
