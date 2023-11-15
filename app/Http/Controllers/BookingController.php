@@ -654,12 +654,19 @@ class BookingController extends Controller
         $id = $request->req_id;
         $user_id = $request->req_user_id;
         $data = BookingRequest::where('id',$id)->first();
+        $booking = Booking::where('id',$data->booking_id)->first();
         BookingRequest::where('id',$id)->update([
             'request_status'    => 3,
             'approve_user'      => getAuth()->id
         ]);
-        $user = User::where('id',$user_id)->first();
-        sendNoti($user,$data->booking_id,$id,getAuth()->id);
+
+        if($data->resend_status){
+            $og_user = User::where('id',$data->booking->user_id)->first();
+            sendNoti($og_user,$booking->id,$data->id,getAuth()->id);
+        }else{
+            $user = User::where('id',$user_id)->first();
+            sendNoti($user,$data->booking_id,$id,getAuth()->id);
+        }
         $unread_noti = getAuth()->unreadNotifications;
         foreach($unread_noti as $item){
             if($item->data['request_id'] == $id && $item->data['req_user_id'] == $user_id){

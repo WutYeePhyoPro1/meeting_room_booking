@@ -114,22 +114,26 @@ function noti_msg($req_id,$req_user)
         switch ($book_req->request_status) {
             case 1:
                 if($book_req->resend_status){
-                    $msg = "Your Have <b class='text-emerald-600'>Accepted</b> The New Conditions By ".$book_req->booking->user->name ?? '';
+                    $msg = "Your Have <b class='text-green-600'>Accepted</b> The New Conditions By ".$book_req->booking->user->name ?? '';
                 }else{
-                    $msg = "Your Request Have Been <b class='text-emerald-600'>Accepted</b> By ".$book_req->approve->name ?? '';
+                    $msg = "Your Request Have Been <b class='text-green-600'>Accepted</b> By ".$book_req->approve->name ?? '';
                 }
                     break;
             case 2:
                 $msg = "System Has Auto <b class='text-rose-600'>Reject</b> Since Exceeded The Meeting Time";
                     break;
             case 3:
-                $msg = "You have been <b class='text-rose-600'>Rejected</b>";
+                if($book_req->resend_status){
+                    $msg = "You <b class='text-rose-600'>Rejected</b> The New Condition By ".$book_req->booking->user->name ?? '';
+                }else{
+                    $msg = "You have been <b class='text-rose-600'>Rejected</b>";
+                }
                     break;
             case 4:
-                $msg = "You Have Changed And <b class='text-sky-600'>Resended</b> New Condition";
+                $msg = "You Have Changed And <b class='text-blue-600'>Resended</b> New Condition";
                     break;
             case 5:
-                $msg = $book_req->booking->user->name. " Have Changed And Resended The Condition";
+                $msg = $book_req->booking->user->name. " Have Changed And <b class='text-blue-600'>Resended</b> The Condition";
                     break;
             default:
                 $msg = "Something Is Wrong,Please Contact SD Team";
@@ -142,22 +146,26 @@ function noti_msg($req_id,$req_user)
                 break;
             case 1:
                 if($book_req->resend_status){
-                    $msg = $book_req->approve->name ." had <b class='text-emerald-600'>Accepted</b> Your New Conditions ";
+                    $msg = $book_req->approve->name ." had <b class='text-green-600'>Accepted</b> Your New Conditions ";
                 }else{
-                    $msg = "You <b class='text-emerald-600'>Accepted</b> The Request From ".$request_user->name;
+                    $msg = "You <b class='text-green-600'>Accepted</b> The Request From ".$request_user->name;
                 }
                     break;
             case 2:
                 $msg = "System Has Auto <b class='text-rose-600'>Reject</b> Since Exceeded The Meeting Time";
                     break;
             case 3:
-                $msg = "You <b class='text-rose-600'>Rejected</b>";
+                if($book_req->resend_status){
+                    $msg = "Your New Conditions have been <b class='text-rose-600'>Rejected</b> By " . $book_req->approve->name ?? '' ;
+                }else{
+                    $msg = "You <b class='text-rose-600'>Rejected</b>";
+                }
                     break;
             case 4:
-                $msg = "You Have Changed And <b class='text-sky-600'>Resended</b> New Condition";
+                $msg = "You Have Changed And <b class='text-blue-600'>Resended</b> New Condition";
                     break;
             case 5:
-                $msg = $book_req->booking->user->name. " Have Changed And Resent The Condition";
+                $msg = $book_req->booking->user->name. " Have Changed And <b class='text-blue-600'>Resended</b> The Condition";
                     break;
             default:
                 $msg = "Something Is Wrong,Please Contact SD Team";
