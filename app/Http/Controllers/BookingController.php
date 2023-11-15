@@ -207,6 +207,9 @@ class BookingController extends Controller
                         ->when(request('to_date'),function($q){
                             $q->where('date','<=',request('to_date'));
                         })
+                        ->when(!request('from_date') && !request('to_date'),function($q){
+                            $q->whereMonth('date',Carbon::now());
+                        })
                         ->orderBy('date','desc')
                         ->orderBy('start_time','desc')
                         ->withTrashed()

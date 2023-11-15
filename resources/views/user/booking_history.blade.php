@@ -17,11 +17,11 @@
                 </div>
                 <div class="flex flex-col">
                     <label for="from_date">From Date :</label>
-                    <input type="date" id="from_date" value="{{ request('from_date') }}" name="from_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
+                    <input type="date" id="from_date" value="{{ request('from_date') ? request('from_date') : (request('to_date') ? '' : date('Y-m-01'))  }}" name="from_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
                 </div>
                 <div class="flex flex-col">
                     <label for="to_date">To Date :</label>
-                    <input type="date" id="to_date" value="{{ request('to_date') }}" name="to_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
+                    <input type="date" id="to_date" value="{{ request('to_date') ? request('to_date') : (request('from_date') ? '' : date('Y-m-t')) }}" name="to_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
                 </div>
                 <div class="flex flex-col">
                     <label for="status">Status :</label>
