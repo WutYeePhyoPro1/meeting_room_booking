@@ -28,7 +28,7 @@
                 <a href="{{ route('overview') }}" id="home">OVERVIEW</a>
             </li>
 
-                    <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 relative select-none {{ (request()->is('mybooking*') || request()->is('todaybooking*') || request()->is('all_booking/history')) ? 'bg-amber-500 px-5 text-white' : ''}}" id="nav_drop_hov" onclick="this.childNodes[1].click()">
+                    <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 relative select-none {{ (request()->is('mybooking*') || request()->is('todaybooking*') || request()->is('all_booking/history') || request()->is('action*')) ? 'bg-amber-500 px-5 text-white' : ''}}" id="nav_drop_hov" onclick="this.childNodes[1].click()">
                         <div class="bg-white h-0" onclick="this.childNodes[1].click()">
                             <span class="select-none" id="book_list" data-dropdown-toggle="dropdown">{{ getAuth()->employee_id == '111-111111' ? 'ACTION' : 'BOOKING' }}</span>
 
