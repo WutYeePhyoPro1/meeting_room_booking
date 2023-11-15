@@ -437,10 +437,12 @@ class adminController extends Controller
             MeetingRoom::where('id',$id)->update([
                 'boss' => 1
             ]);
+            return response()->json(['status' => 1],200);
         }else{
             MeetingRoom::where('id',$id)->update([
                 'boss' => 0
             ]);
+            return response()->json(['status' => 0],200);
         }
     }
 
@@ -451,10 +453,14 @@ class adminController extends Controller
             MeetingRoom::where('id',$id)->update([
                 'guest' => 1
             ]);
+            return response()->json(['status' => 1],200);
+
         }else{
             MeetingRoom::where('id',$id)->update([
                 'guest' => 0
             ]);
+            return response()->json(['status' => 0],200);
+
         }
     }
 
