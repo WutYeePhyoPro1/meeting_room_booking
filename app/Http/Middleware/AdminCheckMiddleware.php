@@ -15,7 +15,7 @@ class AdminCheckMiddleware
      */
     public function handle(Request $request, Closure $next): Response
     {
-        if(getAuth()->employee_id == '000-000000'){
+        if(getAuth()->employee_id == 'SuperAdmin@mail.com'){
             return $next($request);
         }else{
             return back();

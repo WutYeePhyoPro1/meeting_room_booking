@@ -13,7 +13,7 @@
             <input type="hidden" id="succ_msg" value="{{ Session::has('create') ? 1 : (Session::has('update') ? 2 : 0)}}">
             <input type="hidden" id="cur_user_id" value="{{ getAuth()->id }}">
 
-            <div class="{{ (getAuth()->employee_id == '111-111111' && !old('ch_acc')) ? 'hidden' : '' }}" id="start_form">
+            <div class="{{ (getAuth()->employee_id == 'recho@pro1' && !old('ch_acc')) ? 'hidden' : '' }}" id="start_form">
                 <div class="text-center py-1">
                     <span>Let Choose Date & Time !!</span><hr>
                 </div>
@@ -86,18 +86,18 @@
                         @enderror
                     </div>
                     <div class="text-center mt-4" id="btn_div">
-                        @if (getAuth()->employee_id == '111-111111')
+                        @if (getAuth()->employee_id == 'recho@pro1')
                             <x-button type="button" class="bg-rose-400 w-24 h-10 ps-6 focus:ring-rose-600 hover:bg-rose-600" id="return_btn">{{ __('Return') }}</x-button>
                         @endif
                         <x-button type="submit" class="bg-yellow-400 w-24 h-10 ps-7 focus:ring-yellow-600 hover:bg-yellow-600">{{ __('Book') }}</x-button>
                     </div>
-                    @if (getAuth()->employee_id == '111-111111')
+                    @if (getAuth()->employee_id == 'recho@pro1')
                         <input type="hidden" name="ch_acc" id="ch_acc" value="{{ old('ch_acc') }}">
                     @endif
                 </form>
             </div>
 
-            <div class="text-center py-1 {{ (getAuth()->employee_id != '111-111111' || old('ch_acc')) ? 'hidden' : '' }}" id="re_form">
+            <div class="text-center py-1 {{ (getAuth()->employee_id != 'recho@pro1' || old('ch_acc')) ? 'hidden' : '' }}" id="re_form">
                 <span>Please Choose Your Account</span><hr>
                 <ul class="mt-5 overflow-y-scroll max-h-[30rem] ch_acc">
                     @foreach ($user as $item)

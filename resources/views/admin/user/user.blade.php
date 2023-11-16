@@ -29,7 +29,7 @@
                         <td class="">{{ $item->employee_id }}</td>
                         <td class="">{{ $item->departments->name }}</td>
                         <td>
-                            @if ($item->employee_id != '000-000000')
+                            @if ($item->employee_id != 'SuperAdmin@mail.com')
                              <button class="bg-amber-300 hover:bg-amber-400 rounded-lg  px-3 py-1" id="edit" title="edit" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base">edit</i></button>
                              <button class="bg-rose-400 hover:bg-rose-500  rounded-lg  px-3 py-1" onclick="confirmmessage({{ $item->id }})" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base translate-y-0.5">delete</i></button>
                             @endif

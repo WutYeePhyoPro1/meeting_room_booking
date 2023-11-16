@@ -29,7 +29,7 @@
         </div>
         <div class="col-span-2 ms-10">
             <div class="">
-                <form action="{{ getAuth()->employee_id == '000-000000' ? route('home') : route('admin#dashboard') }}" method="GET">
+                <form action="{{ getAuth()->employee_id == 'SuperAdmin@mail.com' ? route('home') : route('admin#dashboard') }}" method="GET">
                     <div class="p-5 grid grid-cols-5 gap-8">
                         <div class="flex flex-col">
                             <label for="from_date">From Date :</label>

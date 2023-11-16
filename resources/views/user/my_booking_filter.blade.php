@@ -27,7 +27,7 @@
                                     <span >Reason :</span>
                                     <span >{{ $item->reason->reason }}</span>
                                 </div>
-                                @if (getAuth()->employee_id == '111-111111')
+                                @if (getAuth()->employee_id == 'recho@pro1')
                                     <div class="grid grid-cols-2 gap-2 my-9 px-4 my_booking_card">
                                         <span >owner :</span>
                                         <span >{{ $item->user->name }}</span>

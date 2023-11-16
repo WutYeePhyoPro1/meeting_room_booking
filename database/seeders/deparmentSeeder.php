@@ -16,7 +16,7 @@ class deparmentSeeder extends Seeder
     public function run(): void
     {
         $data = ['Admin','Construction','Designer','Finance & Accounting','HR'
-                ,'Marketing','Merchandise','Online Sale','Operation','Project Sale','Sourcing','System Development'];
+                ,'Marketing','Merchandise','Online Sale','Operation','Project Sale','Sourcing','System Development','Lanthit','Zin Htet'];
 
         foreach($data as $item){
             DB::table('departments')->insert([

@@ -27,12 +27,12 @@
         <nav class="sidebar_body">
             <ul class="nav_link">
                     <li class="link_item {{ request()->is('home*') || request()->is('dashboard*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
-                        <a href="{{ getAuth()->employee_id == '000-000000' ? route('home') : route('admin#dashboard') }}" class="">
+                        <a href="{{ getAuth()->employee_id == 'SuperAdmin@mail.com' ? route('home') : route('admin#dashboard') }}" class="">
                             <i class="material-symbols-outlined text-white mt-3 text-md">dashboard</i>
                             <span>Dashboard</span>
                         </a>
                     </li>
-                @if (getAuth()->employee_id == '000-000000')
+                @if (getAuth()->employee_id == 'SuperAdmin@mail.com')
                     <li class="link_item {{ request()->is('admin/booking*')? 'active' : '' }}" onclick="this.childNodes[1].click()">
                         <a href="{{ route('admin#booking') }}" class="">
                             <i class="material-symbols-outlined text-white mt-3 text-md -translate-x-1">book_online</i>
@@ -52,7 +52,7 @@
                         </a>
                     </li>
                     @endif
-                    @if (getAuth()->employee_id != '000-000000')
+                    @if (getAuth()->employee_id != 'SuperAdmin@mail.com')
                         <li class="link_item" onclick="this.childNodes[1].click()">
                             <a href="{{ route('home') }}">
                                 <i class="material-symbols-outlined text-white mt-4 text-md">keyboard_return</i>
@@ -81,14 +81,14 @@
 
             </div>
             <div class="w-20 relative ">
-                @if (getAuth()->employee_id == '000-000000')
+                @if (getAuth()->employee_id == 'SuperAdmin@mail.com')
                     <img src="{{ asset('images/user_image/user(male).jpeg') }}" class="object-cover cursor-pointer drop_icon" id="profile_icon"  data-dropdown-toggle="dropdown">
                 @else
                     <i class="material-symbols-outlined cursor-pointer drop_icon text-5xl mt-2 font-thin select-none" id="profile_icon"  data-dropdown-toggle="dropdown">{{ getAuth()->icon ?? 'person' }}</i>
                 @endif
                 <div class=" inline-block text-left">
 
-                    <div class="absolute  right-0 z-10 w-60 origin-top-right {{ getAuth()->employee_id == '000-000000' ? '-translate-y-4' : 'translate-y-3' }}  divide-y divide-gray-100 rounded-md bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="auth_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999">
+                    <div class="absolute  right-0 z-10 w-60 origin-top-right {{ getAuth()->employee_id == 'SuperAdmin@mail.com' ? '-translate-y-4' : 'translate-y-3' }}  divide-y divide-gray-100 rounded-md bg-white shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="auth_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999">
                       <div class="pt-1" role="none">
                         <!-- Active: "bg-gray-100 text-gray-900", Not Active: "text-gray-700" -->
                         <span href="#" class="text-gray-700 text-xl justify-center group flex items-center px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">

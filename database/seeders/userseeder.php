@@ -16,17 +16,9 @@ class userseeder extends Seeder
     {
         DB::table('users')->insert([
             'name'          => 'SuperAdmin',
-            'employee_id'   => '000-000000',
+            'employee_id'   => 'SuperAdmin@mail.com',
             'password'      => Hash::make('admin123'),
             'password_str'  => 'admin123',
-            'branch_id'     => 0,
-            'department_id' => 1
-        ]);
-        DB::table('users')->insert([
-            'name'          => 'Reception',
-            'employee_id'   => '111-111111',
-            'password'      => Hash::make('111-111111'),
-            'password_str'  => '111-111111',
             'branch_id'     => 0,
             'department_id' => 1
         ]);

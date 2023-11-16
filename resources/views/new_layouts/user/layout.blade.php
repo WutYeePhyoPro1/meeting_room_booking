@@ -30,13 +30,13 @@
 
                     <li class="ms-10 cursor-pointer hover:bg-amber-500 hover:text-white hover:px-5 duration-500 relative select-none {{ (request()->is('mybooking*') || request()->is('todaybooking*') || request()->is('all_booking/history') || request()->is('action*')) ? 'bg-amber-500 px-5 text-white' : ''}}" id="nav_drop_hov" onclick="this.childNodes[1].click()">
                         <div class="bg-white h-0" onclick="this.childNodes[1].click()">
-                            <span class="select-none" id="book_list" data-dropdown-toggle="dropdown">{{ getAuth()->employee_id == '111-111111' ? 'ACTION' : 'BOOKING' }}</span>
+                            <span class="select-none" id="book_list" data-dropdown-toggle="dropdown">{{ getAuth()->employee_id == 'recho@pro1' ? 'ACTION' : 'BOOKING' }}</span>
 
                             <div class=" inline-block text-left">
 
                                 <div class="absolute  z-10 w-60 origin-top-right translate-y-6 divide-y divide-gray-100  bg-cus2 text-black shadow-xl ring-1 ring-black ring-opacity-5 focus:outline-none hidden" id="nav_drop" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabindex="-1" style="z-index: 9999;right:-100px">
                                 <div class="" role="none">
-                                    @if (getAuth()->employee_id == '111-111111')
+                                    @if (getAuth()->employee_id == 'recho@pro1')
                                         <a href="{{ route('action') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('action*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
                                             <i class="material-symbols-outlined mr-5">check</i>
                                             ACTION
@@ -45,9 +45,9 @@
 
                                     <a href="{{ route('my_booking') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('mybooking*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
                                         <i class="material-symbols-outlined mr-5">keyboard_tab</i>
-                                    {{ getAuth()->employee_id == '111-111111' ? 'UPCOMING BOOKING' : 'MY UPCOMING BOOKING' }}
+                                    {{ getAuth()->employee_id == 'recho@pro1' ? 'UPCOMING BOOKING' : 'MY UPCOMING BOOKING' }}
                                     </a>
-                                    @if (getAuth()->employee_id != '111-111111')
+                                    @if (getAuth()->employee_id != 'recho@pro1')
                                         <a href="{{ route('booking_history') }}" class="group flex items-center px-4 py-2 text-sm hover:bg-amber-500 hover:text-white {{ request()->is('all_booking/history*') ? 'bg-amber-500 text-white' : '' }}" role="menuitem" tabindex="-1" id="menu-item-1">
                                             <i class="material-symbols-outlined mr-5">history</i>
                                         MY BOOKING HISTORY
@@ -68,7 +68,7 @@
         </ul>
         <input type="hidden" id="user_id" value="{{ getAuth()->employee_id }}">
         <div class="header flex justify-between px-10 z-10 relative">
-            @if (getAuth()->employee_id != '111-111111')
+            @if (getAuth()->employee_id != 'recho@pro1')
                     <div class="relative me-10">
                         <i class="material-symbols-outlined text-4xl mt-3 cursor-pointer font-extralight select-none mr-16" id="noti_btn">notifications</i>
                         <span class="bg-rose-600 text-white text-xs px-1 rounded-full absolute left-5 top-3 cursor-pointer" onclick="$('#noti_btn').click()" id="id_count"></span>
@@ -103,7 +103,7 @@
                         <span href="#" class="text-gray-700 text-xl justify-center group flex items-center px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">
                           {{ getAuth()->name }}
                         </span><hr>
-                        @if (getAuth()->employee_id != '111-111111' )
+                        @if (getAuth()->employee_id != 'recho@pro1' )
                             <a href="{{ route('admin#dashboard') }}" class="whitespace-nowrap text-gray-700 group flex items-center px-4 py-2 text-sm hover:bg-slate-200" role="menuitem" tabindex="-1" id="menu-item-1">
                                 <i class="material-symbols-outlined mr-3">keyboard_return</i>
                             Go To Dashboard
@@ -136,7 +136,7 @@
             <i class="material-symbols-outlined absolute text-rose-600 text-3xl left-2 top-1 cursor-pointer py-2" id="close_noti_btn">close</i>
             <div class="text-center text-white flex px-5 py-1">
                 <i class="material-symbols-outlined text-2xl noti">alarm_on</i>
-                @if (getAuth()->employee_id == '111-111111')
+                @if (getAuth()->employee_id == 'recho@pro1')
                     <span class="ms-2 mt-1">| &nbsp;&nbsp;<b id="owner"></b> Booking for <b id="booking_room"></b> is going to Start in <b id="start_minute"></b> min</span>
                 @else
                     <span class="ms-2 mt-1">| &nbsp;&nbsp;Your Booking for <b id="booking_room"></b> is going to Start in <b id="start_minute"></b> min</span>
@@ -181,7 +181,7 @@
                     // console.log(res.data);
                     if(res.status == 'start')
                     {
-                        if($id = '111-111111'){
+                        if($id = 'recho@pro1'){
                             $('#owner').text(res.data.user.name)
                         }
                         $('#booking_room').text(res.data.room.room_name);

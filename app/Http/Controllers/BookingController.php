@@ -63,7 +63,7 @@ class BookingController extends Controller
         $data = MeetingRoom::where('id',$id)->first();
         $book = Booking::where('room_id',$id)->where('status','!=',3)->get();
         $reason = Reason::get();
-        $user = User::whereNotIn('employee_id',['000-000000','111-111111'])->get();
+        $user = User::whereNotIn('employee_id',['SuperAdmin@mail.com','recho@pro1'])->get();
         // dd($book);
         return view('user.start_booking',compact('data','reason','book','user'));
     }
@@ -122,7 +122,7 @@ class BookingController extends Controller
         $date = Carbon::now()->format('Y-m-d');
         $now = Carbon::now()->format('H:i:s');
 
-        if(getAuth()->employee_id == '111-111111'){
+        if(getAuth()->employee_id == 'recho@pro1'){
             $booking = Booking::where(function($q) use($date,$now){
                             $q->where('date', '>', $date)
                                             ->orWhere(function ($q) use ($date,$now) {
@@ -347,7 +347,7 @@ class BookingController extends Controller
         date_default_timezone_set('Asia/Yangon');
         $date = Carbon::now()->format('Y-m-d');
         $now = Carbon::now()->format('H:i:s');
-        if(getAuth()->employee_id == '111-111111'){
+        if(getAuth()->employee_id == 'recho@pro1'){
             $booking = Booking::where(function($q) use($date,$now){
                             $q->where('date', '>', $date)
                                             ->orWhere(function ($q) use ($date,$now) {
@@ -849,7 +849,7 @@ class BookingController extends Controller
 
         $now_date = Carbon::now()->format('Y-m-d');
         $now_time = Carbon::now()->format('H:i:s');
-        if(getAuth()->employee_id == '111-111111'){
+        if(getAuth()->employee_id == 'recho@pro1'){
             $data = Booking::with('room')
                             ->with('user')
                             ->where('date',$now_date)

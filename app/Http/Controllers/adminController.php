@@ -24,7 +24,7 @@ use Symfony\Component\CssSelector\Node\FunctionNode;
 class adminController extends Controller
 {
     public function home(){
-        if(getAuth()->employee_id == '000-000000'){
+        if(getAuth()->employee_id == 'SuperAdmin@mail.com'){
             $this_year = Carbon::now()->format('Y');
             $last_year = Carbon::now()->subYear(1)->format('Y');
             $data = Booking::selectRaw('TO_CHAR(date,\'Month\')  as month, count(date) as count')
@@ -71,7 +71,7 @@ class adminController extends Controller
                                 })
                                 ->withTrashed()
                                 ->get();
-            $all_user = User::whereNotIn('employee_id',['000-000000','111-111111'])->orderBy('id')->get();
+            $all_user = User::whereNotIn('employee_id',['SuperAdmin@mail.com','recho@pro1'])->orderBy('id')->get();
             $user = $all_user->pluck('name')->all();
             $color = $all_user->pluck('bg_color')->all();
             $data_user = [];
@@ -175,7 +175,7 @@ class adminController extends Controller
                             })
                             ->withTrashed()
                             ->get();
-        $all_user = User::whereNot('employee_id','000-000000')->orderBy('id')->get();
+        $all_user = User::whereNotIn('employee_id',['SuperAdmin@mail.com','recho@pro1'])->orderBy('id')->get();
         $user = $all_user->pluck('name')->all();
         $color = $all_user->pluck('bg_color')->all();
         $data_user = [];
