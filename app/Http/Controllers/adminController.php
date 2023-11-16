@@ -71,7 +71,7 @@ class adminController extends Controller
                                 })
                                 ->withTrashed()
                                 ->get();
-            $all_user = User::whereNot('employee_id','000-000000')->orderBy('id')->get();
+            $all_user = User::whereNotIn('employee_id',['000-000000','111-111111'])->orderBy('id')->get();
             $user = $all_user->pluck('name')->all();
             $color = $all_user->pluck('bg_color')->all();
             $data_user = [];
