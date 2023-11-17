@@ -187,15 +187,15 @@
                         $('#booking_room').text(res.data.room.room_name);
                         $('#start_minute').text(res.min);
                         $('.noti_div').removeClass('w-0 opacity-0 pointer-events-none');
-                        $('.noti_div').addClass('w-4/12');
+                        $('.noti_div').addClass('xl:w-4/12 w-5/12');
                         $('#close_noti_btn').attr('data-id',res.data.id);
                     }
                     if(res.status == 'no'){
                         if(!$('.noti_div').hasClass('w-0 opacity-0 pointer-events-none')){
                             $('.noti_div').addClass('w-0 opacity-0 pointer-events-none');
                         }
-                        if(!$('.noti_div').hasClass('w-4/12')){
-                            $('.noti_div').removeClass('w-4/12');
+                        if(!$('.noti_div').hasClass('xl:w-4/12 w-5/12')){
+                            $('.noti_div').removeClass('xl:w-4/12 w-5/12');
                             $('.noti_div').addClass('w-0');
                         }
                     }
