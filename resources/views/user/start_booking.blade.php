@@ -119,7 +119,7 @@
 
                 var calendar = new FullCalendar.Calendar(calendarEl, {
                     contentHeight: "auto",
-                    slotMinTime : "09:00:00",
+                    slotMinTime : "08:30:00",
                     slotMaxTime : "18:00:00",
                     weekNumbers  : true,
                     eventOverlap:false,
