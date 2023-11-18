@@ -139,8 +139,8 @@ nav{
 
 .slider .thumb{
     position: absolute;
-    height: 10px;
-    width: 10px;
+    height: 15px;
+    width: 15px;
     border-radius: 50%;
     z-index: 3;
     user-select: none;
@@ -149,11 +149,11 @@ nav{
 
 .slider .thumb.left{
     left: 0;
-    transform: translate(0,-3px);
+    transform: translate(0,-4px);
 }
 
 .slider .thumb.right{
     right: 0;
-    transform: translate(0,-3px);
+    transform: translate(0,-4px);
 
 }
