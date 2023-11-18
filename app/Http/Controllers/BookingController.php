@@ -436,7 +436,7 @@ class BookingController extends Controller
         $now_date = Carbon::now()->format('Y-m-d');
         $now_time = Carbon::now()->addMinutes(5)->format('H:i:s');
         $now_time2 = Carbon::now()->format('H:i:s');
-
+        // logger(Carbon::now());
         $booking = Booking::where('room_id', $id)
                 ->where(function ($q) use ($now_date, $now_time) {
                     $q->where('date', $now_date)
@@ -464,6 +464,7 @@ class BookingController extends Controller
             return response()->json(['status'=>$status],200);
         }else{
             if($booking){
+
                 $user = $booking->user->name;
                 if($booking->status == 0){
                     $status = 'Not Avaliable';
