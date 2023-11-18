@@ -248,7 +248,7 @@
 
                                         $range.css('right',$width +'%');
                                         $right.css('right',$width +'%');
-                                        $right_range.val($real_val);
+                                        $right_range.val($step);
                                         $left_range.val(0);
                                         $to_time.text($final_end);
                                     }else{
@@ -257,7 +257,7 @@
 
                                         $range.css('left',$width +'%');
                                         $left.css('left',$width +'%');
-                                        $left_range.val($step);
+                                        $left_range.val($real_val);
                                         $right_range.val($max);
                                         $from_time.text($final_start);
                                     }
