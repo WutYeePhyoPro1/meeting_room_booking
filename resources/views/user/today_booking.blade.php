@@ -72,7 +72,7 @@
                                 </div>
                                 <div class="flex justify-between mt-9 mb-2 px-4 my_booking_card">
                                     @if (auth()->id() != $item->user_id && $item->start_time < \Carbon\Carbon::now())
-                                    <button class="bg-emerald-400 hover:bg-emerald-500 py-2 px-10 rounded-md req_btn" data-id="{{ $item->id }}">Request</button>
+                                    <button class="bg-emerald-400 hover:bg-emerald-500 py-2 px-10 rounded-md req_btn {{ is_request($item->id) ? (is_request($item->id)->request_status != 0 ? 'hidden' : '') : '' }}" data-id="{{ $item->id }}">Request</button>
                                     @endif
                                 </div>
                             </div>
@@ -243,7 +243,6 @@
                                     $real_val = $max-$step;
                                     $width = $real_val == 1 || $real_val == 0 ? $step_width*$real_val : ($step_width*$real_val - 4);
                                     if(res.data.from == 'start'){
-
                                         $start_time = new Date(moment().format('YYYY-MM-DD') +' '+$og_start).getTime();
                                         $final_end= moment($start_time+$total).format('h:mm A');
 
