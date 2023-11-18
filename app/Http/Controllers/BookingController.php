@@ -435,15 +435,16 @@ class BookingController extends Controller
         date_default_timezone_set('Asia/Yangon');
         $now_date = Carbon::now()->format('Y-m-d');
         $now_time = Carbon::now()->addMinutes(5)->format('H:i:s');
-
+        $now_time2 = Carbon::now()->format('H:i:s');
+        // logger(Carbon::now());
         $booking = Booking::where('room_id', $id)
                 ->where(function ($q) use ($now_date, $now_time) {
                     $q->where('date', $now_date)
                         ->where('start_time', '<=', $now_time);
                 })
-                ->where(function ($q) use ($now_date, $now_time) {
+                ->where(function ($q) use ($now_date, $now_time2) {
                     $q->where('date', $now_date)
-                        ->where('end_time', '>=', $now_time);
+                        ->where('end_time', '>=', $now_time2);
                 })
                 ->where(function($q){
                     $q->where('status',0)
@@ -463,6 +464,7 @@ class BookingController extends Controller
             return response()->json(['status'=>$status],200);
         }else{
             if($booking){
+                
                 $user = $booking->user->name;
                 if($booking->status == 0){
                     $status = 'Not Avaliable';
