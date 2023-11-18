@@ -82,22 +82,26 @@
                                     <input type="hidden" class="text-black" name="booking_id" value="{{ $item->id }}">
 
                                     <div class="grid grid-cols-2 gap-2 mb-9 mt-4 px-4 my_booking_card">
-                                        <span >Request Duration :</span>
-                                        <select class="rounded-t-md h-8 text-black p-0 ps-2 total_duration" name="total_duration" id="">
-                                            <option value="">Choose Duration</option>
-                                            @foreach ( avaliable_duration($item->id) as $item )
-                                                <option value="{{ $item }}">{{ $item }}</option>
-                                            @endforeach ()
-                                        </select>
+                                        <span >Request Time :</span>
+                                        <div class="slide_container">
+                                            <input type="range" class="left_range" value="0" min="0" max="{{ get_step($item->id) }}" step="1" id="">
+                                            <input type="range" class="right_range" value="{{ get_step($item->id) }}" min="0" max="{{ get_step($item->id) }}" step="1" id="">
+
+                                            <div class="slider">
+                                                <div class="track"></div>
+                                                <div class="range"></div>
+                                                <div class="thumb left"></div>
+                                                <div class="thumb right"></div>
+                                            </div>
+                                            <input type="hidden" class="from" name="from" value="start">
+                                            <input type="hidden" class="total_duration" name="total_duration" value="{{ $item->duration }}">
+                                            <div class="meg mt-2 text-center">
+                                                <span class="from_time" data-from="{{ $item->start_time }}">{{ date('g:i A',strtotime($item->start_time)) }}</span>&nbsp;&nbsp;~&nbsp;&nbsp;
+                                                <span class="to_time" data-to="{{ $item->end_time }}">{{ date('g:i A',strtotime($item->end_time)) }}</span>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div class="grid grid-cols-2 gap-2 mb-9 mt-4 px-4 my_booking_card">
-                                        <span >From :</span>
-                                        <select class="rounded-t-md h-8 text-black p-0 ps-2 from" name="from" id="">
-                                            <option value="">Choose From</option>
-                                            <option value="start">Start Time</option>
-                                            <option value="end">End Time</option>
-                                        </select>
-                                    </div>
+
                                     <div class="grid grid-cols-2 gap-2 mb-9 mt-4 px-4 my_booking_card">
                                         <span >reason :</span>
                                         <textarea name="reason" class="text-black reason" placeholder="reason..." id="" cols="30" rows="3"></textarea>
@@ -210,27 +214,54 @@
                     $(document).on('click','.req_btn',function(e){
                         $val = $(this).data('id');
                         $this = $(this);
+                        $max = $(this).parent().parent().parent().find('.right_range').attr('max');
+                        $step_width = (100 / $max).toFixed(5);
+
+                        $right_range = $this.parent().parent().parent().find('.right_range');
+                        $left_range = $this.parent().parent().parent().find('.left_range');
+                        $range = $this.parent().parent().parent().find('.range');
+                        $right = $this.parent().parent().parent().find('.thumb.right');
+                        $left  = $this.parent().parent().parent().find('.thumb.left');
+                        $from_time = $this.parent().parent().parent().find('.from_time');
+                        $to_time = $this.parent().parent().parent().find('.to_time');
+
+                        $og_start = $this.parent().parent().parent().find('.from_time').data('from');
+                        $og_end = $this.parent().parent().parent().find('.to_time').data('to');
                         $.ajax({
                             type : 'get',
                             url  : '/today_booking/ajax/booking_request/'+$val,
                             success: function(res){
                                 if(res.status == 'exist')
                                 {
-                                    $this.parent().parent().parent().find('.total_duration').prop('disabled',true);
-                                    $this.parent().parent().parent().find('.from').prop('disabled',true);
+                                    $this.parent().parent().parent().find('.slide_container').addClass('exist');
                                     $this.parent().parent().parent().find('.reason').prop('disabled',true);
-                                    $this.parent().parent().parent().find('.total_duration option').each((i, e) => {
-                                        if ($(e).val() == res.data.total_duration) {
-                                            $(e).prop('selected', true);
-                                        }
-                                    });
-                                    $this.parent().parent().parent().find('.from option').each((i, e) => {
-                                        if ($(e).val() == res.data.from) {
-                                            $(e).prop('selected', true);
-                                        }
-                                    });
                                     $this.parent().parent().parent().find('.reason').text(res.data.request_reason);
                                     $this.parent().parent().parent().find('.send_btn').attr('hidden',true);
+                                    $all  = res.data.total_duration.split(':');
+                                    $total= $all[0]*3600000 + $all[1]*60000 + $all[2]*1000;
+                                    $step = $total/(30*60*1000);
+                                    $real_val = $max-$step;
+                                    $width = $real_val == 1 || $real_val == 0 ? $step_width*$real_val : ($step_width*$real_val - 4);
+                                    if(res.data.from == 'start'){
+
+                                        $start_time = new Date(moment().format('YYYY-MM-DD') +' '+$og_start).getTime();
+                                        $final_end= moment($start_time+$total).format('h:mm A');
+
+                                        $range.css('right',$width +'%');
+                                        $right.css('right',$width +'%');
+                                        $right_range.val($real_val);
+                                        $left_range.val(0);
+                                        $to_time.text($final_end);
+                                    }else{
+                                        $end_time = new Date(moment().format('YYYY-MM-DD') +' '+$og_end).getTime();
+                                        $final_start= moment($end_time-$total).format('h:mm A');
+
+                                        $range.css('left',$width +'%');
+                                        $left.css('left',$width +'%');
+                                        $left_range.val($step);
+                                        $right_range.val($max);
+                                        $from_time.text($final_start);
+                                    }
                                     $status = '';
                                     $text_color = '';
                                     switch (res.data.request_status){
@@ -241,10 +272,6 @@
                                         case(4) : $status = 'Waiting your answer'; $text_color = 'text-rose-500';break;
                                         default :break;
                                     }
-                                    // $status_title = `
-                                    // <b class="req_status ${$text_color}">(${$status})</b>
-                                    // `;
-                                    // $this.parent().parent().parent().parent().find('.booking_title').append($status_title);
                                 }
                             },
                             complete:function(){
@@ -263,6 +290,79 @@
                         $(this).parent().parent().parent().parent().find('.card_div').removeClass('w-0');
                         $(this).parent().parent().parent().parent().find('.card_div').addClass('w-full');
                         $(this).parent().parent().parent().parent().parent().find('.req_status').remove();
+                    })
+
+                    $(document).on('input','.left_range',function(e){
+                        $val = $(this).val();
+                        $max = $(this).attr('max');
+                        $start_time = $(this).parent().find('.from_time').data('from');
+                        $end_time = $(this).parent().find('.to_time').data('to');
+
+                        $step_width = (100 / $max).toFixed(5);
+                        $val = $val == $max ? $val - 1 : $val;
+                        $(this).val($val);
+                        $width = $val == 1 || $val == 0 ? $step_width*$val : ($step_width*$val - 4);
+                        $start_str = new Date(moment().format('YYYY-MM-DD') +' '+$start_time).getTime();
+                        $end_str = new Date(moment().format('YYYY-MM-DD') +' '+$end_time).getTime();
+
+                        $sec = (1000*60*30)*$val;
+                        $final_start = $start_str+$sec;
+
+                        $duration = moment.utc($end_str-$final_start).format('HH:mm:ss');
+
+                        $left_thumb = $(this).parent().find('.thumb.left');
+                        $right_thumb = $(this).parent().find('.thumb.right');
+                        $range = $(this).parent().find('.range');
+                        $right = $(this).parent().find('.right_range');
+
+
+                        $right.val($max);
+                        $left_thumb.css('left',$width+'%');
+                        $right_thumb.css('right',0);
+                        $range.css('left',$width+'%');
+                        $range.css('right',0);
+                        $(this).parent().find('.from_time').text(moment($final_start).format('h:mm A'))
+                        $(this).parent().find('.to_time').text(moment($end_str).format('h:mm A'))
+                        $(this).parent().find('.from').val('end');
+                        $(this).parent().find('.total_duration').val($duration);
+                    })
+
+                    $(document).on('input','.right_range',function(e){
+                        $val = $(this).val();
+                        $max = $(this).attr('max');
+                        $start_time = $(this).parent().find('.from_time').data('from');
+                        $end_time = $(this).parent().find('.to_time').data('to');
+
+                        $for_show = $max - $val;
+                        $step_width = (100 / $max).toFixed(5);
+                        $for_show = $for_show == $max ? Math.floor($for_show - 1) : $for_show;
+                        $val = $val == 0 ? Math.floor($val + 1) : $val;
+                        $(this).val($val);
+                        $width = $for_show == 1 || $for_show == 0 ? $step_width*$for_show : ($step_width*$for_show - 4);
+                        $start_str = new Date(moment().format('YYYY-MM-DD') +' '+$start_time).getTime();
+                        $end_str = new Date(moment().format('YYYY-MM-DD') +' '+$end_time).getTime();
+
+                        $sec = (1000*60*30)*$for_show;
+                        $final_end = $end_str-$sec;
+
+                        $duration = moment.utc(Math.abs($start_str-$final_end)).format('HH:mm:ss');
+
+                        $left_thumb = $(this).parent().find('.thumb.left');
+                        $right_thumb = $(this).parent().find('.thumb.right');
+                        $range = $(this).parent().find('.range');
+                        $left = $(this).parent().find('.left_range');
+
+
+                        $left.val(0);
+                        $left_thumb.css('left',0);
+                        $right_thumb.css('right',$width+'%');
+                        $range.css('right',$width+'%');
+                        $range.css('left',0);
+                        $(this).parent().find('.from_time').text(moment($start_str).format('h:mm A'))
+                        $(this).parent().find('.to_time').text(moment($final_end).format('h:mm A'))
+                        $(this).parent().find('.from').val('start');
+                        $(this).parent().find('.total_duration').val($duration);
+                        // console.log($duration);
                     })
             })
         </script>

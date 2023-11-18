@@ -2,7 +2,32 @@
     @foreach ($booking as $item)
         <div class="max-w bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 px-1 overflow-hidden bg_img1" style="background: linear-gradient(rgba(61, 57, 57, 0.7), rgba(59, 57, 57, 0.7)),url('{{ asset('storage/uploads/room_image/'.$item->room->image->file_name) }}');background-repeat:no-repeat;background-position:center;background-size:cover;color:white;">
             <div class="text-center py-2 my_booking_card ">
-                <span class="booking_title">{{ $item->title }}</span>
+                <span class="booking_title">{{ $item->title }}
+                    @if (is_request($item->id))
+                        @switch(is_request($item->id)->request_status)
+                            @case(0)
+                                <span class="text-amber-500">(Pending)</span>
+                                @break
+                            @case(1)
+                                <span class="text-emerald-500">(Accept)</span>
+                                @break
+                            @case(2)
+                                <span class="text-rose-500">(Reject)</span>
+                                @break
+                            @case(3)
+                                <span class="text-rose-500">(Reject)</span>
+                                @break
+                            @case(4)
+                                <span class="text-sky-500">(Resend)</span>
+                                @break
+                            @case(5)
+                                <span class="text-sky-500">(Resended)</span>
+                                @break
+                            @default
+
+                        @endswitch
+                    @endif
+                </span>
             </div>
             <hr>
             <div class="flex">
@@ -35,22 +60,26 @@
                         <input type="hidden" class="text-black" name="booking_id" value="{{ $item->id }}">
 
                         <div class="grid grid-cols-2 gap-2 mb-9 mt-4 px-4 my_booking_card">
-                            <span >Request Duration :</span>
-                            <select class="rounded-t-md h-8 text-black p-0 ps-2 total_duration" name="total_duration" id="">
-                                <option value="">Choose Duration</option>
-                                @foreach ( avaliable_duration($item->id) as $item )
-                                    <option value="{{ $item }}">{{ $item }}</option>
-                                @endforeach ()
-                            </select>
+                            <span >Request Time :</span>
+                            <div class="slide_container">
+                                <input type="range" class="left_range" value="0" min="0" max="{{ get_step($item->id) }}" step="1" id="">
+                                <input type="range" class="right_range" value="{{ get_step($item->id) }}" min="0" max="{{ get_step($item->id) }}" step="1" id="">
+
+                                <div class="slider">
+                                    <div class="track"></div>
+                                    <div class="range"></div>
+                                    <div class="thumb left"></div>
+                                    <div class="thumb right"></div>
+                                </div>
+                                <input type="hidden" class="from" name="from" value="start">
+                                <input type="hidden" class="total_duration" name="total_duration" value="{{ $item->duration }}">
+                                <div class="meg mt-2 text-center">
+                                    <span class="from_time" data-from="{{ $item->start_time }}">{{ date('g:i A',strtotime($item->start_time)) }}</span>&nbsp;&nbsp;~&nbsp;&nbsp;
+                                    <span class="to_time" data-to="{{ $item->end_time }}">{{ date('g:i A',strtotime($item->end_time)) }}</span>
+                                </div>
+                            </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-2 mb-9 mt-4 px-4 my_booking_card">
-                            <span >From :</span>
-                            <select class="rounded-t-md h-8 text-black p-0 ps-2 from" name="from" id="">
-                                <option value="">Choose From</option>
-                                <option value="start">Start Time</option>
-                                <option value="end">End Time</option>
-                            </select>
-                        </div>
+
                         <div class="grid grid-cols-2 gap-2 mb-9 mt-4 px-4 my_booking_card">
                             <span >reason :</span>
                             <textarea name="reason" class="text-black reason" placeholder="reason..." id="" cols="30" rows="3"></textarea>

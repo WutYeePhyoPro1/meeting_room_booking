@@ -278,3 +278,13 @@ function get_status($id)
     }
     return $msg;
 }
+
+function get_step($id)
+{
+    $booking = Booking::where('id',$id)->first();
+    $duration = $booking->duration;
+    list($hour,$min,$sec) = explode(':',$duration);
+    $total = ($hour * 3600) + ($min * 60) + $sec;
+    $step = $total/1800;
+    return $step;
+}
