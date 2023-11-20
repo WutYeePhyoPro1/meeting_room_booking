@@ -69,9 +69,10 @@
         <input type="hidden" id="user_id" value="{{ getAuth()->employee_id }}">
         <div class="header flex justify-between px-10 z-10 relative">
             @if (getAuth()->employee_id != 'recho@pro1')
-                    <div class="relative me-10">
+                    <div class="relative me-10" id="noti_div">
                         <i class="material-symbols-outlined text-4xl mt-3 cursor-pointer font-extralight select-none mr-16" id="noti_btn">notifications</i>
-                        <span class="bg-rose-600 text-white text-xs px-1 rounded-full absolute left-5 top-3 cursor-pointer" onclick="$('#noti_btn').click()" id="id_count"></span>
+                        <span class="bg-rose-600 text-white text-xs px-1 rounded-full absolute left-5 top-3 cursor-pointer " onclick="$('#noti_btn').click()" id="id_count"></span>
+
 
                         <div class=" inline-block text-left">
 
@@ -91,6 +92,7 @@
                             </div>
                             </div>
                         </div>
+
                     </div>
                 @endif
             <div class="w-20 relative ">
@@ -210,6 +212,13 @@
                 type: 'get',
                 success: function(res){
                     $('#id_count').text(res);
+                    if(res > 0){
+                        $('#noti_div').append(`
+                        <span class="bg-rose-600 text-white text-xs px-2 py-2 rounded-full absolute left-5 top-3 cursor-pointer animate-ping" id="noti_animate"></span>
+                        `);
+                    }else{
+                        $('#noti_animate').remove();
+                    }
                 }
             })
         }

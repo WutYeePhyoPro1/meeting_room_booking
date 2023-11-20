@@ -1,21 +1,18 @@
-@extends('new_layouts.admin.layout')
-@section('content')
-<style>
-    .select2-selection__choice {
-        padding: 5px 10px;
-        line-height: 1.5;
-    }
-
-    .select2-selection{
-        overflow: auto;
-    }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Meeting Room Booking System</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.1.js" integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    @vite(['resources/css/app.css', 'resources/js/app.js'])
+</head>
+<body>
     <div class="ps-5">
-        <div class="p-4 flex justify-between">
-            <span class="text-2xl font-serif">Dashboard</span>
-            <a href="{{ route('admin#home_ppt') }}"><x-button class="bg-emerald-500 hover:bg-emerald-700 mr-10" style="box-shadow: 2px 2px 8px rgb(0,0,0,0.7)" title="export" ><i class="material-symbols-outlined">ios_share</i></x-button></a>
-        </div>
-        <div class="mx-auto shadow-lg px-5 pb-2 bg-slate-100 shadow-slate-400" style="position: relative; height:45vh; width:95%">
+        <div class="mx-auto shadow-lg px-5 pb-2 bg-slate-100 shadow-slate-400 mt-4" style="position: relative; height:45vh; width:95%">
             <canvas id="myChart" style="width: 100%"></canvas>
         </div>
         <div id="this_year" data-item="{{ json_encode($this_year_data) }}"></div>
@@ -29,39 +26,7 @@
             <input type="hidden"  id="color" data-item="{{ json_encode($color) }}">
         </div>
         <div class="col-span-2 ms-10">
-            <div class="">
-                <form action="{{ getAuth()->employee_id == 'SuperAdmin@mail.com' ? route('home') : route('admin#dashboard') }}" method="GET">
-                    <div class="p-5 grid grid-cols-5 gap-8">
-                        <div class="flex flex-col">
-                            <label for="from_date">From Date :</label>
-                            <input type="date" id="from_date" value="{{ request('from_date') }}" name="from_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
-                        </div>
-                        <div class="flex flex-col">
-                            <label for="to_date">To Date :</label>
-                            <input type="date" id="to_date" value="{{ request('to_date') }}" name="to_date" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
-                        </div>
-                        <div class="flex flex-col">
-                            <label for="status">Month :</label>
-                            <input type="month" id="month" value="{{ request('month') }}" name="month" class="mt-2 border-1 text-slate-700 border-slate-400 rounded-lg focus:ring-0 focus:border-b-4  focus:border-slate-400 placeholder-slate-300">
-                        </div>
-                        <div class="flex flex-col">
-                            <label for="status" class="mb-1">Status :</label>
-                            <select id="status" name="status[]" style="" multiple="multiple">
-                                <option value="">Choose Status</option>
-                                <option value="6" {{ request('status') ? (in_array(6,request('status')) ? 'selected' : '') : '' }} >Pending</option>
-                                <option value="1" {{ request('status') ? (in_array(1,request('status')) ? 'selected' : '') : '' }}>Started</option>
-                                <option value="2" {{ request('status') ? (in_array(2,request('status')) ? 'selected' : '') : '' }} >Ended</option>
-                                <option value="3" {{ request('status') ? (in_array(3,request('status')) ? 'selected' : '') : '' }} >Cancelled</option>
-                                <option value="4" {{ request('status') ? (in_array(4,request('status')) ? 'selected' : '') : '' }} >Missed</option>
-                                <option value="5" {{ request('status') ? (in_array(5,request('status')) ? 'selected' : '') : '' }} >Finished</option>
-                            </select>
-                        </div>
-                        <div class="">
-                            <x-button class="bg-emerald-600 text-white mt-8 h-10 ps-6 hover:bg-emerald-800">Search</x-button>
-                        </div>
-                    </div>
-                </form>
-            </div>
+        
             <div class="grid grid-cols-4 gap-4 px-10">
                 <div class="w-full h-24 bg-slate-200 shadow-lg text-center pt-1 text-xl font-serif flex flex-col">
                     <span class="underline">All</span>
@@ -78,9 +43,6 @@
         </div>
     </div>
     <script>
-        $(document).ready(function(e){
-            $('#status').select2();
-        })
         const this_year = JSON.parse(document.getElementById('this_year').dataset.item);
         const last_year = JSON.parse(document.getElementById('last_year').dataset.item);
 
@@ -155,4 +117,5 @@
             }
         });
       </script>
-@endsection
+</body>
+</html>
