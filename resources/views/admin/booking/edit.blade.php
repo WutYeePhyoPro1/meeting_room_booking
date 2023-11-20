@@ -26,8 +26,15 @@
             <div class="grid grid-cols-2 gap-2 mt-5">
                 <div class="flex flex-col ">
                     <label for="">Room <span class="text-red-600">*</span>:</label>
-                    <span class="h-7 w-full bg-white mt-2 border border-slate-300 rounded-md text-center select-none">{{ $data->room->room_name }}</span>
-                    <input type="hidden" name="room_id" id="room_id" value="{{ $data->id }}">
+                    <select id="room_id" name="room_id" class="h-10 mt-2 border-slate-200 rounded-t-md focus:ring-0 focus:border-slate-400">
+                        <option value="">Choose Room</option>
+                        <option value="1" {{ $data->room_id == 1 ? 'selected' : '' }}>Room 1</option>
+                        <option value="2" {{ $data->room_id == 2 ? 'selected' : '' }}>Room 2</option>
+                        <option value="3" {{ $data->room_id == 3 ? 'selected' : '' }}>Room 3</option>
+                    </select>
+                    @error('date')
+                        <small class="ml-2 text-red-600">{{ $message }}</small>
+                    @enderror
                 </div>
                 <div class="flex flex-col">
                     <label for="date">Date <span class="text-red-600">*</span>:</label>
@@ -44,6 +51,7 @@
                         <option value="">Choose StartTime</option>
                     </select>
                     <input type="hidden" id="original_start" value="{{ $data->start_time }}">
+
                     @error('start_time')
                         <small class="ml-2 text-red-600">{{ $message }}</small>
                     @enderror
@@ -69,6 +77,7 @@
                 <label for="reason">Title <span class="text-red-600">*</span>:</label>
                 <select name="reason_id" id="reason" class="h-10 mt-2 border-slate-200 rounded-t-md focus:ring-0  focus:border-slate-400">
                     <option value="">Choose Reason</option>
+                    <option value="{{ $data->end_time }}" selected>{{ $data->end_time }}</option>
                     @foreach ($reason as $item)
                         <option value="{{ $item->id }}" {{ old('reason_id',$data->reason_id) == $item->id ? 'selected' : '' }}>{{ $item->reason }}</option>
                     @endforeach
@@ -113,6 +122,8 @@
 
 
             var id = $('#id').val();
+            var start =  moment($('#original_start').val(), 'HH:mm:ss').format('h:mm A');;
+            var end = moment($('#original_end').val(), 'HH:mm:ss').format('h:mm A');
             $.ajax({
             type : "GET",
             url  :  "/booking/ajax/event_click/"+id,
@@ -120,8 +131,11 @@
                 $('.time_interval').html('');
             },
             success: function(res){
+                // console.log(res);
                 $list = '<option value="">Choose StartTime</option>';
+                $list += `<option value="${start}" selected>${start}</option>`;
                 $list1= '<option value="">Choose EndTime</option>';
+                $list1= `<option value="${end}">${end}</option>`;
                 $gl_vl = res.time;
                 for($j = 0 ; $j <= res.time.length-1 ; $j++)
                 {
@@ -156,7 +170,7 @@
                     $start_time = $('#start_time').val();
                     $end_time   = $('#end_time').val();
                     $og_start   = $('#original_start').val();
-                    $og_end     = $('#original_end').val();
+                    $og_end     = $('#original_end').val() 
                     $og_dur     = $('#og_duration').val();
                     $s = $start_time.split(":");
                     $e = $end_time.split(":");

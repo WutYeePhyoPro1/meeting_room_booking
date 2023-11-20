@@ -416,7 +416,7 @@ class adminController extends Controller
     // edit booking
     public function edit_booking($id)
     {
-        $data = Booking::where('id',$id)->first();
+        $data = Booking::where('id',$id)->withTrashed()->first();
         $reason = Reason::get();
         return view('admin.booking.edit',compact('data','reason'));
     }
