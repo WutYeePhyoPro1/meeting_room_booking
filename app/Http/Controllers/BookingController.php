@@ -84,6 +84,11 @@ class BookingController extends Controller
             $book->title        = $request->title;
             $book->reason_id    = $request->reason_id;
             $book->remark       = $request->remark;
+            if(strtotime($request->date .' '.$request->start_time) > strtotime(Carbon::now()) ){
+                $book->status       = 0;
+            }else{
+                $book->status       = 4;
+            }
             if(isset($request->ch_acc)){
                 $book->reception = 1;
             }
