@@ -160,7 +160,7 @@
                             $now        = $now.getTime();
                             $start_time = $start.getTime();
                             $end_time = $end.getTime();
-                            $show_btn_time = $start_time-(1000 * 60 * 5);
+                            $show_btn_time = $start_time-(1000 * 60 * 15);
                             // console.log($start_time +'_'+ $show_btn_time);
                             if ($now > $show_btn_time) {
                                 var diff = $end_time - $now;
