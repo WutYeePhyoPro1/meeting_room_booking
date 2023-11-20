@@ -872,7 +872,7 @@ class BookingController extends Controller
 
         if($data)
         {
-            $start = strtotime($data->start_time) - 60*10;
+            $start = strtotime($data->start_time) - 60*15;
             $now   = strtotime(Carbon::now());
             if($now > $start){
                 $diff = strtotime($data->start_time) -$now;
