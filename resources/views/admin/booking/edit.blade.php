@@ -146,7 +146,7 @@
                 for($i = 0 ; $i <= $all_time.length-1 ; $i++)
                 {
                     $list1 += `
-                    <option value="${$all_time[$i]}" ${$all_time[$i] == res.data.end_time ? 'selected':''}>${moment($1all_time[$i], 'HH:mm:ss').format('h:mm A')}</option>
+                    <option value="${$all_time[$i]}" ${$all_time[$i] == res.data.end_time ? 'selected':''}>${moment($all_time[$i], 'HH:mm:ss').format('h:mm A')}</option>
                     `;
 
                 }
