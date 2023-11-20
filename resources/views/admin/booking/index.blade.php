@@ -100,10 +100,12 @@
                         @endif
                         </td>
                         <td class="text-right pr-1">
-                            <a href="{{ route('admin#editbooking',['id'=>$item->id]) }}"><button class="bg-amber-300 hover:bg-amber-400 rounded-lg  px-3 py-1" id="edit" title="edit" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base mt-1">edit</i></button></a>
-                            <a href="javascript:confirmmessage({{ $item->id }})"><button class="bg-rose-300 hover:bg-rose-400 rounded-lg  px-3 py-1" id="cancel" title="cancel" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base mt-1">cancel</i></button></a>
+                            @if(!$item->deleted_at)
+                                <a href="{{ route('admin#editbooking',['id'=>$item->id]) }}"><button class="bg-amber-300 hover:bg-amber-400 rounded-lg  px-3 py-1" id="edit" title="edit" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base mt-1">edit</i></button></a>
+                                <a href="javascript:confirmmessage({{ $item->id }})"><button class="bg-rose-300 hover:bg-rose-400 rounded-lg  px-3 py-1" id="cancel" title="cancel" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base mt-1">cancel</i></button></a>
+                            @endif
                             <a href="javascript:{}">
-                                <button class="bg-sky-300 hover:bg-sky-400 rounded-lg  px-3 py-1" id="detail" title="detail" data-id="{{ $item->id }}"><i class="material-symbols-out   lined text-base mt-1">info</i></button>
+                                <button class="bg-sky-300 hover:bg-sky-400 rounded-lg  px-3 py-1" id="detail" title="detail" data-id="{{ $item->id }}"><i class="material-symbols-outlined text-base mt-1">info</i></button>
                             </a>
                         </td>
                     </tr>

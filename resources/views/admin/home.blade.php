@@ -13,7 +13,7 @@
     <div class="ps-5">
         <div class="p-4 flex justify-between">
             <span class="text-2xl font-serif">Dashboard</span>
-            <a href="{{ route('admin#home_ppt') }}"><x-button class="bg-emerald-500 hover:bg-emerald-700 mr-10" style="box-shadow: 2px 2px 8px rgb(0,0,0,0.7)" title="export" ><i class="material-symbols-outlined">ios_share</i></x-button></a>
+            {{-- <a href="{{ route('admin#home_ppt') }}"><x-button class="bg-emerald-500 hover:bg-emerald-700 mr-10" style="box-shadow: 2px 2px 8px rgb(0,0,0,0.7)" title="export" ><i class="material-symbols-outlined">ios_share</i></x-button></a> --}}
         </div>
         <div class="mx-auto shadow-lg px-5 pb-2 bg-slate-100 shadow-slate-400" style="position: relative; height:45vh; width:95%">
             <canvas id="myChart" style="width: 100%"></canvas>

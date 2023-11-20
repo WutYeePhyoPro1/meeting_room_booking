@@ -45,12 +45,12 @@ Route::middleware(['auth:sanctum',config('jetstream.auth_session'),'verified',])
             route::get('room/edit/{id}','room_edit')->name('edit_room');
             route::post('room/create','store_room')->name('store_room');
             route::get('room/delete/{id}','room_delete')->name('delete_room');
-            //home powerpoiint
-            route::get('home/ppt','host_ppt')->name('admin#home_ppt');
         });
 
         //ajax
         route::get('room/boss/{id}','boss_in');
         route::get('room/guest/{id}','guest_in');
+        //home powerpoiint
+        route::get('home/ppt','home_ppt')->name('admin#home_ppt');
     });
 });

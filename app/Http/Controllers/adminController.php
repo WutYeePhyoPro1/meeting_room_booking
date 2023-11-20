@@ -17,112 +17,29 @@ use Illuminate\Validation\Rule;
 use App\Rules\RoomNameDublicate;
 use App\Customize\Commonfunction;
 use Illuminate\Support\Facades\DB;
+use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use PhpOffice\PhpPresentation\IOFactory;
+use App\Repositories\DashboardRepository;
+use PhpOffice\PhpPresentation\PhpPresentation;
+use App\Interfaces\DashboardRepositoryInterface;
 use Symfony\Component\CssSelector\Node\FunctionNode;
 
 class adminController extends Controller
 {
+
+    private DashboardRepositoryInterface $repository;
+
+    public function __construct(DashboardRepository $repository)
+    {
+        $this->repository = $repository;
+    }
+
     public function home(){
         if(getAuth()->employee_id == 'SuperAdmin@mail.com'){
-            $this_year = Carbon::now()->format('Y');
-            $last_year = Carbon::now()->subYear(1)->format('Y');
-            $data = Booking::selectRaw('TO_CHAR(date,\'Month\')  as month, count(date) as count')
-                            ->whereYear('date',$this_year)
-                            ->groupBy(DB::raw('TO_CHAR(date,\'Month\') '))
-                            ->orderBy('month')
-                            ->get();
-
-            $data1 = Booking::selectRaw('TO_CHAR(date,\'Month\')  as month, count(date) as count')
-                            ->whereYear('date',$last_year)
-                            ->groupBy(DB::raw('TO_CHAR(date,\'Month\') '))
-                            ->orderBy('month')
-                            ->get();
-
-
-                $year = date('Y',strtotime(request('month')));
-                $month= date('m',strtotime(request('month')));
-            // dd(request('status'));
-            $user_data = Booking::with('user')
-                        ->select(DB::raw('count(user_id) as count'), 'user_id')
-                        ->when(request('month'), function ($q) use ($year, $month) {
-                            $q->whereMonth('date', $month)
-                                ->whereYear('date', $year);
-                        })
-                        ->when(request('from_date') && !request('month'), function ($q) {
-                            $q->where('date', '>=', request('from_date'));
-                        })
-                        ->when(request('to_date') && !request('month'), function ($q) {
-                            $q->where('date', '<=', request('to_date'));
-                        })
-                        ->when(request('room'), function ($q) {
-                            $q->where('room_id', request('room'));
-                        })
-                        ->when(request('status') , function($q){
-                            $q->when(in_array(6,request('status')),function($q){
-                                $q->whereIn('status',request('status'))
-                                ->orwhere('status',0);
-                            })
-                            ->when(!in_array(6,request('status')) , function($q){
-                                $q->whereIn('status',request('status'));
-                            });
-                        })
-                        ->groupBy('user_id')
-                        ->orderBy('user_id')
-                        ->withTrashed()
-                        ->get();
-
-                        // dd($user_data);
-            $all_data = Booking::when(request('month'),function($q) use($year,$month){
-                                    $q->whereMonth('date',$month)
-                                    ->whereYear('date',$year);
-                                })
-                                ->when(request('from_date') && !request('month'),function($q){
-                                    $q->where('date','>=',request('from_date'));
-                                })
-                                ->when(request('to_date') && !request('month'),function($q){
-                                    $q->where('date','<=',request('to_date'));
-                                })
-                                ->when(request('room'),function($q){
-                                    $q->where('room_id',request('room'));
-                                })
-                                ->when(request('status') , function($q){
-                                    $q->when(in_array(6,request('status')),function($q){
-                                        $q->whereIn('status',request('status'))
-                                        ->orwhere('status',0);
-                                    })
-                                    ->when(!in_array(6,request('status')) , function($q){
-                                        $q->whereIn('status',request('status'));
-                                    });
-                                })
-                                ->withTrashed()
-                                ->get();
-            $all_user = User::whereNotIn('employee_id',['SuperAdmin@mail.com','recho@pro1'])->orderBy('id')->get();
-            $user = $all_user->pluck('name')->all();
-            $color = $all_user->pluck('bg_color')->all();
-            $data_user = [];
-            $final_data= [];
-            foreach($all_user as $item){
-                $data_user[$item->name] = null;
-            }
-            foreach($user_data as $item)
-            {
-                    $data_user[$item->user->name] = $item->count;
-            }
-            foreach($data_user as $index=>$item){
-                $final_data[]=$item;
-            }
-
-            $this_year_data = ['January' => null, 'February' => null, 'March' => null, 'April' => null, 'May' => null, 'June' => null, 'July' => null,'August' => null,'September' => null,'October' => null,'November' => null,'December' => null];
-            $last_year_data = $this_year_data;
-            foreach($data as $item){
-                $this_year_data[trim($item->month,' ')] = $item->count;
-            }
-            foreach($data1 as $item){
-                $last_year_data[trim($item->month,' ')] = $item->count;
-            }
-
-            return view('admin.home',compact('this_year_data','last_year_data','final_data','user_data','user','color','all_data'));
+            $all = $this->repository->get_home_data();
+            return view('admin.home',$all);
         }else{
             $room = MeetingRoom::orderBy('created_at','asc')->get();
             // $week_date = Carbon::now()->subDay(7);
@@ -138,95 +55,9 @@ class adminController extends Controller
     //go to user home page
     public function dashboard(){
 
-        $this_year = Carbon::now()->format('Y');
-        $last_year = Carbon::now()->subYear(1)->format('Y');
-        $data = Booking::selectRaw('TO_CHAR(date,\'Month\')  as month, count(date) as count')
-                        ->whereYear('date',$this_year)
-                        ->groupBy(DB::raw('TO_CHAR(date,\'Month\') '))
-                        ->orderBy('month')
-                        ->get();
+        $all = $this->repository->get_home_data();
 
-        $data1 = Booking::selectRaw('TO_CHAR(date,\'Month\')  as month, count(date) as count')
-                        ->whereYear('date',$last_year)
-                        ->groupBy(DB::raw('TO_CHAR(date,\'Month\') '))
-                        ->orderBy('month')
-                        ->get();
-
-
-            $year = date('Y',strtotime(request('month')));
-            $month= date('m',strtotime(request('month')));
-
-        $user_data = Booking::with('user')->select(DB::raw('count(user_id) as count'),'user_id')
-                                ->when(request('month'),function($q) use($year,$month){
-                                    $q->whereMonth('date',$month)
-                                    ->whereYear('date',$year);
-                                })
-                                ->when(request('from_date') && !request('month'),function($q){
-                                    $q->where('date','>=',request('from_date'));
-                                })
-                                ->when(request('to_date') && !request('month'),function($q){
-                                    $q->where('date','<=',request('to_date'));
-                                })
-                                ->when(request('status') , function($q){
-                                    $q->when(in_array(6,request('status')),function($q){
-                                        $q->whereIn('status',request('status'))
-                                        ->orwhere('status',0);
-                                    })
-                                    ->when(!in_array(6,request('status')) , function($q){
-                                        $q->whereIn('status',request('status'));
-                                    });
-                                })
-                                ->groupBy('user_id')
-                                ->orderBy('user_id')
-                                ->withTrashed()
-                                ->get();
-        $all_data = Booking::when(request('month'),function($q) use($year,$month){
-                                $q->whereMonth('date',$month)
-                                ->whereYear('date',$year);
-                            })
-                            ->when(request('from_date') && !request('month'),function($q){
-                                $q->where('date','>=',request('from_date'));
-                            })
-                            ->when(request('to_date') && !request('month'),function($q){
-                                $q->where('date','<=',request('to_date'));
-                            })
-                            ->when(request('status') , function($q){
-                                $q->when(in_array(6,request('status')),function($q){
-                                    $q->whereIn('status',request('status'))
-                                    ->orwhere('status',0);
-                                })
-                                ->when(!in_array(6,request('status')) , function($q){
-                                    $q->whereIn('status',request('status'));
-                                });
-                            })
-                            ->withTrashed()
-                            ->get();
-        $all_user = User::whereNotIn('employee_id',['SuperAdmin@mail.com','recho@pro1'])->orderBy('id')->get();
-        $user = $all_user->pluck('name')->all();
-        $color = $all_user->pluck('bg_color')->all();
-        $data_user = [];
-        $final_data= [];
-        foreach($all_user as $item){
-            $data_user[$item->name] = null;
-        }
-        foreach($user_data as $item)
-        {
-                $data_user[$item->user->name] = $item->count;
-        }
-        foreach($data_user as $index=>$item){
-            $final_data[]=$item;
-        }
-
-        $this_year_data = ['January' => null, 'February' => null, 'March' => null, 'April' => null, 'May' => null, 'June' => null, 'July' => null,'August' => null,'September' => null,'October' => null,'November' => null,'December' => null];
-        $last_year_data = $this_year_data;
-        foreach($data as $item){
-            $this_year_data[trim($item->month,' ')] = $item->count;
-        }
-        foreach($data1 as $item){
-            $last_year_data[trim($item->month,' ')] = $item->count;
-        }
-
-        return view('admin.home',compact('this_year_data','last_year_data','final_data','user_data','user','color','all_data'));
+        return view('admin.home',$all);
     }
 
     public function user()
@@ -442,7 +273,7 @@ class adminController extends Controller
     // edit booking
     public function edit_booking($id)
     {
-        $data = Booking::where('id',$id)->first();
+        $data = Booking::where('id',$id)->withTrashed()->first();
         $reason = Reason::get();
         return view('admin.booking.edit',compact('data','reason'));
     }
@@ -498,10 +329,43 @@ class adminController extends Controller
     }
 
     //ppt file for dashboard
-    public function host_ppt()
-    {
+    // public function home_ppt()
+    // {
+    //    // Get data from the repository
+    //    $all = $this->repository->get_home_data();
 
-    }
+    //    // Render the view with the retrieved data
+    //    $view = view('admin.home_ppt', $all);
+    //    $htmlContent = $view->render();
+
+    //    // Convert HTML to an image using Browsershot
+    //    $imagePath = public_path('presentation_image.png');
+    //    Browsershot::html($htmlContent)->save($imagePath);
+
+    //    // Create a presentation object
+    //    $presentation = new PhpPresentation();
+
+    //    // Create a slide
+    //    $slide = $presentation->createSlide();
+
+    //    // Add the image to the slide
+    //    $slide->createDrawingShape()->setName('Presentation Image')->setPath($imagePath)->setHeight(720);
+
+    //    // Save the presentation to a file or send it as a response
+    //    $filename = 'presentation.pptx';
+    //    $path = public_path($filename);
+
+    //    $writer = IOFactory::createWriter($presentation, 'PowerPoint2007');
+    //    $writer->save($path);
+
+    //    // If you want to send the presentation as a response, you can use the following:
+    //    $headers = [
+    //        'Content-Type' => 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
+    //        'Content-Disposition' => 'attachment; filename="' . $filename . '"',
+    //    ];
+
+    //    return response()->download($path, $filename)->deleteFileAfterSend();
+    // }
 
     //validate
     public function cus_validate($data,$action)
