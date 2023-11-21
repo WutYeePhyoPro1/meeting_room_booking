@@ -81,6 +81,7 @@ class BookingController extends Controller
             $book->start_time   = $request->start_time;
             $book->end_time     = $request->end_time;
             $book->duration     = $request->duration;
+            $book->room_id     = $request->room_id;
             $book->title        = $request->title;
             $book->reason_id    = $request->reason_id;
             $book->remark       = $request->remark;
