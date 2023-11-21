@@ -83,7 +83,7 @@
                                 Ended
                                 @break
                             @case(3)
-                                Canceled
+                                Cancelled
                                 @break
                             @case(4)
                                 Missed
