@@ -81,6 +81,7 @@ class BookingController extends Controller
             $book->start_time   = $request->start_time;
             $book->end_time     = $request->end_time;
             $book->duration     = $request->duration;
+            $book->room_id     = $request->room_id;
             $book->title        = $request->title;
             $book->reason_id    = $request->reason_id;
             $book->remark       = $request->remark;
@@ -465,9 +466,15 @@ class BookingController extends Controller
         $guest = $data->guest;
         if($boss == 1){
             $status = 'Boss In';
+            MeetingRoom::where('id',$id)->update([
+                'status'    => 1
+            ]);
             return response()->json(['status'=>$status],200);
         }elseif($guest == 1){
             $status = 'Guest In';
+            MeetingRoom::where('id',$id)->update([
+                'status'    => 1
+            ]);
             return response()->json(['status'=>$status],200);
         }else{
             if($booking){
