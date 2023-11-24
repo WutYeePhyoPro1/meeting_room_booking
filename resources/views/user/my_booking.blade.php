@@ -65,6 +65,8 @@
                                 <div class="flex justify-between mt-9 mb-2 px-4 my_booking_card all_btn_gp">
                                     <input type="hidden" id="extendable" value="{{ count(check_extendable($item->id)) > 0 ? 1 : 0 }}">
                                     <input type="hidden" class="room_status" value="{{ $item->room->status }}">
+                                    <input type="hidden" class="boss_status" value="{{ $item->room->boss }}">
+                                    <input type="hidden" class="guest_status" value="{{ $item->room->guest }}">
                                     <button class="bg-emerald-400 hover:bg-emerald-500 py-2 px-10 rounded-md hidden start_btn" data-id="{{ $item->id }}">Start</button>
                                     <button class="bg-rose-300 hover:bg-rose-400 py-2 rounded-md px-10 end_btn {{ $item->status == 1 ? '' : 'hidden' }}" data-id="{{ $item->id }}" >End</button>
                                     <button class="bg-sky-500 hover:bg-sky-600 py-2 rounded-md px-10 extend_btn {{ ($item->status == 1 && count(check_extendable($item->id))>0 && !$item->extend_status) ? '' : 'hidden' }}" data-id="{{ $item->id }}">Extend</button>
@@ -150,6 +152,8 @@
                             $end_time = $(e).eq($i).data('end');
                             $date       = $(e).eq($i).data('date');
                             $room_status= $('.room_status').eq($i).val();
+                            $boss_status= $('.boss_status').eq($i).val();
+                            $guest_status= $('.guest_status').eq($i).val();
                             $start_date = $date+' '+$start_time;
                             $end_date = $date+' '+$end_time;
                             $start = new Date($start_date);
@@ -164,7 +168,7 @@
                             // console.log($start_time +'_'+ $show_btn_time);
                             if ($now > $show_btn_time) {
                                 var diff = $end_time - $now;
-                                if (diff > 0 && $room_status == 0) {
+                                if (diff > 0 && $room_status == 0 && $boss_status == 0 && $guest_status == 0) {
                                     // console.log(diff);
 
                                     if($('.booking_status').eq($i).val() == 0){
