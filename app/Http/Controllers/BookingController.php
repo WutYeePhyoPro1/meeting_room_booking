@@ -466,15 +466,9 @@ class BookingController extends Controller
         $guest = $data->guest;
         if($boss == 1){
             $status = 'Boss In';
-            MeetingRoom::where('id',$id)->update([
-                'status'    => 1
-            ]);
             return response()->json(['status'=>$status],200);
         }elseif($guest == 1){
             $status = 'Guest In';
-            MeetingRoom::where('id',$id)->update([
-                'status'    => 1
-            ]);
             return response()->json(['status'=>$status],200);
         }else{
             if($booking){
