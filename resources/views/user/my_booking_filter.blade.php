@@ -44,6 +44,8 @@
                                 <div class="flex justify-between mt-9 mb-2 px-4 my_booking_card all_btn_gp">
                                     <input type="hidden" id="extendable" value="{{ count(check_extendable($item->id)) > 0 ? 1 : 0 }}">
                                     <input type="hidden" class="room_status" value="{{ $item->room->status }}">
+                                    <input type="hidden" class="boss_status" value="{{ $item->room->boss }}">
+                                    <input type="hidden" class="guest_status" value="{{ $item->room->guest }}">
                                     <button class="bg-emerald-400 hover:bg-emerald-500 py-2 px-10 rounded-md hidden start_btn" data-id="{{ $item->id }}">Start</button>
                                     <button class="bg-rose-300 hover:bg-rose-400 py-2 rounded-md px-10 end_btn {{ $item->status == 1 ? '' : 'hidden' }}" data-id="{{ $item->id }}" >End</button>
                                     <button class="bg-sky-500 hover:bg-sky-600 py-2 rounded-md px-10 extend_btn {{ ($item->status == 1 && count(check_extendable($item->id))>0 && !$item->extend_status) ? '' : 'hidden' }}" data-id="{{ $item->id }}">Extend</button>
