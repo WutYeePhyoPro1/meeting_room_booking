@@ -2,7 +2,7 @@
 @section('content')
 <style>
     .select2-selection__choice {
-        padding: 5px 10px;
+        padding: 3px 7px;
         line-height: 1.5;
     }
 
@@ -79,7 +79,9 @@
     </div>
     <script>
         $(document).ready(function(e){
-            $('#status').select2();
+            $('#status').select2({
+                theme:'classic'
+            });
         })
         const this_year = JSON.parse(document.getElementById('this_year').dataset.item);
         const last_year = JSON.parse(document.getElementById('last_year').dataset.item);
