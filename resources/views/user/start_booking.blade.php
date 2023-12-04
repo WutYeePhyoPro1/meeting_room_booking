@@ -11,7 +11,7 @@
         <i class="material-symbols-outlined fixed right-1 top-1/3 cursor-pointer duration-500 bg-slate-500 rounded-xl text-white select-none booking_icon">arrow_right</i>
         <div class="w-1/3 p-2 overflow-hidden rounded-lg mt-4 duration-500 whitespace-nowrap ml-3 relative" id="booking_div" style="background-color: rgb(255,250,223)">
             <input type="hidden" id="succ_msg" value="{{ Session::has('create') ? 1 : (Session::has('update') ? 2 : 0)}}">
-            <input type="hidden" id="cur_user_id" value="{{ getAuth()->id }}">
+            <input type="hidden" id="cur_user_id" value="{{ getAuth()->id == 13 ? 9 : getAuth()->id }}">
 
             <div class="{{ (getAuth()->employee_id == 'recho@pro1' && !old('ch_acc')) ? 'hidden' : '' }}" id="start_form">
                 <div class="text-center py-1">
@@ -101,7 +101,9 @@
                 <span>Please Choose Your Account</span><hr>
                 <ul class="mt-5 overflow-y-scroll max-h-[30rem] ch_acc">
                     @foreach ($user as $item)
-                        <li class="w-11/12 ms-5 hover:bg-amber-200 h-8 my-4 leading-8 cursor-pointer rounded-md user_accounts" data-id="{{ $item->id }}">{{ $item->name }}</li>
+                        @if ($item->employee_id != '000-000024')
+                            <li class="w-11/12 ms-5 hover:bg-amber-200 h-8 my-4 leading-8 cursor-pointer rounded-md user_accounts" data-id="{{ $item->id }}">{{ $item->name }}</li>
+                        @endif
                     @endforeach
                 </ul>
             </div>
@@ -136,13 +138,13 @@
                     events:[
                         @foreach ($book as $item)
                         {
-                            title: '{{ $item->title . '(' . $item->user->name . ')' }}',
+                            title: "{{ $item->title . '(' . ($item->user->employee_id == '000-000024' ? 'System Development' : $item->user->name) . ')' }}",
                             start: "{{ $item->date.'T'.$item->start_time }}",
                             end: "{{ $item->date.'T'.$item->end_time }}",
                             color: '{{ $item->user->bg_color }}',
                             textColor: '{{ $item->user->text_color }}',
                             id: '{{ $item->id }}',
-                            user_id: '{{ $item->user_id }}'
+                            user_id: '{{ $item->user_id == 13 ? 9 : $item->user_id }}'
                         },
 
                         @endforeach
@@ -170,9 +172,9 @@
                         let today      = moment().format('YYYY-MM-DD HH:mm:ss');
                         let user_id = $('#cur_user_id').val();
                         let ch_acc = $('#ch_acc').val();
-                        console.log(ch_acc);
 
                         let b_user_id = event.user_id;
+                        console.log(user_id);
 
                         if ((start_date < today) || (user_id != b_user_id) || (ch_acc && ch_acc != b_user_id)) {
                             event.editable = false;

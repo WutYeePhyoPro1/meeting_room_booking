@@ -155,7 +155,7 @@
                             $boss_status= $('.boss_status').eq($i).val();
                             $guest_status= $('.guest_status').eq($i).val();
                             $start_date = $date+' '+$start_time;
-                            $end_date = $date+' '+$end_time;
+                            $end_date = $date+' '+$end_time;\
                             $start = new Date($start_date);
                             $end = new Date($end_date);
                             $started = $('.started').eq($i).val();

@@ -12,7 +12,7 @@ class bookingExport implements FromView,WithColumnWidths
 {
     /**
     * @return \Illuminate\Support\Collection
-    */
+    */  
     protected $filter;
 
     public function __construct($filter)
