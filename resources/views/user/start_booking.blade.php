@@ -101,11 +101,7 @@
                 <span>Please Choose Your Account</span><hr>
                 <ul class="mt-5 overflow-y-scroll max-h-[30rem] ch_acc">
                     @foreach ($user as $item)
-<<<<<<< HEAD
                         @if ($item->employee_id != '000-000024')
-=======
-                    @if ($item->employee_id != '000-000024')
->>>>>>> 5c7b7673686e926bb8efba6964fdf37efbc9f58f
                             <li class="w-11/12 ms-5 hover:bg-amber-200 h-8 my-4 leading-8 cursor-pointer rounded-md user_accounts" data-id="{{ $item->id }}">{{ $item->name }}</li>
                         @endif
                     @endforeach
