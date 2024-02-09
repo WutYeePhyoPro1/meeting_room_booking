@@ -34,7 +34,8 @@
                         </div>
                         <div class="flex flex-col">
                             <label for="date">Date <span class="text-red-600">*</span>:</label>
-                            <input type="date" min="<?php echo date("Y-m-d"); ?>" max="<?php echo date("Y-m-d", strtotime(date("Y-m-d") . " +13 days"))?>" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="date" id="date">
+                            <!-- <input type="date" min="<?php echo date("Y-m-d"); ?>" max="<?php echo date("Y-m-d", strtotime(date("Y-m-d") . " +13 days"))?>" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="date" id="date"> -->
+                            <input type="date" min="<?php echo date("Y-m-d"); ?>" max="<?php echo strtotime(date("Y-m-d", strtotime("+1 month")))?>" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="date" id="date">
                             @error('date')
                                 <small class="ml-2 text-red-600">{{ $message }}</small>
                             @enderror
@@ -151,7 +152,7 @@
                     ],
                     eventConstraint: {
                         start: moment().format('YYYY-MM-DD'),
-                        end: moment().add(14,'days').format('YYYY-MM-DD'),
+                        end: moment().add(1, 'months').format('YYYY-MM-DD'),
                     },
                     // eventAllow: function(info){
                     //     return info.start >= '09:00' && info.end <= '17:00';
