@@ -15,33 +15,33 @@ export default {
         "./node_modules/tw-elements/dist/js/**/*.js"
     ],
 
-    theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
-            colors: {
-                emerald : colors.emerald,
-                red     : colors.red,
-                cus     : 'rgb(73, 100, 153)',
-                cus1    : 'rgba(32, 43, 63, 0.9)',
-                cus2    : 'rgb(206, 206, 206)'
-            },
-            padding:{
-                    
-            },
+        theme: {
+            extend: {
+                fontFamily: {
+                    sans: ['Figtree', ...defaultTheme.fontFamily.sans],
+                },
+                colors: {
+                    emerald : colors.emerald,
+                    red     : colors.red,
+                    cus     : 'rgb(73, 100, 153)',
+                    cus1    : 'rgba(32, 43, 63, 0.9)',
+                    cus2    : 'rgb(206, 206, 206)'
+                },
+                padding:{
 
-            // spacing: {
-            //     '1': '8px',
-            //     '2': '12px',
-            //     '3': '16px',
-            //     '4': '24px',
-            //     '5': '32px',
-            //     '6': '48px',
-            //   }
+                },
 
+                // spacing: {
+                //     '1': '8px',
+                //     '2': '12px',
+                //     '3': '16px',
+                //     '4': '24px',
+                //     '5': '32px',
+                //     '6': '48px',
+                //   }
+
+            },
         },
-    },
 
     plugins: [forms, typography,require("tw-elements/dist/plugin.cjs")],
     darkMode: "class"

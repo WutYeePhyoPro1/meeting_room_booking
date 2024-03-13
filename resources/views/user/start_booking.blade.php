@@ -154,6 +154,7 @@
                         @endforeach
                     ],
                     eventConstraint: {
+                        //start time for booking and end time for booking (တပတ် အတွင်းပဲ booking လုပ်ခွင့်ပေး)
                         start: moment().format('YYYY-MM-DD'),
                         end: moment().add(7,'days').format('YYYY-MM-DD'),
                     },

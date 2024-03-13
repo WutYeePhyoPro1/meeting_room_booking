@@ -7,11 +7,7 @@
         <div class="grid grid-cols-3 gap-6 pt-10 px-5 xl:px-32">
 
             @foreach ($room as $item)
-<<<<<<< HEAD
                 <div class="max-w bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 room_card">
-=======
-                <div class="max-w bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700  room_card">
->>>>>>> 5c7b7673686e926bb8efba6964fdf37efbc9f58f
                     <div class="h-4/6 ">
                         <a href="javascript:{}" >
                             <img class="rounded-t-lg object-cover h-full w-full duration-500 hover:scale-125 booking_a" src="{{ asset('storage/uploads/room_image/'.$item->image->file_name) }}" alt="" />
@@ -101,10 +97,10 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="flex justify-center text-xs mt-2 bg-white">
-                {{ $bookings->links() }}
+                <div class="flex justify-center text-xs mt-2 bg-white">
+                    {{ $bookings->links() }}
 
-        </div>
+            </div>
 
         @push('js')
             <script>
