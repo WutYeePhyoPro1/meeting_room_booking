@@ -84,7 +84,7 @@ class DashboardRepository implements DashboardRepositoryInterface
                                 })
                                 ->withTrashed()
                                 ->get();
-            $all_user = User::whereNotIn('employee_id',['SuperAdmin@mail.com','recho@pro1'])->orderBy('id')->get();
+            $all_user = User::whereNotIn('employee_id',['SuperAdmin@mail.com','recho@pro1','000-000024'])->orderBy('id')->get();
             $user = $all_user->pluck('name')->all();
             $color = $all_user->pluck('bg_color')->all();
             $data_user = [];

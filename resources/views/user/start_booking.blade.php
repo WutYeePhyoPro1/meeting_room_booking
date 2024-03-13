@@ -34,7 +34,8 @@
                         </div>
                         <div class="flex flex-col">
                             <label for="date">Date <span class="text-red-600">*</span>:</label>
-                            <input type="date" min="<?php echo date("Y-m-d"); ?>" max="<?php echo date("Y-m-d", strtotime(date("Y-m-d") . " +6 days"))?>" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="date" id="date">
+                            <!-- <input type="date" min="<?php echo date("Y-m-d"); ?>" max="<?php echo date("Y-m-d", strtotime(date("Y-m-d") . " +13 days"))?>" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="date" id="date"> -->
+                            <input type="date" min="<?php echo date("Y-m-d"); ?>" max="<?php echo strtotime(date("Y-m-d", strtotime("+1 month")))?>" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="date" id="date">
                             @error('date')
                                 <small class="ml-2 text-red-600">{{ $message }}</small>
                             @enderror
@@ -101,11 +102,7 @@
                 <span>Please Choose Your Account</span><hr>
                 <ul class="mt-5 overflow-y-scroll max-h-[30rem] ch_acc">
                     @foreach ($user as $item)
-<<<<<<< HEAD
                         @if ($item->employee_id != '000-000024')
-=======
-                    @if ($item->employee_id != '000-000024')
->>>>>>> 5c7b7673686e926bb8efba6964fdf37efbc9f58f
                             <li class="w-11/12 ms-5 hover:bg-amber-200 h-8 my-4 leading-8 cursor-pointer rounded-md user_accounts" data-id="{{ $item->id }}">{{ $item->name }}</li>
                         @endif
                     @endforeach
@@ -156,7 +153,7 @@
                     eventConstraint: {
                         //start time for booking and end time for booking (တပတ် အတွင်းပဲ booking လုပ်ခွင့်ပေး)
                         start: moment().format('YYYY-MM-DD'),
-                        end: moment().add(7,'days').format('YYYY-MM-DD'),
+                        end: moment().add(1, 'months').format('YYYY-MM-DD'),
                     },
                     // eventAllow: function(info){
                     //     return info.start >= '09:00' && info.end <= '17:00';
