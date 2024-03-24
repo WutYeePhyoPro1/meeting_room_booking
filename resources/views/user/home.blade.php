@@ -97,10 +97,10 @@
                     @endforeach
                 </tbody>
             </table>
-            <div class="flex justify-center text-xs mt-2 bg-white">
-                {{ $bookings->links() }}
+                <div class="flex justify-center text-xs mt-2 bg-white">
+                    {{ $bookings->links() }}
 
-        </div>
+            </div>
 
         @push('js')
             <script>
