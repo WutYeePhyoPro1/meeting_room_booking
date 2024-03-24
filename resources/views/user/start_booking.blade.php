@@ -90,7 +90,7 @@
                         @if (getAuth()->employee_id == 'recho@pro1')
                             <x-button type="button" class="bg-rose-400 w-24 h-10 ps-6 focus:ring-rose-600 hover:bg-rose-600" id="return_btn">{{ __('Return') }}</x-button>
                         @endif
-                        <x-button type="submit" class="bg-yellow-400 w-24 h-10 ps-7 focus:ring-yellow-600 hover:bg-yellow-600">{{ __('Book') }}</x-button>
+                        <x-button type="button" id="booking_submit" class="bg-yellow-400 w-24 h-10 ps-7 focus:ring-yellow-600 hover:bg-yellow-600">{{ __('Book') }}</x-button>
                     </div>
                     @if (getAuth()->employee_id == 'recho@pro1')
                         <input type="hidden" name="ch_acc" id="ch_acc" value="{{ old('ch_acc') }}">
@@ -494,6 +494,12 @@
                                 $('#total_duration').text('00:00:00');
                                 $('#duration').val('00:00:00');
                     }
+                })
+
+                $(document).on('click','#booking_submit',function(e){
+                    $(this).text('Loading');
+                    $(this).css('pointer-events','none');
+                    $('#booking_form').submit();
                 })
 
 
