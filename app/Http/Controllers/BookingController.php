@@ -73,7 +73,26 @@ class BookingController extends Controller
     {
         $user_id = getAuth()->id;
         $this->cus_validate($request,'store');
-        // dd($request->all());
+
+            $data = $this->repository->check_avaliable($request->date,$request->room_id);
+            $start_time     = $request->start_time;
+            $duration       = $request->duration;
+            list($hour,$min,$sec) = explode(':',$duration);
+            $total_sec = $hour*3600 + $min*60 + $sec;
+            $step   = $total_sec/1800;
+            $start_str = strtotime($start_time);
+
+            for($i = 0 ; $i <= $step ; $i++)
+            {
+                $arr[] = date('H:i:s',$start_str);
+                $start_str+=1800;
+            }
+            $pass = array_diff($arr,$data[0]) == [] ? true : false;
+            if(!$pass)
+            {
+                return back()->with('fails','အချိန်မအားပါ');
+            }
+        
         if($request->booking_id){
             $book               = Booking::find($request->booking_id);
             $book->id           = $request->booking_id;

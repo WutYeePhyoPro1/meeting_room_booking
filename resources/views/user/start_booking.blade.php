@@ -10,7 +10,7 @@
         <div id='calendar' class="w-2/3 duration-500"></div>
         <i class="material-symbols-outlined fixed right-1 top-1/3 cursor-pointer duration-500 bg-slate-500 rounded-xl text-white select-none booking_icon">arrow_right</i>
         <div class="w-1/3 p-2 overflow-hidden rounded-lg mt-4 duration-500 whitespace-nowrap ml-3 relative" id="booking_div" style="background-color: rgb(255,250,223)">
-            <input type="hidden" id="succ_msg" value="{{ Session::has('create') ? 1 : (Session::has('update') ? 2 : 0)}}">
+            <input type="hidden" id="succ_msg" value="{{ Session::has('create') ? 1 : (Session::has('update') ? 2 : (Session::has('fails') ? 3 : 0))}}">
             <input type="hidden" id="cur_user_id" value="{{ getAuth()->id == 13 ? 9 : getAuth()->id }}">
 
             <div class="{{ (getAuth()->employee_id == 'recho@pro1' && !old('ch_acc')) ? 'hidden' : '' }}" id="start_form">
@@ -398,6 +398,12 @@
                         icon: 'success',
                         title: 'Success',
                         text : 'Booking Update Success'
+                    })
+                }else if($success == 3){
+                    Swal.fire({
+                        icon: 'fail',
+                        title: 'Fails',
+                        text : 'အချိန်မအားပါ'
                     })
                 }
 
