@@ -71,9 +71,11 @@ class BookingController extends Controller
     //store booking data
     public  function store(Request $request)
     {
+
         $user_id = getAuth()->id;
         $this->cus_validate($request,'store');
-
+        if(!isset($request->status))
+        {
             $data = $this->repository->check_avaliable($request->date,$request->room_id);
             $start_time     = $request->start_time;
             $duration       = $request->duration;
@@ -92,8 +94,10 @@ class BookingController extends Controller
             {
                 return back()->with('fails','အချိန်မအားပါ');
             }
-        
-        if($request->booking_id){
+        }
+
+        if(isset($request->booking_id)){
+
             $book               = Booking::find($request->booking_id);
             $book->id           = $request->booking_id;
             $book->date         = $request->date;
@@ -101,16 +105,20 @@ class BookingController extends Controller
             $book->end_time     = $request->end_time;
             $book->duration     = $request->duration;
             $book->room_id     = $request->room_id;
+            if($request->status)
+            {
+                $book->status   = $request->status;
+            }
             $book->title        = $request->title;
             $book->reason_id    = $request->reason_id;
             $book->remark       = $request->remark;
-            if(strtotime($request->date .' '.$request->start_time) > strtotime(Carbon::now()) ){
-                $book->status       = 0;
-            }else if(strtotime($request->date .' '.$request->start_time) < strtotime(Carbon::now()) && strtotime($request->date .' '.$request->end_time) > strtotime(Carbon::now())){
-                $book->status       = 1;
-            }else{
-                $book->status       = 4;
-            }
+            // if(strtotime($request->date .' '.$request->start_time) > strtotime(Carbon::now()) ){
+            //     $book->status       = 0;
+            // }else if(strtotime($request->date .' '.$request->start_time) < strtotime(Carbon::now()) && strtotime($request->date .' '.$request->end_time) > strtotime(Carbon::now())){
+            //     $book->status       = 1;
+            // }else{
+            //     $book->status       = 4;
+            // }
             if(isset($request->ch_acc)){
                 $book->reception = 1;
             }
