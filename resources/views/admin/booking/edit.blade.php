@@ -16,13 +16,36 @@
         </div>
         <form action="{{ route('booking_store') }}" method="POST" class="mt-3" id="booking_form">
             @csrf
-            <div class="flex flex-col">
-                <label for="title">Title <span class="text-r\ed-600">*</span>:</label>
-                <input type="text" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="title" id="title" value="{{ old('title',$data->title) }}">
-                @error('title')
-                    <small class="ml-2 text-red-600">{{ $message }}</small>
-                @enderror
+            <div class="grid grid-cols-2 gap-2 mt-5">
+                <div class="flex flex-col">
+                    <label for="title">Title <span class="text-r\ed-600">*</span>:</label>
+                    <input type="text" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" name="title" id="title" value="{{ old('title',$data->title) }}">
+                    @error('title')
+                        <small class="ml-2 text-red-600">{{ $message }}</small>
+                    @enderror
+                </div>
+                <div class="flex flex-col">
+                    <label for="status">status <span class="text-r\ed-600">*</span>:</label>
+                    <select name="status" id="status" class="h-10 mt-2 border-slate-200 rounded-t-md focus:ring-0 focus:border-slate-400">
+                        @if ((strtotime($data->date .' '.$data->start_time) > strtotime(Carbon\Carbon::now())) )
+                            <option value="0" {{ $data->status == 0 ? 'selected' : '' }}>Pending</option>
+                        @endif
+                        @if ((strtotime($data->date .' '.$data->start_time) < strtotime(Carbon\Carbon::now())) && strtotime($data->date .' '.$data->end_time) > strtotime(Carbon\Carbon::now()))
+                            <option value="1" {{ $data->status == 1 ? 'selected' : '' }}>Started</option>
+                        @endif
+                        @if (strtotime($data->date .' '.$data->end_time) < strtotime(Carbon\Carbon::now()) )
+                            <option value="2" {{ $data->status == 2 ? 'selected' : '' }}>Ended</option>
+                            <option value="4" {{ $data->status == 4 ? 'selected' : '' }}>Missed</option>
+                            <option value="5" {{ $data->status == 5 ? 'selected' : '' }}>Finished</option>
+                        @endif
+                        <option value="3" {{ $data->status == 3 ? 'selected' : '' }}>Cancelled</option>
+                    </select>
+                    @error('status')
+                        <small class="ml-2 text-red-600">{{ $message }}</small>
+                    @enderror
+                </div>
             </div>
+
             <div class="grid grid-cols-2 gap-2 mt-5">
                 <div class="flex flex-col ">
                     <label for="">Room <span class="text-red-600">*</span>:</label>
@@ -38,7 +61,7 @@
                 </div>
                 <div class="flex flex-col">
                     <label for="date">Date <span class="text-red-600">*</span>:</label>
-                    <input type="date" min="<?php echo date("Y-m-d"); ?>" max="<?php echo date("Y-m-d", strtotime(date("Y-m-d") . " +6 days"))?>" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" value="{{ $data->date }}" name="date" id="date">
+                    <input type="date" class="h-7 mt-2 border-slate-200 rounded-md focus:ring-0 focus:border-b-4 focus:border-slate-400" value="{{ $data->date }}" name="date" id="date">
                     @error('date')
                         <small class="ml-2 text-red-600">{{ $message }}</small>
                     @enderror
