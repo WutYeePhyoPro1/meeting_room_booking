@@ -6,7 +6,7 @@
         </div> --}}
         <div class="grid grid-cols-3 gap-6 pt-10 px-5 xl:px-32">
 
-            @foreach ($room as $item)
+            @foreach ($room->sortBy('serial') as $item)
             <div class="max-w bg-white border border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700  room_card">
                     <div class="h-4/6 ">
                         <a href="javascript:{}" >

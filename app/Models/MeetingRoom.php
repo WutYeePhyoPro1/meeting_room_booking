@@ -18,7 +18,8 @@ class MeetingRoom extends Model
         'seat',
         'status',
         'boss',
-        'guest'
+        'guest',
+        'serial'
     ];
 
     public function branches()
