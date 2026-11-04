@@ -17,7 +17,6 @@ use Illuminate\Validation\Rule;
 use App\Rules\RoomNameDublicate;
 use App\Customize\Commonfunction;
 use Illuminate\Support\Facades\DB;
-use Spatie\Browsershot\Browsershot;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use PhpOffice\PhpPresentation\IOFactory;
